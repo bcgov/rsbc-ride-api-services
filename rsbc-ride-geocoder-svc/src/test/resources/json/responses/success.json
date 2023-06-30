@@ -1,0 +1,20 @@
+{
+  "success": true,
+  "addressRaw": "123 Main Street, Ottawa, ON K1P 1J1, Canada",
+  "dataBc": {
+    "score": 55,
+    "precision": "High",
+    "fullAddress": "123 Main Street, Ottawa, ON K1P 1J1, Canada",
+    "faults": [
+      "The address may not be an actual location in Ottawa.",
+      "The provided coordinates may not be exact."
+    ],
+    "lat": 41.3879,
+    "lon": 73.2311
+  },
+  "google": {
+    "lat": 45.5234,
+    "lon": 75.6750,
+    "score": 70
+  }
+}

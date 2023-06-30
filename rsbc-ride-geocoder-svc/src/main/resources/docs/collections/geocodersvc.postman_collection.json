@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "6f00b5be-cd1e-47e7-83bb-d0fcb43ca428",
+		"name": "geocodersvc",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17000682"
+	},
+	"item": [
+		{
+			"name": "Ping",
+			"item": [
+				{
+					"name": "Ping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOSTNAME}}/geocodersvc/ping",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"geocodersvc",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Address",
+			"item": [
+				{
+					"name": "sendQuery",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "notset",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "SSGUser",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOSTNAME}}/geocodersvc/api/v1/address?address=123 Main Street, Ottawa, ON K1P 1J1, Canada",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"geocodersvc",
+								"api",
+								"v1",
+								"address"
+							],
+							"query": [
+								{
+									"key": "address",
+									"value": "123 Main Street, Ottawa, ON K1P 1J1, Canada"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
