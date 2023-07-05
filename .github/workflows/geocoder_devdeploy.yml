@@ -34,7 +34,7 @@ jobs:
    build:
     name: Build and Push
     runs-on: ubuntu-latest
-    if: startsWith(github.event.pull_request.head.ref, 'release/')
+    if: startsWith(github.event.pull_request.head.ref, 'release-geocoder/')
     environment: dev
     needs: run_unit_test
     env:
