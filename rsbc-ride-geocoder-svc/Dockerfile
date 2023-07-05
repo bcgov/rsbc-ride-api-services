@@ -10,7 +10,6 @@ RUN mvn clean install -DskipTests
 FROM artifacts.developer.gov.bc.ca/rbe5-images/openjdk-basseimage:17.0.2-jdk
 WORKDIR /app
 RUN pwd
-COPY /target/*.jar app.jar
 EXPOSE 8080
 COPY --from=MAVEN_BUILD /build/target/*.jar /app/app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
