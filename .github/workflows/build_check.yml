@@ -33,11 +33,11 @@ jobs:
       #     chmod +x ./gradlew
       #     ./gradlew test
       #     ls build/test-results
-      # - name: Publish Test Report
-      #   uses: mikepenz/action-junit-report@v3
-      #   if: success() || failure()
-      #   with:
-      #     report_paths: './src/build/test-results/test/TEST-*.xml'
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
+        if: success() || failure()
+        with:
+          report_paths: './rsbc-ride-geocoder-svc/target/surefire-reports/TEST-*.xml'
           # report_paths: '/home/runner/work/rsbc-ride-producer-api/rsbc-ride-producer-api/src/build/test-results/test/TEST-*.xml'
 
           
