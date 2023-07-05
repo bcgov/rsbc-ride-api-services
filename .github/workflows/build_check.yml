@@ -58,7 +58,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: rsbc-ride-geocoder-svc
-          file: Dockerfile
+          file: rsbc-ride-geocoder-svc/Dockerfile
           push: false
 
 
