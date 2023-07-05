@@ -1,0 +1,20 @@
+{
+    "request": {
+        "method": "GET",
+        "urlPathPattern": "/addresses.geojson",
+        "queryParameters": {
+            "address": {
+                "equalTo": "123 Main Street, Ottawa, ON K1P"
+            }
+          }
+    },
+    "response": {
+        "status": 200,
+        "bodyFileName": "data_bc_raw.json",         
+        "headers": {
+            "Content-Type": "application/json"
+      }
+    }
+}
+
+
