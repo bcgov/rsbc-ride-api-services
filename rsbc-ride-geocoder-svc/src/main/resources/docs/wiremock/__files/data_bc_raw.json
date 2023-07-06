@@ -1,0 +1,28 @@
+{
+    "features": [
+      {
+        "geometry": {
+          "coordinates": [
+            73.2311,
+            41.3879
+          ]
+        },
+        "properties": {
+          "score": 55,
+          "match_precision": "High",
+          "full_address": "123 Main Street, Ottawa, ON K1P 1J1, Canada",
+            "address": {
+              "street": "123 Main Street",
+              "city": "Ottawa",
+              "province": "ON",
+              "postal_code": "K1P 1J1",
+              "country": "Canada"
+            },
+            "faults": [
+              "The address may not be an actual location in Ottawa.",
+              "The provided coordinates may not be exact."
+            ]
+        }
+      }
+    ]
+}

@@ -1,0 +1,22 @@
+spring:
+  active:
+    profiles: test
+
+application:
+  minimumConfidenceScore: 60
+  security:
+    username: SSGUser
+    password: notset
+  geocodeUserName: SSGUser
+  geocodePassword: notset
+  dataBcUrl: http://localhost:8085
+  dataBcApiKey: ${DATA_BC_API_KEY:}
+  googleUrl: http://localhost:8085/maps/api/geocode/json
+  googleApiKey: AIzaSyDQVxyW6-V3r-1jc90P4bQ2ulm2uJxlq1I
+  googleFailOver: true
+  webClientBaseUri:
+  webClientTimeOut: 5000
+  path:
+    ping: /ping
+    ready: /ready
+    geocodersvc: /geocodersvc/api/v1/address
