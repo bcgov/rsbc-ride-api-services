@@ -1,0 +1,119 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Geocoder Service API
+  description: Service to retrieve latitude/longitude of an address using DataBC
+  contact:
+    name: RIDE team
+
+paths:
+  /api/v1/address:
+    get:
+      summary: Lookup lat/lon of street address using DataBC..
+      operationId: addressLookup
+      tags:
+        - address
+      parameters:
+        - name: address
+          in: query
+          description: Street address
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Geocoder Service Response
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/dataResponse"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorResponse"
+  /ping:
+    get:
+      summary: Check is application is up and running.
+      operationId: ping
+      tags:
+        - ping
+      responses:
+        '200':
+          description: Ping Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Welcome to Geocodersvc!"
+
+components:
+  schemas:
+    googleData:
+      type: object
+      properties:
+        lat:
+          type: number
+          description: Latitude
+        lon:
+            type: number
+            description: Longitude
+        score:
+          type: integer
+          description: Score of the address
+    dataBc:
+      type: object
+      properties:
+        score:
+          type: integer
+          description: Score of the address
+        precision:
+          type: string
+          description: Precision of the address
+        fullAddress:
+          type: string
+          description: Full address
+        faults:
+          type: array
+          description: Fault of the address
+          items:
+            type: string
+            description: Fault of the address
+        lat:
+          type: number
+          description: Latitude
+        lon:
+            type: number
+            description: Longitude
+    dataResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        addressRaw:
+          type: string
+          description: Raw address
+        dataBc:
+          type: dataBc
+          description: DataBC response
+        google:
+          type: googleData
+          description: Google response
+        error:
+          type: String
+          description: Error message
+    errorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          default: false
+          description: Indicates if the request was successful
+        error:
+          type: String
+          description: Error message
