@@ -40,19 +40,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-local
-    environment:
-      ENVIRONMENT: dev
-      MIN_CONFIDENCE_SCORE: "55"
-      API_USER_NAME: usertest
-      API_USER_PASSWORD: notset
-      GEOCODE_SECRET_KEY: test
-      GEOCODE_BASIC_AUTH_USER: user
-      GEOCODE_BASIC_AUTH_PASS: test
-      DATA_BC_API_URL: test
-      DATA_BC_API_KEY: test
-      GOOGLE_API_ROOT_URL: test
-      GOOGLE_API_KEY: not-implemented-at-this-time
-      GOOGLE_FAIL_OVER_ENABLED: "FALSE"
+    env_file:
+      - .env
     container_name: geocodersvc
     ports:
       - 8080:8080

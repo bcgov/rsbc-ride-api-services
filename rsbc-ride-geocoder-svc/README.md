@@ -1,10 +1,43 @@
 
 # RIDE: GeoCoder API Service  
 
-## About  
+## About    
+
+TBD
 
 
-## Local Development  
+## Local Development    
+
+To test the API locally from a Docker container, run below commands. Before running the commands, copy the .env-template file and rename the copied file to .env. Update the variable values in the .env file.  
+
+```yaml
+ENVIRONMENT=dev
+MIN_CONFIDENCE_SCORE=
+API_USER_NAME=
+API_USER_PASSWORD=
+GEOCODE_SECRET_KEY=
+GEOCODE_BASIC_AUTH_USER=
+GEOCODE_BASIC_AUTH_PASS=
+DATA_BC_API_URL=
+DATA_BC_API_KEY=
+GOOGLE_API_ROOT_URL=
+GOOGLE_API_KEY=
+GOOGLE_FAIL_OVER_ENABLED="FALSE"
+```    
+
+After updating the values, run this command to spin up local docker stack for the API.  
+
+```sh
+cd rsbc-ride-geocoder-svc  
+docker-compose build --no-cache && docker-compose up --force-recreate
+```  
+
+The API can be accessed at http://localhost:8080  
+
+![api_ping](images/api_ping.png)
+
+
+
 
 
 
