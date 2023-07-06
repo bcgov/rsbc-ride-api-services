@@ -3,10 +3,21 @@
 
 ## About    
 
-TBD
+TBD  
 
 
-## Local Development    
+## Pre-Requisites  
+
+To be able to run the API service locally below are some pre-requisites you need  
+- Install Docker  
+- Install Make  
+    ```sh
+    winget install GnuWin32.make  
+    ```  
+- Install OpenJDK17
+
+
+## Local Development      
 
 To test the API locally from a Docker container, run below commands. Before running the commands, copy the .env-template file and rename the copied file to .env. Update the variable values in the .env file.  
 
@@ -29,13 +40,34 @@ After updating the values, run this command to spin up local docker stack for th
 
 ```sh
 cd rsbc-ride-geocoder-svc  
-docker-compose build --no-cache && docker-compose up --force-recreate
-```  
+make build_start
+```    
+
+To stop the containers
+```sh
+cd rsbc-ride-geocoder-svc  
+make down
+```   
+
 
 The API can be accessed at http://localhost:8080  
 
-![api_ping](images/api_ping.png)
+![api_ping](images/api_ping.png)  
 
+
+To perform some other steps locally  
+
+Run a local build  
+```sh
+cd rsbc-ride-geocoder-svc  
+make local_build
+``` 
+
+Run Unit tests locally  
+```sh
+cd rsbc-ride-geocoder-svc  
+make run_tests
+``` 
 
 
 
