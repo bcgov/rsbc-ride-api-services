@@ -21,15 +21,7 @@ jobs:
             - contexts: rsbc-ride-geocoder-svc
               image_names: rsbc-ride-geocoder-svc
               sarif_file: trivy-geocoder.sarif
-              docker_file: roadside-forms-frontend/frontend_web_app/Dockerfile
-            - contexts: python
-              image_names: rsbc-roadside-forms-backend-api
-              sarif_file: trivy-backend.sarif
-              docker_file: python/prohibition_web_svc/Dockerfile
-            - contexts: python
-              image_names: rsbc-roadside-forms-form-handler
-              sarif_file: trivy-form-handler.sarif
-              docker_file: python/form_handler/Dockerfile
+              docker_file: rsbc-ride-geocoder-svc/Dockerfile
     steps:
       - name: Checkout
         uses: actions/checkout@v3
