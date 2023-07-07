@@ -62,7 +62,7 @@ jobs:
         with:
           scan-type: image
           image-ref: ${{ inputs.DOCKER_IMAGE_NAME }}:latest
-          format: 'table'sss
+          format: 'table'
           exit-code: '1'
           ignore-unfixed: true
           severity: CRITICAL
