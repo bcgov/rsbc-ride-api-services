@@ -9,9 +9,17 @@ on:
 
 
 jobs:
+   trivy-scan:
+    uses: ./.github/workflows/trivy-scan-workflow.yml
+    with:
+      DOCKER_CONTEXT: rsbc-ride-geocoder-svc
+      DOCKER_FILE: rsbc-ride-geocoder-svc/Dockerfile
+      DOCKER_IMAGE_NAME: rsbc-ride-geocoder-svc
+    secrets: inherit
    run_unit_test:
     name: Run Unit Tests
     runs-on: ubuntu-latest
+    needs: trivy-scan
     environment: pr
     steps:
       - name: Checkout repository
@@ -36,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.event.pull_request.head.ref, 'release-geocoder/')
     environment: dev
-    needs: run_unit_test
+    needs: [trivy-scan,run_unit_test]
     env:
       DOCKER_IMAGE_TAG: ${{ github.sha}}
       DOCKER_CONTEXT_FOLDER: rsbc-ride-geocoder-svc
@@ -68,7 +76,7 @@ jobs:
    deploy_dev_argocd:
     name: Push to Gitops repo for Dev deployment via Argocd
     runs-on: ubuntu-latest
-    needs: [run_unit_test,build]
+    needs: [trivy-scan,run_unit_test,build]
     env:
       PR_NUMBER: ${{ github.event.number }}
       PR_IMAGE_STREAM_TAG: ${{ github.sha}}
