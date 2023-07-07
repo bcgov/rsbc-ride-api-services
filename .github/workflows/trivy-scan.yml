@@ -72,3 +72,13 @@ jobs:
         if: always()
         with:
           sarif_file: ${{matrix.sarif_file}}
+      - name: Post SARIF findings in the issue
+        uses: sett-and-hive/sarif-to-issue-action@v1
+        if: failure()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          branch: ${{ github.head_ref }}
+          sarif-file: ${{matrix.sarif_file}}
+          title: "Critical vulnerabilities found in ${{matrix.image_names}} on PR ${{ github.event.number }}"
+          odc-sarif: false
