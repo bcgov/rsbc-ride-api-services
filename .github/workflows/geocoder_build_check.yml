@@ -10,6 +10,13 @@ on:
       - rsbc-ride-geocoder-svc/**
 
 jobs:
+  trivy-scan:
+    uses: ./.github/workflows/trivy-scan-workflow.yml
+    with:
+      DOCKER_CONTEXT: rsbc-ride-geocoder-svc
+      DOCKER_FILE: rsbc-ride-geocoder-svc/Dockerfile
+      DOCKER_IMAGE_NAME: rsbc-ride-geocoder-svc
+    secrets: inherit
   run_unit_test:
     name: Run Unit Tests
     runs-on: ubuntu-latest
