@@ -4,6 +4,7 @@ import ca.bc.gov.ride.geocodersvc.domain.model.dataBc.DataBcRaw;
 import ca.bc.gov.ride.geocodersvc.config.properties.Properties;
 import ca.bc.gov.ride.geocodersvc.model.DataBc;
 import ca.bc.gov.ride.geocodersvc.model.DataResponse;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class BCDataService {
     @Autowired
     private Properties properties;
 
+    @WithSpan
     public Mono<DataResponse> getBcDataApi(String addressString) {
         return webClient
                 .method(HttpMethod.GET)

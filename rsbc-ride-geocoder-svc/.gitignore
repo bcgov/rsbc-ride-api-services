@@ -37,7 +37,13 @@ build/
 
 ### docker-compose secret files
 .env
+/src/test/resources/local/target/geocodersvc-0.0.1-SNAPSHOT.jar
 
 ### VS Code ###
 .vscode/
 .DS_Store
+
+## Metrics ##
+tempo-data/
+src/test/resources/local/tempo-data/
+
