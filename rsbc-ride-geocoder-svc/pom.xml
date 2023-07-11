@@ -23,6 +23,7 @@
 	</properties>
 
 	<dependencies>
+
 		<!-- Spring Dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -35,8 +36,6 @@
 			<artifactId>snakeyaml</artifactId>
 			<version>2.0</version>
 		</dependency>
-
-
 
 		<!-- Spring Security -->
 		<dependency>
@@ -65,6 +64,29 @@
 			<version>1.11.1</version>
 		</dependency>
 
+		<!-- OpenTelemetry Dependencies -->
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-api</artifactId>
+			<version>1.18.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry.instrumentation</groupId>
+			<artifactId>opentelemetry-instrumentation-annotations</artifactId>
+			<version>1.18.0-alpha</version>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-api-trace</artifactId>
+			<version>0.13.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-api-metrics</artifactId>
+			<version>1.10.0-alpha-rc.1</version>
+			<scope>runtime</scope>
+		</dependency>
+
 		<!-- Reactor Dependencies-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -83,31 +105,6 @@
 			<version>1.18.24</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<!-- Mongo Dependencies -->
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>org.mongodb</groupId>-->
-<!--			<artifactId>mongodb-driver-reactivestreams</artifactId>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>org.mongodb</groupId>-->
-<!--			<artifactId>bson</artifactId>-->
-<!--		</dependency>-->
-	<!-- Mongock  Dependencies-->
-<!--		<dependency>-->
-<!--			<groupId>io.mongock</groupId>-->
-<!--			<artifactId>mongock-springboot-v3</artifactId>-->
-<!--			<version>5.3.0</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>io.mongock</groupId>-->
-<!--			<artifactId>mongodb-reactive-driver</artifactId>-->
-<!--			<version>5.3.0</version>-->
-<!--		</dependency>-->
 
 		<!-- OpenApi Generator Dependencies -->
 		<dependency>
@@ -163,6 +160,38 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Jmeter Dependency-->
+		<dependency>
+			<groupId>org.apache.jmeter</groupId>
+			<artifactId>ApacheJMeter_core</artifactId>
+			<version>5.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jmeter</groupId>
+			<artifactId>ApacheJMeter_http</artifactId>
+			<version>5.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jmeter</groupId>
+			<artifactId>ApacheJMeter_java</artifactId>
+			<version>5.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>kg.apc</groupId>
+			<artifactId>jmeter-plugins-standard</artifactId>
+			<version>1.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jmeter</groupId>
+			<artifactId>jorphan</artifactId>
+			<version>5.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.13</version>
+		</dependency>
+
 		<!-- Dependências do SLF4J e Logback -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -209,9 +238,9 @@
 						<reactive>true</reactive>
 						<useSwaggerUI>true</useSwaggerUI>
 						<additionalModelTypeAnnotations>
-							@lombok.Data
+							@lombok.Setter
+							@lombok.Getter
 							@lombok.Builder
-							@lombok.NoArgsConstructor
 							@lombok.AllArgsConstructor
 							@lombok.experimental.Accessors(fluent = true)
 							@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
