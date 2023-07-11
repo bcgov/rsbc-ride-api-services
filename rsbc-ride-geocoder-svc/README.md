@@ -237,4 +237,3 @@ To push and release new changes, please follow below steps.
 - This triggers the prod deploy workflow (Geocoder-Build & Deploy to PROD). If for any reason the build fails, workflow shows the log and the PR is blocked. Without resolving the error, the merge cannot happen  
 - The workflow doesnt actually directly deploy. It builds the container image, pushes to Artifactory and then updates the image tag (commit sha) to the ArgoCD Kustomize manifest for prod overlay  
 - Once the workflow completes, perform a Sync on the ArgoCD project to deploy the changes to Prod. The ArgoCD project name is: be5301-ride-geocoder-svc-prod    
->>>>>>> project-a/main
