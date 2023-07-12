@@ -46,4 +46,5 @@ build/
 ## Metrics ##
 tempo-data/
 src/test/resources/local/tempo-data/
+opentelemetry-javaagent.jar
 
