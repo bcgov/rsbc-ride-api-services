@@ -23,7 +23,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AddressApiControllerTest {
+public class AddressApiTest {
 
     @LocalServerPort
     Integer port;
@@ -79,7 +79,7 @@ public class AddressApiControllerTest {
 
     @NotNull
     private static String getFileContent(String location) throws IOException {
-        return new String(Objects.requireNonNull(AddressApiControllerTest.class.getClassLoader()
+        return new String(Objects.requireNonNull(AddressApiTest.class.getClassLoader()
                 .getResourceAsStream(location)).readAllBytes());
     }
 
