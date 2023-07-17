@@ -1,7 +1,7 @@
 version: '3.8'
  
 networks:
-  geocoder-network:
+  network-applications:
     driver: bridge
 
 volumes:
@@ -9,29 +9,85 @@ volumes:
   grafana_data:
 
 services:
+  collector:
+    image: otel/opentelemetry-collector:latest
+    container_name: collector
+    hostname: collector
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
+    volumes:
+      - ./collector-config-local.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "5555:5555"     # Receiver from Agent
+      - "6666:6666"     # Sender for Prometheus
+    networks:
+      - network-applications
+    depends_on:
+      tempo:
+        condition: service_healthy
+      prometheus:
+        condition: service_healthy
+
+  tempo:
+    image: grafana/tempo:1.5.0
+    container_name: tempo
+    hostname: tempo
+    command: [ "-search.enabled=true", "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./tempo-config.yaml:/etc/tempo.yaml
+      - ./tempo-overrides.yaml:/etc/overrides.yaml
+      - ./tempo-data:/tmp/tempo
+    ports:
+      - "3200:3200"     # Sender for Grafana
+      - "4317:4317"     # Receiver from Collector
+    networks:
+      - network-applications
+    healthcheck:
+      interval: 5s
+      retries: 10
+      test: wget --no-verbose --tries=1 --spider http://host.docker.internal:3200/status || exit 1
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
-    ports:
-      - 9090:9090
-    volumes:
-      - ./src/test/resources/local/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus_data:/prometheus
+    hostname: prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"     # Sender for Grafana
     networks:
-      - geocoder-network
-
+      - network-applications
+    healthcheck:
+      interval: 5s
+      retries: 10
+      test: wget --no-verbose --tries=1 --spider http://host.docker.internal:9090/status || exit 1
 
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
-    ports:
-      - 3000:3000
+    hostname: grafana
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./grafana-bootstrap.ini:/etc/grafana/grafana.ini
+      - ./grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+    ports:
+      - "3000:3000"     # Exposure for Browser
     networks:
-      - geocoder-network
+      - network-applications
+    healthcheck:
+      interval: 5s
+      retries: 10
+      test: wget --no-verbose --tries=1 --spider http://host.docker.internal:3000 || exit 1
+    depends_on:
+      tempo:
+        condition: service_healthy
+      prometheus:
+        condition: service_healthy
