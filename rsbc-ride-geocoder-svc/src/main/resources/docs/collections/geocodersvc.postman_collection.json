@@ -51,9 +51,16 @@
 							]
 						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"url": {
-							"raw": "{{HOSTNAME}}/geocodersvc/api/v1/address?address=123 Main Street, Ottawa, ON K1P 1J1, Canada",
+							"raw": "{{HOSTNAME}}/geocodersvc/api/v1/address?address=525%20Superior%20St%20Bictoria%20BC",
 							"host": [
 								"{{HOSTNAME}}"
 							],
@@ -66,12 +73,227 @@
 							"query": [
 								{
 									"key": "address",
-									"value": "123 Main Street, Ottawa, ON K1P 1J1, Canada"
+									"value": "525+Superior+St+Victoria+BC",
+									"disabled": true
+								},
+								{
+									"key": "address",
+									"value": "525%20Superior%20St%20Bictoria%20BC"
 								}
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Sucess - Lower Score",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HOSTNAME}}/geocodersvc/api/v1/address?address=123%20Main%20Street%2C%20Ottawa%2C%20ON%20K1P%201J1%2C%20Canada&address=123 Main Street, Ottawa, ON K1P 1J1, Canada",
+									"host": [
+										"{{HOSTNAME}}"
+									],
+									"path": [
+										"geocodersvc",
+										"api",
+										"v1",
+										"address"
+									],
+									"query": [
+										{
+											"key": "address",
+											"value": "123%20Main%20Street%2C%20Ottawa%2C%20ON%20K1P%201J1%2C%20Canada"
+										},
+										{
+											"key": "address",
+											"value": "123 Main Street, Ottawa, ON K1P 1J1, Canada"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "365"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"addressRaw\": \"123 Main Street, Ottawa, ON K1P 1J1, Canada\",\n    \"dataBc\": {\n        \"score\": 55,\n        \"precision\": \"High\",\n        \"fullAddress\": \"123 Main Street, Ottawa, ON K1P 1J1, Canada\",\n        \"faults\": [\n            \"The address may not be an actual location in Ottawa.\",\n            \"The provided coordinates may not be exact.\"\n        ],\n        \"lat\": 41.3879,\n        \"lon\": 73.2311\n    },\n    \"google\": {\n        \"lat\": 45.5234,\n        \"lon\": 75.675,\n        \"score\": 70\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "sendQuery Development",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "notset",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "SSGUser",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "apikey",
+								"value": "DEnSpeVKlYUhKo7YZWM0iBVUKjQb5QN0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://geocoder.api.gov.bc.ca/addresses.json?addressString=525%20Superior%20St%20Victoria%20BC",
+							"protocol": "https",
+							"host": [
+								"geocoder",
+								"api",
+								"gov",
+								"bc",
+								"ca"
+							],
+							"path": [
+								"addresses.json"
+							],
+							"query": [
+								{
+									"key": "address",
+									"value": "123 Main Street, Ottawa, ON K1P 1J1, Canada",
+									"disabled": true
+								},
+								{
+									"key": "address",
+									"value": "13615%20Fraser%20Hwy%2C%20Surrey%2C%20BC",
+									"disabled": true
+								},
+								{
+									"key": "addressString",
+									"value": "525%20Superior%20St%20Victoria%20BC"
+								},
+								{
+									"key": "address",
+									"value": "525+Superior+St+Victoria+BC",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Sucess - Lower Score",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HOSTNAME}}/geocodersvc/api/v1/address?address=123%20Main%20Street%2C%20Ottawa%2C%20ON%20K1P%201J1%2C%20Canada&address=123 Main Street, Ottawa, ON K1P 1J1, Canada",
+									"host": [
+										"{{HOSTNAME}}"
+									],
+									"path": [
+										"geocodersvc",
+										"api",
+										"v1",
+										"address"
+									],
+									"query": [
+										{
+											"key": "address",
+											"value": "123%20Main%20Street%2C%20Ottawa%2C%20ON%20K1P%201J1%2C%20Canada"
+										},
+										{
+											"key": "address",
+											"value": "123 Main Street, Ottawa, ON K1P 1J1, Canada"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "365"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"addressRaw\": \"123 Main Street, Ottawa, ON K1P 1J1, Canada\",\n    \"dataBc\": {\n        \"score\": 55,\n        \"precision\": \"High\",\n        \"fullAddress\": \"123 Main Street, Ottawa, ON K1P 1J1, Canada\",\n        \"faults\": [\n            \"The address may not be an actual location in Ottawa.\",\n            \"The provided coordinates may not be exact.\"\n        ],\n        \"lat\": 41.3879,\n        \"lon\": 73.2311\n    },\n    \"google\": {\n        \"lat\": 45.5234,\n        \"lon\": 75.675,\n        \"score\": 70\n    }\n}"
+						}
+					]
 				}
 			]
 		}

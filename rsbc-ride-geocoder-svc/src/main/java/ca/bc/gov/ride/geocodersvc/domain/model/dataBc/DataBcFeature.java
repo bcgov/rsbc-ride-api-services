@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(fluent = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DataBcFeatures {
+public class DataBcFeature {
 
   @JsonProperty("geometry")
   private DataBcGeometry geometry;

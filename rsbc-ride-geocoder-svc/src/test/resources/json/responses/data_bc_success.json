@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "addressRaw": "525 Superior St Victoria BC",
+  "dataBc": {
+    "score": 100,
+    "precision": "CIVIC_NUMBER",
+    "fullAddress": "525 Superior St, Victoria, BC",
+    "faults": [[]],
+    "lat": 48.4176982,
+    "lon": -123.3708218
+  }
+}

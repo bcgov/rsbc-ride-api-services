@@ -1,10 +1,10 @@
 {
     "request": {
         "method": "GET",
-        "urlPathPattern": "/addresses.geojson",
+        "urlPathPattern": "/addresses.json",
         "queryParameters": {
             "address": {
-                "equalTo": "123 Main Street, Ottawa, ON K1P"
+                "equalTo": "525 Superior St Victoria BC"
             }
           }
     },
