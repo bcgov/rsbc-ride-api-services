@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 
 @Slf4j
 @Service
@@ -33,7 +34,7 @@ public class BCDataService {
     public Mono<DataResponse> getBcDataApi(String addressString) {
         return webClient
                 .method(HttpMethod.GET)
-                .uri(properties.getDataBcUrl() + "/addresses.geojson?address=" +
+                .uri(properties.getDataBcUrl() + "/addresses.json?addressString=" +
                         URLEncoder.encode(addressString, StandardCharsets.UTF_8))
                 .header("apikey", properties.getDataBcApiKey())
                 .accept(MediaType.APPLICATION_JSON)
@@ -51,10 +52,10 @@ public class BCDataService {
 
     private DataBc extractDataBc(DataBcRaw data) {
         return DataBc.builder()
+                .fullAddress(data.features().get(0).properties().fullAddress())
                 .score(data.features().get(0).properties().score())
                 .precision(data.features().get(0).properties().matchPrecision())
-                .fullAddress(data.features().get(0).properties().fullAddress())
-                .faults(data.features().get(0).properties().faults())
+                .faults(Collections.singletonList(data.features().get(0).properties().faults()))
                 .lat(data.features().get(0).geometry().coordinates().get(1))
                 .lon(data.features().get(0).geometry().coordinates().get(0))
                 .build();
