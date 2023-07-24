@@ -1,0 +1,26 @@
+{
+  "success": true,
+  "addressRaw": "525 Superior St Bictoria BC",
+  "dataBc": {
+    "score": 98,
+    "precision": "CIVIC_NUMBER",
+    "fullAddress": "525 Superior St, Victoria, BC",
+    "faults": [
+      [
+        {
+          "value": "BICTORIA",
+          "element": "LOCALITY",
+          "fault": "spelledWrong",
+          "penalty": 2
+        }
+      ]
+    ],
+    "lat": 48.4176982,
+    "lon": -123.3708218
+  },
+  "google": {
+    "lat": 45.5234,
+    "lon": 75.6750,
+    "score": 70
+  }
+}

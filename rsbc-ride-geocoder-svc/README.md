@@ -120,16 +120,28 @@ In a second terminal, navigate to the "src/test/resources/local" folder and exec
     address: Endereço to be queried
    </br>(GET - https://geocoder.api.gov.bc.ca/geocodersvc/api/v1/address?address=123 Main Street, Ottawa, ON K1P 1J1, Canada)
 
-
-## Documentations
-### Actuator
-https://geocoder.api.gov.bc.ca/geocodersvc/actuator
+   
+## Documentation
 
 ### Api Docs
 https://geocoder.api.gov.bc.ca/geocodersvc/v3/api-docs
 
-### SwaggerApi
-https://geocoder.api.gov.bc.ca/geocodersvc/swagger-ui.html
+## Swagger
+
+The application documentation can be accessed at the address https://geocoder.api.gov.bc.ca/geocodersvc/swagger-ui.html, where we have examples of controller executions:
+
+![api_ping](images/swagger.png)
+
+
+## Metrics
+### Actuator
+https://geocoder.api.gov.bc.ca/geocodersvc/actuator
+
+### Actuator
+https://geocoder.api.gov.bc.ca/geocodersvc/actuator/prometheus
+
+
+
 
 # RIDE: GeoCoder API Service  
 

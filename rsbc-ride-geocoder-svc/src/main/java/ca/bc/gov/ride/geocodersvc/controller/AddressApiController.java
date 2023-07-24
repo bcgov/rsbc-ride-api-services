@@ -23,7 +23,7 @@ import io.opentelemetry.context.Scope;
 
 @Slf4j
 @RestController
-@OpenAPIDefinition(servers = {@Server(url = "/", description = "Default Server URL")})
+@OpenAPIDefinition(servers = {@Server(url = "/geocodersvc", description = "Geocoder Service")})
 public class AddressApiController implements AddressApi {
 
     @Autowired
