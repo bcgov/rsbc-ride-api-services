@@ -1,13 +1,20 @@
+
+[![Geocoder-Build & Deploy to DEV](https://github.com/bcgov/rsbc-ride-api-services/actions/workflows/geocoder_devdeploy.yml/badge.svg)](https://github.com/bcgov/rsbc-ride-api-services/actions/workflows/geocoder_devdeploy.yml) [![Geocoder-Build & Deploy to TEST](https://github.com/bcgov/rsbc-ride-api-services/actions/workflows/geocoder_testdeploy.yml/badge.svg)](https://github.com/bcgov/rsbc-ride-api-services/actions/workflows/geocoder_testdeploy.yml) [![Geocoder-Build & Deploy to PROD](https://github.com/bcgov/rsbc-ride-api-services/actions/workflows/geocoder_proddeploy.yml/badge.svg)](https://github.com/bcgov/rsbc-ride-api-services/actions/workflows/geocoder_proddeploy.yml)
+
 <br/>
 <p align="center">
-  <h3 align="center">Geocoder Service</h3>
+  <h3 align="center">RIDE: Geocoder API Service</h3>
 
   <p align="center">
     Integration Service for querying Address in Data BC.
     <br/>
     <a href="https://github.com/bcgov/rsbc-ride-api-services/tree/main/rsbc-ride-geocoder-svc">Explore the docs</a>
   </p>
-</p>
+</p>  
+
+## About    
+
+TBD  
 
 ## Summary
 
@@ -16,7 +23,9 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Usage](#usage)
-- [Integrated Tests](#integrated-tests)
+- [Local Tests](#local-tests)
+- [Integrated Tests](#integrated-tests)  
+- [Change Process](#change-process)
 
 ## Built With
  ![Spring](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
@@ -40,7 +49,13 @@ The necessary tools for running this project locally are:
 
 * [WireMock](https://wiremock.org/): A tool that enables the simulation of HTTP-based API services.
 
-* [Postman](https://www.postman.com/downloads/) An API client that makes it easy for developers to create, share, test, and document APIs.
+* [Postman](https://www.postman.com/downloads/) An API client that makes it easy for developers to create, share, test, and document APIs.  
+
+To be able to run the API service locally as Docker below are some pre-requisites you need  
+- [Install Docker](https://www.docker.com/get-started/)
+- [Install Make](https://www.gnu.org/software/make/)  
+
+
 
 ### Installation
 
@@ -79,9 +94,9 @@ For this request, it is necessary to provide the address as a parameter. This ad
 
 ## Local Tests
 
-### Docker Containers
+### Metrics Docker Containers
 
-First, we will deploy the containers to collect metrics. The configurations are available in the path src/test/resources/local. In this folder, we have the following files:
+To collect API metrics locally, few containers are spun up to collect metrics. The configurations are available in the path local_dev/local_metrics. Here are the files in this folder:  
 
 - **collector-config-local.yaml:** OpenTelemetry collector configurations.
 - **docker-compose.yml:** Docker services that we will use.
@@ -90,80 +105,24 @@ First, we will deploy the containers to collect metrics. The configurations are 
 - **prometheus.yml:** Prometheus configurations, pointing to the collector and the application's host.
 - **run-microservice.sh:** Script to initialize our application with the execution of the OpenTelemetry agent.
 - **tempo-config.yaml:** Default configurations for "tempo," responsible for application tracing.
-- **tempo-overrides.yaml:** Configurations for sending metrics and traces.
+- **tempo-overrides.yaml:** Configurations for sending metrics and traces.      
 
-To start the services that collect metrics, we will run the command:
-
+Run this command to spin up the local metrics stack:  
 ```sh
-docker compose up
-```
+cd rsbc-ride-geocoder-svc  
+make metrics_stack_up
+```       
 
-This command will bring up the following services:
-
-- **collector:** OpenTelemetry collector
-- **tempo:** responsible for application traces
-- **prometheus:** displays metrics processed by the Actuator
-- **grafana:** displays metrics in a graphical interface.
-
-### Running the application
-In a second terminal, navigate to the "src/test/resources/local" folder and execute the available script "run-service.sh". This script will download the OpenTelemetry agent, compile, and run our application, making it available for querying.
+To stop the local metrics stack  
+```sh
+cd rsbc-ride-geocoder-svc  
+make metrics_stack_down
+```     
 
 
-## Integrated Tests
-1. Make sure that our REST application is running on port 8080 and WireMock is running on port 8082.
+### Running the application  
 
-
-2. Upon executing the application, Mongock will also be executed, ensuring that loading data into the Partners table will prepare the application.
- 
-
-3. Execute the call according to the address where the Mock was set up by WireMock: '123 Main Street, Ottawa, ON K1P 1J1, Canada' 
-    address: Endereço to be queried
-   </br>(GET - https://geocoder.api.gov.bc.ca/geocodersvc/api/v1/address?address=123 Main Street, Ottawa, ON K1P 1J1, Canada)
-
-   
-## Documentation
-
-### Api Docs
-https://geocoder.api.gov.bc.ca/geocodersvc/v3/api-docs
-
-## Swagger
-
-The application documentation can be accessed at the address https://geocoder.api.gov.bc.ca/geocodersvc/swagger-ui.html, where we have examples of controller executions:
-
-![api_ping](images/swagger.png)
-
-
-## Metrics
-### Actuator
-https://geocoder.api.gov.bc.ca/geocodersvc/actuator
-
-### Actuator
-https://geocoder.api.gov.bc.ca/geocodersvc/actuator/prometheus
-
-
-
-
-# RIDE: GeoCoder API Service  
-
-## About    
-
-TBD  
-
-
-## Pre-Requisites  
-
-To be able to run the API service locally below are some pre-requisites you need  
-- Install Docker  
-- Install Make  
-    ```sh
-    winget install GnuWin32.make  
-    ```  
-- Install OpenJDK17
-
-
-## Local Development      
-
-To test the API locally from a Docker container, run below commands. Before running the commands, copy the .env-template file and rename the copied file to .env. Update the variable values in the .env file.  
+Before running the API containers, copy the .env-template file and rename the copied file to .env. Update the variable values in the .env file.  
 
 ```yaml
 ENVIRONMENT=dev
@@ -180,12 +139,19 @@ GOOGLE_API_KEY=
 GOOGLE_FAIL_OVER_ENABLED="FALSE"
 ```    
 
-After updating the values, run this command to spin up local docker stack for the API.  
+After updating the values, run this command to spin up local docker stack for the API. It will spin up the API and the metrics containers.
 
 ```sh
 cd rsbc-ride-geocoder-svc  
 make build_start
-```    
+```      
+
+This command will bring up the following services:
+
+- **collector:** OpenTelemetry collector
+- **tempo:** responsible for application traces
+- **prometheus:** displays metrics processed by the Actuator
+- **grafana:** displays metrics in a graphical interface.
 
 To stop the containers
 ```sh
@@ -213,9 +179,40 @@ cd rsbc-ride-geocoder-svc
 make run_tests
 ``` 
 
+### Future Change---TBD
+In a second terminal, navigate to the "src/test/resources/local" folder and execute the available script "run-service.sh". This script will download the OpenTelemetry agent, compile, and run our application, making it available for querying.
 
 
+## Integrated Tests
+1. Make sure that our REST application is running on port 8080 and WireMock is running on port 8082.
 
+
+2. Upon executing the application, Mongock will also be executed, ensuring that loading data into the Partners table will prepare the application.
+ 
+
+3. Execute the call according to the address where the Mock was set up by WireMock: '123 Main Street, Ottawa, ON K1P 1J1, Canada' 
+    address: Endereço to be queried
+   </br>(GET - https://geocoder.api.gov.bc.ca/geocodersvc/api/v1/address?address=123 Main Street, Ottawa, ON K1P 1J1, Canada)
+
+   
+## Documentation
+
+### API Docs
+https://geocoder.api.gov.bc.ca/geocodersvc/v3/api-docs
+
+### Swagger
+
+The application documentation can be accessed at the address https://geocoder.api.gov.bc.ca/geocodersvc/swagger-ui.html, where we have examples of controller executions:
+
+![api_ping](images/swagger.png)
+
+
+## Metrics  Endpoints
+### Actuator
+https://geocoder.api.gov.bc.ca/geocodersvc/actuator
+
+### Actuator
+https://geocoder.api.gov.bc.ca/geocodersvc/actuator/prometheus  
 
 ## Change Process  
 

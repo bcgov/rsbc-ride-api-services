@@ -1,5 +1,5 @@
 
-.PHONY: build_start down local_build run_tests
+.PHONY: build_start down local_build run_tests metrics_stack_up
 
 # Docker build and start the local docker stack
 build_start:
@@ -15,3 +15,11 @@ local_build:
 # Perform local unit tests
 run_tests:
 	mvn clean compile test
+
+# Spin up the local metrics stack
+metrics_stack_up:
+	cd local_dev/local_metrics && docker-compose -f docker-compose.yml up -d --force-recreate $(c)
+
+# Spin down the local metrics stack
+metrics_stack_down:
+	cd local_dev/local_metrics && docker-compose -f docker-compose.yml down $(c)
