@@ -5,6 +5,7 @@ import ca.bc.gov.ride.geocodersvc.config.properties.Properties;
 import ca.bc.gov.ride.geocodersvc.model.DataBc;
 import ca.bc.gov.ride.geocodersvc.model.DataResponse;
 import ca.bc.gov.ride.geocodersvc.model.GoogleData;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class GoogleService {
     @Autowired
     private Properties properties;
 
+    @WithSpan
     public Mono<DataResponse> getGoogleApi(String addressString, DataBc dataBc) {
         return webClient
                 .method(HttpMethod.GET)

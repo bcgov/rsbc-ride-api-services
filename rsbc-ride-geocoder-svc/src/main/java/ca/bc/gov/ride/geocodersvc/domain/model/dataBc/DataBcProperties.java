@@ -17,17 +17,17 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DataBcProperties {
 
+  @JsonProperty("fullAddress")
+  private String fullAddress;
+
   @JsonProperty("score")
   private Integer score;
 
-  @JsonProperty("match_precision")
+  @JsonProperty("matchPrecision")
   private String matchPrecision;
 
-  @JsonProperty("full_address")
-  private String fullAddress;
-
   @JsonProperty("faults")
-  private List<String> faults;
+  private List<DataBcFault> faults;
 
 }
 

@@ -1,8 +1,8 @@
 {
   "type": "FeatureCollection",
-  "queryAddress": "525 Superior St Victoria BC",
-  "searchTimestamp": "2023-07-21 04:20:47",
-  "executionTime": 1.252,
+  "queryAddress": "525 Superior St Bictoria BC",
+  "searchTimestamp": "2023-07-19 14:37:18",
+  "executionTime": 3.049,
   "version": "4.2.2-RELEASE",
   "baseDataDate": "2022-09-09",
   "crs": {
@@ -17,10 +17,10 @@
   "setBack": 0,
   "minScore": 0,
   "maxResults": 1,
-  "disclaimer": "https://www2.gov.bc.ca/gov/content?id=79F93E018712422FBC8E674A67A70535",
-  "privacyStatement": "https://www2.gov.bc.ca/gov/content?id=9E890E16955E4FF4BF3B0E07B4722932",
-  "copyrightNotice": "Copyright �� 2023 Province of British Columbia - Open Government License",
-  "copyrightLicense": "https://www2.gov.bc.ca/gov/content?id=A519A56BC2BF44E4A008B33FCF527F61",
+  "disclaimer": "https:\/\/www2.gov.bc.ca\/gov\/content?id=79F93E018712422FBC8E674A67A70535",
+  "privacyStatement": "https:\/\/www2.gov.bc.ca\/gov\/content?id=9E890E16955E4FF4BF3B0E07B4722932",
+  "copyrightNotice": "Copyright \uFFFD\uFFFD 2023 Province of British Columbia - Open Government License",
+  "copyrightLicense": "https:\/\/www2.gov.bc.ca\/gov\/content?id=A519A56BC2BF44E4A008B33FCF527F61",
   "features": [
     {
       "type": "Feature",
@@ -39,10 +39,17 @@
       },
       "properties": {
         "fullAddress": "525 Superior St, Victoria, BC",
-        "score": 100,
+        "score": 98,
         "matchPrecision": "CIVIC_NUMBER",
         "precisionPoints": 100,
-        "faults": [],
+        "faults": [
+          {
+            "value": "BICTORIA",
+            "element": "LOCALITY",
+            "fault": "spelledWrong",
+            "penalty": 2
+          }
+        ],
         "siteName": "",
         "unitDesignator": "",
         "unitNumber": "",

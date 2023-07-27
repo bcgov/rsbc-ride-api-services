@@ -8,19 +8,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(fluent = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DataBcGeometry {
+public class DataBcFault {
 
-  @JsonProperty("coordinates")
-  private List<BigDecimal> coordinates;
+  @JsonProperty("value")
+  private String value;
+
+  @JsonProperty("element")
+  private String element;
+
+  @JsonProperty("fault")
+  private String fault;
+
+  @JsonProperty("penalty")
+  private Integer penalty;
 
 }
 

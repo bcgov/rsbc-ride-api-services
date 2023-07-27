@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
-@OpenAPIDefinition(servers = {@Server(url = "/", description = "Default Server URL")})
+@OpenAPIDefinition(servers = {@Server(url = "/geocodersvc", description = "Geocoder Service")})
 public class PingController implements PingApi {
 
     @Override
