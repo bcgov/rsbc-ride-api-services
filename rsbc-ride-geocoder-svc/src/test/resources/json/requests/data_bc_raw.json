@@ -1,0 +1,75 @@
+{
+  "type": "FeatureCollection",
+  "queryAddress": "525 Superior St Victoria BC",
+  "searchTimestamp": "2023-07-21 04:20:47",
+  "executionTime": 1.252,
+  "version": "4.2.2-RELEASE",
+  "baseDataDate": "2022-09-09",
+  "crs": {
+    "type": "EPSG",
+    "properties": {
+      "code": 4326
+    }
+  },
+  "interpolation": "adaptive",
+  "echo": "true",
+  "locationDescriptor": "any",
+  "setBack": 0,
+  "minScore": 0,
+  "maxResults": 1,
+  "disclaimer": "https://www2.gov.bc.ca/gov/content?id=79F93E018712422FBC8E674A67A70535",
+  "privacyStatement": "https://www2.gov.bc.ca/gov/content?id=9E890E16955E4FF4BF3B0E07B4722932",
+  "copyrightNotice": "Copyright �� 2023 Province of British Columbia - Open Government License",
+  "copyrightLicense": "https://www2.gov.bc.ca/gov/content?id=A519A56BC2BF44E4A008B33FCF527F61",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "crs": {
+          "type": "EPSG",
+          "properties": {
+            "code": 4326
+          }
+        },
+        "coordinates": [
+          -123.3708218,
+          48.4176982
+        ]
+      },
+      "properties": {
+        "fullAddress": "525 Superior St, Victoria, BC",
+        "score": 100,
+        "matchPrecision": "CIVIC_NUMBER",
+        "precisionPoints": 100,
+        "faults": [],
+        "siteName": "",
+        "unitDesignator": "",
+        "unitNumber": "",
+        "unitNumberSuffix": "",
+        "civicNumber": 525,
+        "civicNumberSuffix": "",
+        "streetName": "Superior",
+        "streetType": "St",
+        "isStreetTypePrefix": "false",
+        "streetDirection": "",
+        "isStreetDirectionPrefix": "",
+        "streetQualifier": "",
+        "localityName": "Victoria",
+        "localityType": "City",
+        "electoralArea": "",
+        "provinceCode": "BC",
+        "locationPositionalAccuracy": "high",
+        "locationDescriptor": "parcelPoint",
+        "siteID": "dc9357ba-7f40-4395-9eda-219ca5f475c0",
+        "blockID": 296337,
+        "fullSiteDescriptor": "",
+        "accessNotes": "",
+        "siteStatus": "active",
+        "siteRetireDate": "9999-12-31",
+        "changeDate": "2022-09-10",
+        "isOfficial": "true"
+      }
+    }
+  ]
+}
