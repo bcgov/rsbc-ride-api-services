@@ -1,0 +1,55 @@
+spring:
+  active:
+    profiles: ${SPRING_PROFILES_ACTIVE:local}
+  application:
+    name: geocodersvc
+  webflux:
+    base-path: /geocodersvc
+
+application:
+  environment: ${ENVIRONMENT:dev}
+  minimumConfidenceScore: ${MIN_CONFIDENCE_SCORE:55}
+  security:
+    username: ${API_USER_NAME:SSGUser}
+    password: ${API_USER_PASSWORD:notset}
+  geocodeSecret: ${GEOCODE_SECRET_KEY:}
+  geocodeUserName: ${GEOCODE_BASIC_AUTH_USER:}
+  geocodePassword: ${GEOCODE_BASIC_AUTH_PASS:}
+  dataBcUrl: ${DATA_BC_API_URL:https://geocoder.api.gov.bc.ca}
+  dataBcApiKey: ${DATA_BC_API_KEY:}
+  googleUrl: ${GOOGLE_API_ROOT_URL:https://maps.googleapis.com/maps/api/geocode/json}
+  googleApiKey: ${GOOGLE_API_KEY:not-implemented-at-this-time}
+  googleFailOver: ${GOOGLE_FAIL_OVER_ENABLED:FALSE}
+  webClientBaseUri:
+  webClientTimeOut: 5000
+  path:
+    ping: /ping
+    ready: /ready
+    geocodesvc: /geocodersvc/api/v1/address
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: "health,metrics,prometheus"
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    metrics:
+      enabled: true
+      export:
+        prometheus:
+          enabled: true
+    prometheus:
+      enabled: true
+
+otel:
+  traces:
+    api:
+      version: v1
+  metrics:
+    api:
+      version: v1
+      enabled: true

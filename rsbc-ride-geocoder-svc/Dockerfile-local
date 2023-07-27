@@ -1,0 +1,15 @@
+FROM maven@sha256:62e6a9e10fb57f3019adeea481339c999930e7363f2468d1f51a7c0be4bca26d AS MAVEN_BUILD
+COPY pom.xml /build/
+COPY . /build/
+WORKDIR /build/
+RUN pwd
+RUN ls -a
+RUN mvn clean install -DskipTests
+
+
+FROM openjdk@sha256:98f0304b3a3b7c12ce641177a99d1f3be56f532473a528fda38d53d519cafb13
+WORKDIR /app
+RUN pwd
+EXPOSE 8080
+COPY --from=MAVEN_BUILD /build/target/*.jar /app/app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]

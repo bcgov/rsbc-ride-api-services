@@ -1,0 +1,23 @@
+{
+    "request": {
+        "method": "GET",
+        "urlPathPattern": "/maps/api/geocode/json",
+        "queryParameters": {
+            "key": {
+                "equalTo": "AIzaSyDQVxyW6-V3r-1jc90P4bQ2ulm2uJxlq1I"
+            },
+            "address": {
+                "equalTo": "123 Main Street, Ottawa, ON K1P 1J1, Canada"
+            }
+          }
+    },
+    "response": {
+        "status": 200,
+        "bodyFileName": "google_raw.json",         
+        "headers": {
+            "Content-Type": "application/json"
+      }
+    }
+}
+
+
