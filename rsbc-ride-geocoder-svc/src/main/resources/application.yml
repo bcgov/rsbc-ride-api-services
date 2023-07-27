@@ -32,7 +32,7 @@ management:
     enabled-by-default: false
     web:
       exposure:
-        include: "health,prometheus"
+        include: "health,metrics,prometheus"
   endpoint:
     health:
       enabled: true
@@ -43,4 +43,13 @@ management:
         prometheus:
           enabled: true
     prometheus:
+      enabled: true
+
+otel:
+  traces:
+    api:
+      version: v1
+  metrics:
+    api:
+      version: v1
       enabled: true

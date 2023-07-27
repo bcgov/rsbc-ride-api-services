@@ -81,8 +81,15 @@ components:
           type: array
           description: Fault of the address
           items:
-            type: string
-            description: Fault of the address
+            type: object
+            value:
+              type: string
+            element:
+              type: string
+            fault:
+              type: string
+            penalty:
+              type: integer
         lat:
           type: number
           description: Latitude

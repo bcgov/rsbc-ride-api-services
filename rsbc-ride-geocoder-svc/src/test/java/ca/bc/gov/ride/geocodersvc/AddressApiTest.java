@@ -23,7 +23,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AddressApiControllerTest {
+public class AddressApiTest {
 
     @LocalServerPort
     Integer port;
@@ -42,19 +42,13 @@ public class AddressApiControllerTest {
 
     @Value("${application.googleApiKey}")
     private String googleApiKey;
-
-
     private WireMockServer wireMockServer;
-    private final String ADDRESS_TEST = "123 Main Street, Ottawa, ON K1P 1J1, Canada";
 
     @BeforeEach
     public void init() throws IOException {
-        String AddressTestEncoded = "123+Main+Street%252C+Ottawa%252C+ON+K1P+1J1%252C+Canada";
         WireMock.configureFor("localhost", 8085);
         wireMockServer = new WireMockServer(8085);
         wireMockServer.start();
-        mockingDataBcApi(AddressTestEncoded);
-        mockingGoogleApi(AddressTestEncoded);
     }
 
     @AfterEach
@@ -64,38 +58,65 @@ public class AddressApiControllerTest {
 
     @Test
     @DisplayName("Test that verifies the response from the Databc API")
-    public void addressLookup_EndToEndSuccessTest() throws IOException {
+    public void addressLookup_EndToEndSuccessTestDataBc() throws IOException {
+        String address = "525 Superior St Victoria BC";
+        String addressTestEncoded = "525+Superior+St+Victoria+BC";
+        String mockFileLocation = "json/requests/data_bc_raw.json";
+
+        mockingDataBcApi(addressTestEncoded, mockFileLocation);
+        mockingGoogleApi(addressTestEncoded);
 
         webTestClient.get()
                 .uri("http://localhost:" + port + pathGeocoderSvc +
-                        "?address=" + ADDRESS_TEST)
+                        "?address=" + address)
                 .header("Authorization",
                         "Basic " + Base64.getEncoder().encodeToString(
                                 (securityUsername+":"+securitYPassword).getBytes()))
                 .exchange().expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody().json(getFileContent("json/responses/success.json"), true);
+                .expectBody().json(getFileContent("json/responses/data_bc_success.json"), true);
+    }
+
+    @Test
+    @DisplayName("Test that verifies the response from the Databc API and Google API")
+    public void addressLookup_EndToEndSuccessTestGoogleApi() throws IOException {
+        String address = "525 Superior St Bictoria BC";
+        String addressTestEncoded = "525+Superior+St+Bictoria+BC";
+        String mockFileLocation = "json/requests/lower_score.json";
+
+        mockingDataBcApi(addressTestEncoded, mockFileLocation);
+        mockingGoogleApi(addressTestEncoded);
+
+        webTestClient.get()
+                .uri("http://localhost:" + port + pathGeocoderSvc +
+                        "?address=" + address)
+                .header("Authorization",
+                        "Basic " + Base64.getEncoder().encodeToString(
+                                (securityUsername+":"+securitYPassword).getBytes()))
+                .exchange().expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody().json(getFileContent("json/responses/google_success.json"), true);
     }
 
     @NotNull
     private static String getFileContent(String location) throws IOException {
-        return new String(Objects.requireNonNull(AddressApiControllerTest.class.getClassLoader()
+        return new String(Objects.requireNonNull(AddressApiTest.class.getClassLoader()
                 .getResourceAsStream(location)).readAllBytes());
     }
 
-    private void mockingDataBcApi(String AddressTestEncoded) throws IOException {
+    private void mockingDataBcApi(String addressTestEncoded, String fileLocation) throws IOException {
         stubFor(
-                get(urlEqualTo("/addresses.geojson?address="+ AddressTestEncoded))
+                get(urlEqualTo("/addresses.json?addressString="+ addressTestEncoded))
                         .willReturn(aResponse()
                                 .withStatus(200)
                                 .withHeader("Content-Type", "application/json")
-                                .withBody(getFileContent("json/requests/data_bc_raw.json"))));
+                                .withBody(getFileContent(fileLocation))));
     }
 
-    private void mockingGoogleApi(String AddressTestEncoded) throws IOException {
+    private void mockingGoogleApi(String addressTestEncoded) throws IOException {
         stubFor(
                 get(urlEqualTo("/maps/api/geocode/json?key=" + googleApiKey +
-                        "&address="+ AddressTestEncoded))
+                        "&address="+ addressTestEncoded))
                         .willReturn(aResponse()
                                 .withStatus(200)
                                 .withHeader("Content-Type", "application/json")
