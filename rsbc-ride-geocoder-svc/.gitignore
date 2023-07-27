@@ -1,0 +1,50 @@
+# Python bytecode
+__pycache__/
+*.pyc
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+
+### IntelliJ IDEA ###
+*.idea
+.idea/*
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### docker-compose secret files
+.env
+/src/test/resources/local/target/geocodersvc-0.0.1-SNAPSHOT.jar
+
+### VS Code ###
+.vscode/
+.DS_Store
+
+## Metrics ##
+tempo-data/
+src/test/resources/local/tempo-data/
+opentelemetry-javaagent.jar
+

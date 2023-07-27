@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'collector'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'collector:6666' ]
+  - job_name: 'api-geocoder-service'
+    metrics_path: /geocodersvc/actuator/prometheus
+    static_configs:
+      - targets: ['host.docker.internal:8080']
+        labels:
+          application: geocodersvc
+  - job_name: 'api-payment-service'
+    metrics_path: /paymentsvc/actuator/prometheus
+    static_configs:
+      - targets: ['localhost:8585']
+        labels:
+          application: paymentsvc
