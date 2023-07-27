@@ -1,0 +1,20 @@
+{
+    "request": {
+        "method": "GET",
+        "urlPathPattern": "/addresses.json",
+        "queryParameters": {
+            "address": {
+                "equalTo": "525 Superior St Victoria BC"
+            }
+          }
+    },
+    "response": {
+        "status": 200,
+        "bodyFileName": "data_bc_raw.json",         
+        "headers": {
+            "Content-Type": "application/json"
+      }
+    }
+}
+
+

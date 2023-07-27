@@ -1,0 +1,13 @@
+{
+    "results": [
+      {
+        "geometry": {
+          "location": {
+            "lat": 45.5234,
+            "lng": 75.6750
+          },
+          "location_type": "RANGE_INTERPOLATED"
+        }
+      }
+    ]
+}
