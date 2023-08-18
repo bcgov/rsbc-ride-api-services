@@ -19,3 +19,4 @@ fi
 #export SERVER_PORT=8585
 
 java -javaagent:./${AGENT_FILE} -jar target/geocodersvc-0.0.1-SNAPSHOT.jar
+
