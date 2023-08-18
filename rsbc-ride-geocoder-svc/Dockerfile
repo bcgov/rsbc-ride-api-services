@@ -9,7 +9,8 @@ RUN mvn clean install -DskipTests
 
 FROM artifacts.developer.gov.bc.ca/rbe5-images/openjdk-basseimage:17.0.2-jdk
 WORKDIR /app
+RUN curl -k -L https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
 RUN pwd
 EXPOSE 8080
 COPY --from=MAVEN_BUILD /build/target/*.jar /app/app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java","-javaagent:","./opentelemetry-javaagent.jar", "-jar", "app.jar"]
