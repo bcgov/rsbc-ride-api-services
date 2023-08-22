@@ -1,0 +1,5 @@
+fastapi==0.101.1
+uvicorn==0.23.2
+gunicorn==21.2.0
+requests==2.31.0
+pymssql==2.2.8
