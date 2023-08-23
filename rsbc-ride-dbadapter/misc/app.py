@@ -88,20 +88,34 @@ async def upsertdata(payload: dict):
             datarows=payloadinput['data']
             primarykeys=payloadinput['primarykeys']
             logging.info("processing data for BI destination")  
-            bi_db_obj=BiDBClass(dbname,dbserver,dbuser,dbpassword,logging)
+            bi_db_obj=BiDBClass(dbname,dbserver,dbuser,dbpassword)
             for rw in datarows:
                 logging.info("processing row")
                 logging.debug(rw)
                 recordfnd,rows=bi_db_obj.querydata(schema,tablename,rw,primarykeys)
                 if recordfnd:
-                    # print('record found')
+                    print('record found')
                     # logging.info('duplicate found. Skipping row')
                     # logging.error('duplicate found. Skipping row')
                     logging.info('record found. Updating row')
                     bi_db_obj.upsertdata(schema,tablename,rw,primarykeys)
                 else:
-                    # print('record not found')
+                    print('record not found')
                     insertSttus=bi_db_obj.insertrow(schema,tablename,rw)
+                # upsertStts=bi_db_obj.upsertdata(schema,tablename,rw,primarykeys)
+                # bi_db_obj.upsertdata(schema,tablename,rw)
+                # recordfnd,rows=bi_db_obj.querydata(schema,tablename,rw)
+                # print(recordfnd)
+                # print(rows)
+                # if recordfnd:
+                #     # print('record found')
+                #     # logging.info('duplicate found. Skipping row')
+                #     # logging.error('duplicate found. Skipping row')
+                #     logging.info('record found. Updating row')
+                #     bi_db_obj.upsertdata(schema,tablename,rw)
+                # else:
+                #     # print('record not found')
+                #     insertSttus=bi_db_obj.insertrow(schema,tablename,rw)
         status_code = 200
         respstatus = {"status": "success"}
     except Exception as e:
