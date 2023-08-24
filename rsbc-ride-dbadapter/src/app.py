@@ -28,23 +28,35 @@ async def insertdata(payload: dict):
     logging.info("triggered insertdata")
     respstatus = {"status": "failure"}
     status_code = 500
+    errFlag=False
     try:
         payloadinput = payload.copy()
         if not validatepayload(payloadinput):
             status_code = 400
             raise Exception('Invalid payload')
-        logging.info(payloadinput)
-        if payloadinput['destination']=='bi':
+    except Exception as e:
+        print(e)
+        logging.error(e)
+        respstatus = {"status": "failure", "error": str(e)}
+        logging.debug(payloadinput)
+    if payloadinput['destination']=='bi':
+        try:
             dbserver=os.getenv('BI_DB_SERVER')
             dbuser=os.getenv('BI_DB_USER')
             dbpassword=os.getenv('BI_DB_PASSWORD')
             dbname=os.getenv('BI_DB_NAME')
-            schema=payloadinput['schema']
-            tablename=payloadinput['tablename']
-            datarows=payloadinput['data']
-            logging.info("processing data for BI destination")  
-            bi_db_obj=BiDBClass(dbname,dbserver,dbuser,dbpassword)
-            for rw in datarows:
+        except Exception as e:
+            # print(e)
+            logging.error(e)
+            respstatus = {"status": "failure", "error": str(e)}
+            logging.debug(payloadinput)
+        schema=payloadinput['schema']
+        tablename=payloadinput['tablename']
+        datarows=payloadinput['data']
+        logging.info("processing data for BI destination")  
+        bi_db_obj=BiDBClass(dbname,dbserver,dbuser,dbpassword,logging)
+        for rw in datarows:
+            try:
                 logging.info("processing row")
                 logging.debug(rw)
                 # bi_db_obj.upsertdata(schema,tablename,rw)
@@ -58,12 +70,15 @@ async def insertdata(payload: dict):
                 else:
                     print('record not found')
                     insertSttus=bi_db_obj.insertrow(schema,tablename,rw)
-        status_code = 200
-        respstatus = {"status": "success"}
-    except Exception as e:
-        print(e)
-        logging.error(e)
-        respstatus = {"status": "failure","error":str(e)}
+            except Exception as e:                
+                logging.error(e)
+                errFlag=True
+                respstatus = {"status": "failure", "error": str(e)}
+                logging.debug(payloadinput)
+                logging.info("error processing row.moving to next row")
+        if not errFlag:
+            status_code = 200
+            respstatus = {"status": "success"}
     return JSONResponse(status_code=status_code, content=respstatus)
 
 
@@ -72,24 +87,36 @@ async def upsertdata(payload: dict):
     logging.info("triggered upsertdata")
     respstatus = {"status": "failure"}
     status_code = 500
+    errFlag=False
     try:
         payloadinput = payload.copy()
         if not validatepayload(payloadinput):
             status_code = 400
             raise Exception('Invalid payload')
-        logging.info(payloadinput)
-        if payloadinput['destination']=='bi':
+    except Exception as e:
+        # print(e)
+        logging.error(e)
+        respstatus = {"status": "failure", "error": str(e)}
+        logging.debug(payloadinput)
+    if payloadinput['destination']=='bi':
+        try:
             dbserver=os.getenv('BI_DB_SERVER')
             dbuser=os.getenv('BI_DB_USER')
             dbpassword=os.getenv('BI_DB_PASSWORD')
             dbname=os.getenv('BI_DB_NAME')
-            schema=payloadinput['schema']
-            tablename=payloadinput['tablename']
-            datarows=payloadinput['data']
-            primarykeys=payloadinput['primarykeys']
-            logging.info("processing data for BI destination")  
-            bi_db_obj=BiDBClass(dbname,dbserver,dbuser,dbpassword,logging)
-            for rw in datarows:
+        except Exception as e:
+            # print(e)
+            logging.error(e)
+            respstatus = {"status": "failure", "error": str(e)}
+            logging.debug(payloadinput)
+        schema=payloadinput['schema']
+        tablename=payloadinput['tablename']
+        datarows=payloadinput['data']
+        primarykeys=payloadinput['primarykeys']
+        logging.info("processing data for BI destination")  
+        bi_db_obj=BiDBClass(dbname,dbserver,dbuser,dbpassword,logging)
+        for rw in datarows:
+            try:
                 logging.info("processing row")
                 logging.debug(rw)
                 recordfnd,rows=bi_db_obj.querydata(schema,tablename,rw,primarykeys)
@@ -102,10 +129,13 @@ async def upsertdata(payload: dict):
                 else:
                     # print('record not found')
                     insertSttus=bi_db_obj.insertrow(schema,tablename,rw)
-        status_code = 200
-        respstatus = {"status": "success"}
-    except Exception as e:
-        print(e)
-        logging.error(e)
-        respstatus = {"status": "failure","error":str(e)}
+            except Exception as e:                
+                logging.error(e)
+                errFlag=True
+                respstatus = {"status": "failure", "error": str(e)}
+                logging.debug(payloadinput)
+                logging.info("error processing row.moving to next row")
+        if not errFlag:
+            status_code = 200
+            respstatus = {"status": "success"}
     return JSONResponse(status_code=status_code, content=respstatus)
