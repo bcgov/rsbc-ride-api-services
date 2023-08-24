@@ -1,4 +1,4 @@
-name: Geocoder-Build & Deploy to DEV
+name: DBadapter-Build & Deploy to DEV
 on:
   pull_request:
     types: [opened, reopened,edited,synchronize]
