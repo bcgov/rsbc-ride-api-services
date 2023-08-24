@@ -11,6 +11,7 @@ ENV TESTING 0
 
 WORKDIR /app
 COPY src/ .
+COPY requirements.txt .
 # RUN pip install --no-cache-dir -r requirements.txt
 # RUN chown -R app:app /app
 # USER app
