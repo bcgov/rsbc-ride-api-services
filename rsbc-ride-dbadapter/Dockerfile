@@ -10,8 +10,9 @@ ENV TESTING 0
 
 
 WORKDIR /app
-COPY src/ .
-COPY requirements.txt .
+COPY . .
+# COPY requirements.txt .
+# COPY main.py .
 # RUN pip install --no-cache-dir -r requirements.txt
 # RUN chown -R app:app /app
 # USER app
@@ -19,4 +20,4 @@ COPY requirements.txt .
 # USER 1001
 RUN /usr/local/bin/python -m pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
-CMD ["gunicorn", "main:app", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:5000", "--error-logfile", "-"]
+CMD ["gunicorn", "main:api", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:5000", "--error-logfile", "-"]
