@@ -1,0 +1,102 @@
+name: CI Checks for dbadapter build
+
+on:
+  push:
+    branches-ignore:   
+      - 'release**'
+      - 'main'
+      - 'master'
+    paths:
+      - rsbc-ride-dbadapter/**
+
+jobs:
+  test_build:
+    name: Test the Build
+    runs-on: ubuntu-latest
+    # environment: dev
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3    
+      - name: Setup
+        uses: docker/setup-buildx-action@v2
+        with:
+          install: true  
+      - name: Login
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build
+        uses: docker/build-push-action@v3
+        with:
+          context: rsbc-ride-dbadapter
+          file: rsbc-ride-dbadapter/Dockerfile
+          push: false
+      # - name: Checkout repository
+      #   uses: actions/checkout@v3      
+      # - name: Perform a test build
+      #   run: |
+      #     docker build -f Dockerfile-local -t testimage .
+
+#   trivy-scan:
+#     uses: ./.github/workflows/trivy-scan-workflow.yml
+#     with:
+#       DOCKER_CONTEXT: rsbc-ride-geocoder-svc
+#       DOCKER_FILE: rsbc-ride-geocoder-svc/Dockerfile
+#       DOCKER_IMAGE_NAME: rsbc-ride-geocoder-svc
+#     secrets: inherit
+#   run_unit_test:
+#     name: Run Unit Tests
+#     runs-on: ubuntu-latest
+#     environment: pr
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3   
+#       - name: Set up JDK 17
+#         uses: actions/setup-java@v3
+#         with:
+#           java-version: '17'
+#           distribution: 'temurin'
+#       - name: Run unit tests
+#         run: |
+#           cd rsbc-ride-geocoder-svc
+#           mvn clean compile test
+#       - name: Publish Test Report
+#         uses: mikepenz/action-junit-report@v3
+#         if: success() || failure()
+#         with:
+#           report_paths: './rsbc-ride-geocoder-svc/target/surefire-reports/TEST-*.xml'
+
+          
+
+#   test_build:
+#     name: Test the Build
+#     runs-on: ubuntu-latest
+#     needs: run_unit_test
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+
+#       - name: Setup
+#         uses: docker/setup-buildx-action@v2
+#         with:
+#           install: true
+
+#       - name: Login
+#         uses: docker/login-action@v2
+#         with:
+#           registry: ${{ secrets.DOCKER_REGISTRY }}
+#           username: ${{ secrets.DOCKER_USERNAME }}
+#           password: ${{ secrets.DOCKER_PASSWORD }}
+
+#       - name: Build
+#         uses: docker/build-push-action@v3
+#         with:
+#           context: rsbc-ride-geocoder-svc
+#           file: rsbc-ride-geocoder-svc/Dockerfile
+#           push: false
+
+
+
+
