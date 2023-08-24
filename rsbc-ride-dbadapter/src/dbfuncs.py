@@ -17,13 +17,14 @@ class BiDBClass(DatabaseClass):
         self.dbuser = dbuser
         self.dbpass = dbpass
         self.dbname=dbname
+        self.logging = logging
         self.conn,self.cursor = self.getconnection()
-        self.logging=logging
+
 
     def getconnection(self):
         conn = pymssql.connect(server=self.dbserver, user=self.dbuser, password=self.dbpass, database=self.dbname)
         cursor = conn.cursor()
-        logging.info("connected to db")
+        self.logging.info("connected to db")
         return conn,cursor
     
     def querydata(self,schema,tablename,payload,primarykeys=None):
@@ -34,7 +35,7 @@ class BiDBClass(DatabaseClass):
             query = f"SELECT * FROM {schema}.{tablename} WHERE {qrystr}"
             result = self.cursor.execute(query)
             rows = self.cursor.fetchall()
-            logging.debug(rows)
+            self.logging.debug(rows)
             if len(rows)>0:
                 recordfound=True
         else:
@@ -42,7 +43,7 @@ class BiDBClass(DatabaseClass):
             query = f"SELECT * FROM {schema}.{tablename} WHERE {qrystr}"
             result = self.cursor.execute(query)
             rows = self.cursor.fetchall()
-            logging.debug(rows)
+            self.logging.debug(rows)
             if len(rows)>0:
                 recordfound=True
 
@@ -51,14 +52,14 @@ class BiDBClass(DatabaseClass):
     def insertrow(self,schema,tablename,payload):
         # sql insert query
         insertstr=bi_prepinsertstring(payload,tablename,schema)
-        logging.debug(insertstr)
+        self.logging.debug(insertstr)
         self.cursor.execute(insertstr)
         self.conn.commit()
         return True
 
     def upsertdata(self,schema,tablename,payload,primarykeys):
         upsertstr=bi_prepupsertstring(payload,tablename,schema,primarykeys)
-        logging.debug(upsertstr)
+        self.logging.debug(upsertstr)
         self.cursor.execute(upsertstr)
         self.conn.commit()
         return True
