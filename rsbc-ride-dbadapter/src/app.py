@@ -120,12 +120,15 @@ async def upsertdata(payload: dict):
                 logging.info("processing row")
                 logging.debug(rw)
                 recordfnd,rows=bi_db_obj.querydata(schema,tablename,rw,primarykeys)
-                if recordfnd:
+                if recordfnd and len(rows)==1:
                     # print('record found')
                     # logging.info('duplicate found. Skipping row')
                     # logging.error('duplicate found. Skipping row')
                     logging.info('record found. Updating row')
                     bi_db_obj.upsertdata(schema,tablename,rw,primarykeys)
+                elif recordfnd and len(rows)>1:
+                    logging.error('multiple records found. Skipping row')
+                    raise Exception('multiple records found. Skipping row')
                 else:
                     # print('record not found')
                     insertSttus=bi_db_obj.insertrow(schema,tablename,rw)
