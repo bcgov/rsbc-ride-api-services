@@ -38,7 +38,7 @@ class BiDBClass(DatabaseClass):
             self.logging.debug(rows)
             if len(rows)>0:
                 recordfound=True
-        elif primarykeys=='NA':
+        elif primarykeys[0]=='NA':
             rows=[]
         else:
             qrystr=bi_prepquerystring(payload,primarykeys)
