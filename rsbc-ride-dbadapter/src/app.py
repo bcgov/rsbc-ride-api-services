@@ -112,7 +112,7 @@ async def upsertdata(payload: dict):
         schema=payloadinput['schema']
         tablename=payloadinput['tablename']
         datarows=payloadinput['data']
-        primarykeys=payloadinput['primarykeys']
+        primarykeys=payloadinput.get('primarykeys',None)
         logging.info("processing data for BI destination")  
         bi_db_obj=BiDBClass(dbname,dbserver,dbuser,dbpassword,logging)
         for rw in datarows:

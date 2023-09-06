@@ -38,6 +38,8 @@ class BiDBClass(DatabaseClass):
             self.logging.debug(rows)
             if len(rows)>0:
                 recordfound=True
+        elif primarykeys=='NA':
+            rows=[]
         else:
             qrystr=bi_prepquerystring(payload,primarykeys)
             query = f"SELECT * FROM {schema}.{tablename} WHERE {qrystr}"
