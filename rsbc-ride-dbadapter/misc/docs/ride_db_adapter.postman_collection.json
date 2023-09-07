@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "7674ffd3-ab99-4a32-ad9b-9512a9176c4b",
+		"name": "RIDE_DB_Adapter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2475239"
+	},
+	"item": [
+		{
+			"name": "ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/ping",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send_data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tablename\":\"dispute_status_updates\",\r\n    \"schema\":\"etk\",\r\n    \"destination\":\"bi\",\r\n    \"data\":[{\r\n        \"event_id\":123,\r\n        \"count_number\":1,\r\n        \"ticket_number\":\"AA\",\r\n        \"dispute_action_date\":\"2019-04-06\",\r\n        \"dispute_action_code\":\"C\"\r\n    }],\r\n    \"source\":\"etk_consumer\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/insertdata",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"insertdata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upsert_data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tablename\":\"dispute_status_updates\",\r\n    \"schema\":\"etk\",\r\n    \"destination\":\"bi\",\r\n    \"data\":[{\r\n        \"event_id\":1234,\r\n        \"count_number\":1,\r\n        \"ticket_number\":\"AA\",\r\n        \"dispute_action_date\":\"2019-04-06\",\r\n        \"dispute_action_code\":\"A\"\r\n    }],\r\n    \"source\":\"etk_consumer\",\r\n    \"primarykeys\":[\"event_id\",\"count_number\",\"ticket_number\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/upsertdata",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"upsertdata"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
