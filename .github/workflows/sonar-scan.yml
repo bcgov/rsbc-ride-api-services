@@ -5,8 +5,12 @@ on:
     branches:
       - main
       - release-geocoder/**
+    paths:
+      - rsbc-ride-geocoder-svc/**
   pull_request:
     types: [opened, synchronize, reopened]
+    paths:
+      - rsbc-ride-geocoder-svc/**
     branches:
         - main
         - devbranch

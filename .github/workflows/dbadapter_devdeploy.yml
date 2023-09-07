@@ -1,0 +1,92 @@
+name: DBadapter-Build & Deploy to DEV
+on:
+  pull_request:
+    types: [opened, reopened,edited,synchronize]
+    branches:   
+      - 'devbranch'
+    paths:
+      - rsbc-ride-dbadapter/**
+
+
+jobs:
+   trivy-scan:
+    uses: ./.github/workflows/trivy-scan-workflow.yml
+    with:
+      DOCKER_CONTEXT: rsbc-ride-dbadapter
+      DOCKER_FILE: rsbc-ride-dbadapter/Dockerfile
+      DOCKER_IMAGE_NAME: rsbc-ride-dbadapter
+    secrets: inherit
+   build:
+    name: Build and Push
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.pull_request.head.ref, 'release-dbadapter/')
+    environment: dev
+    needs: [trivy-scan]
+    env:
+      DOCKER_IMAGE_TAG: ${{ github.sha}}
+      DOCKER_CONTEXT_FOLDER: rsbc-ride-dbadapter
+      DOCKER_IMAGE_NAME: rbe5-images/rsbc-ride-dbadapter
+      DOCKER_FILE: rsbc-ride-dbadapter/Dockerfile
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: docker/setup-buildx-action@v2
+        with:
+          install: true
+
+      - name: Login
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{ env.DOCKER_CONTEXT_FOLDER }}
+          file: ${{ env.DOCKER_FILE }}
+          push: true
+          tags: ${{ secrets.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}
+   deploy_dev_argocd:
+    name: Push to Gitops repo for Dev deployment via Argocd
+    runs-on: ubuntu-latest
+    needs: [trivy-scan,build]
+    env:
+      PR_NUMBER: ${{ github.event.number }}
+      PR_IMAGE_STREAM_TAG: ${{ github.sha}}
+      RELEASE_NAME: release_1_0_0
+    steps:
+      - name: Checkout Gitops repository
+        uses: actions/checkout@v3
+        with:
+          repository: bcgov-c/tenant-gitops-be5301
+          ref: deployment/rsbc-ride-api-svcs
+          token: ${{ secrets.GITOPS_GITHUB_TOKEN }}
+      - name: Update Image tag for Dev deploy
+        uses: mikefarah/yq@v4.28.1
+        with:
+          cmd: yq eval -i '.images[0].newTag = "${{env.PR_IMAGE_STREAM_TAG}}"' 'db-adapter-api/overlays/dev/kustomization.yaml'
+      - name: Update release name for Dev deploy
+        uses: mikefarah/yq@v4.28.1
+        with:
+          cmd: yq eval -i '.commonAnnotations.release_name = "${{env.RELEASE_NAME}}"' 'db-adapter-api/overlays/dev/kustomization.yaml'
+      - name: Update sha annotation
+        uses: mikefarah/yq@v4.28.1
+        with:
+          cmd: yq eval -i '.commonAnnotations.commit_sha = "${{env.PR_IMAGE_STREAM_TAG}}"' 'db-adapter-api/overlays/dev/kustomization.yaml'
+      - name: Check Changed value
+        run: |
+          cat db-adapter-api/overlays/dev/kustomization.yaml
+      - name: Push Changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "updated dev deploy details to dev overlay yaml"
+          git push -u origin deployment/rsbc-ride-api-svcs
+
+  
+        
