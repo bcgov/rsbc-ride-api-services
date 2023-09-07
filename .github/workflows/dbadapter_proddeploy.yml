@@ -25,7 +25,7 @@ jobs:
     env:
       DOCKER_IMAGE_TAG: ${{ github.sha}}
       DOCKER_CONTEXT_FOLDER: rsbc-ride-dbadapter
-      DOCKER_IMAGE_NAME: rbe5-images/rsbc-ride-dbadapter
+      DOCKER_IMAGE_NAME: rbe5-images/rsbc-ride-dbadapter-prod
       DOCKER_FILE: rsbc-ride-dbadapter/Dockerfile
     steps:
       - name: Checkout
