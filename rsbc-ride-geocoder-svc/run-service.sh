@@ -10,6 +10,7 @@ fi
 export OTEL_SERVICE_NAME=geocodersvc
 export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:5555
 
+
 export MIN_CONFIDENCE_SCORE=60
 export GOOGLE_FAIL_OVER_ENABLED=TRUE
 export DATA_BC_API_URL=http://localhost:8082
