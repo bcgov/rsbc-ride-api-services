@@ -13,6 +13,24 @@ def validatepayload(payload):
         return False
     return True
 
+def removenulls(payload):
+    tmppayload=payload.copy()
+    datainput=payload['data']
+    tmpdata=[]
+    for rw in datainput:
+        tmpdata.append(removenullsfromrow(rw))
+    tmppayload['data']=tmpdata
+    return tmppayload
+
+def removenullsfromrow(rw):
+    tmprw={}
+    for k,v in rw.items():
+        if v==None or v=='null' or v=='NULL' or v=='Null' or v=='':
+            pass
+        else:
+            tmprw[k]=v
+    return tmprw
+
 
 def bi_prepquerystring(payload,primarykeys=None):
     tmpstr=''
