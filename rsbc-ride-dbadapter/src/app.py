@@ -3,7 +3,7 @@ import fastapi
 from fastapi.responses import PlainTextResponse,JSONResponse
 import os
 import logging
-from src.utils import validatepayload
+from src.utils import validatepayload,removenulls
 from src.dbfuncs import BiDBClass
 
 
@@ -34,12 +34,14 @@ async def insertdata(payload: dict):
         if not validatepayload(payloadinput):
             status_code = 400
             raise Exception('Invalid payload')
+        payloadinput = removenulls(payloadinput)
     except Exception as e:
         print(e)
         logging.error(e)
         respstatus = {"status": "failure", "error": str(e)}
         logging.debug(payloadinput)
-    if payloadinput['destination']=='bi':
+        errFlag=True
+    if payloadinput['destination']=='bi' and not errFlag:
         try:
             dbserver=os.getenv('BI_DB_SERVER')
             dbuser=os.getenv('BI_DB_USER')
@@ -93,12 +95,14 @@ async def upsertdata(payload: dict):
         if not validatepayload(payloadinput):
             status_code = 400
             raise Exception('Invalid payload')
+        payloadinput=removenulls(payloadinput)
     except Exception as e:
         # print(e)
         logging.error(e)
         respstatus = {"status": "failure", "error": str(e)}
         logging.debug(payloadinput)
-    if payloadinput['destination']=='bi':
+        errFlag=True
+    if payloadinput['destination']=='bi' and not errFlag:
         try:
             dbserver=os.getenv('BI_DB_SERVER')
             dbuser=os.getenv('BI_DB_USER')
