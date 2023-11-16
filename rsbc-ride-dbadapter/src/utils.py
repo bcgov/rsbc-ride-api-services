@@ -26,7 +26,7 @@ def removenullsfromrow(rw):
     tmprw={}
     for k,v in rw.items():
         if k=='lat' or k=='long':
-            pass
+            tmprw[k]=v
         elif v==None or v=='null' or v=='NULL' or v=='Null' or v=='':
             pass
         else:
