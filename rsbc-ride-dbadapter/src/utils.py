@@ -18,13 +18,23 @@ def sanitizepayload(payload):
         pass
     else:
         payloaddata=payload.copy()
-        tmppayload=payload['data'][0].copy()
-        outputpayload=payload['data'][0].copy()
-        for k,v in tmppayload.items():
-            if isinstance(v,str):
-                newval=v.replace("'","''")
-                outputpayload[k]=newval
-        payloaddata['data'][0]=outputpayload
+        tmppayload=payload['data'].copy()
+        tmpdata=[]
+        for rw in tmppayload:
+            outputpayload=rw.copy()
+            for k,v in rw.items():
+                if isinstance(v,str):
+                    newval=v.replace("'","''")
+                    outputpayload[k]=newval
+            tmpdata.append(outputpayload)
+        payloaddata['data']=tmpdata
+        # tmppayload=payload['data'][0].copy()
+        # outputpayload=payload['data'][0].copy()
+        # for k,v in tmppayload.items():
+        #     if isinstance(v,str):
+        #         newval=v.replace("'","''")
+        #         outputpayload[k]=newval
+        # payloaddata['data'][0]=outputpayload
     return payloaddata
 
 def removenulls(payload):
