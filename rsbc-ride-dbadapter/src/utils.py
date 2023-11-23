@@ -13,6 +13,30 @@ def validatepayload(payload):
         return False
     return True
 
+def sanitizepayload(payload):
+    if len(payload['data'])==0:
+        pass
+    else:
+        payloaddata=payload.copy()
+        tmppayload=payload['data'].copy()
+        tmpdata=[]
+        for rw in tmppayload:
+            outputpayload=rw.copy()
+            for k,v in rw.items():
+                if isinstance(v,str):
+                    newval=v.replace("'","''")
+                    outputpayload[k]=newval
+            tmpdata.append(outputpayload)
+        payloaddata['data']=tmpdata
+        # tmppayload=payload['data'][0].copy()
+        # outputpayload=payload['data'][0].copy()
+        # for k,v in tmppayload.items():
+        #     if isinstance(v,str):
+        #         newval=v.replace("'","''")
+        #         outputpayload[k]=newval
+        # payloaddata['data'][0]=outputpayload
+    return payloaddata
+
 def removenulls(payload):
     tmppayload=payload.copy()
     datainput=payload['data']
@@ -51,7 +75,6 @@ def bi_prepinsertstring(payload,tablename,schema):
     columns = ', '.join(payload.keys())
     values = ', '.join([f"'{value}'" for value in payload.values()])
     sql_query = f"INSERT INTO {schema}.{tablename} ({columns}) VALUES ({values})"
-
     return sql_query
 
 def bi_prepupsertstring(payload,tablename,schema,primarykeys):
