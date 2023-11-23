@@ -3,7 +3,7 @@ import fastapi
 from fastapi.responses import PlainTextResponse,JSONResponse
 import os
 import logging
-from src.utils import validatepayload,removenulls
+from src.utils import validatepayload,removenulls,sanitizepayload
 from src.dbfuncs import BiDBClass
 
 
@@ -35,6 +35,7 @@ async def insertdata(payload: dict):
             status_code = 400
             raise Exception('Invalid payload')
         payloadinput = removenulls(payloadinput)
+        payloadinput = sanitizepayload(payloadinput)
     except Exception as e:
         print(e)
         logging.error(e)
@@ -59,6 +60,7 @@ async def insertdata(payload: dict):
         bi_db_obj=BiDBClass(dbname,dbserver,dbuser,dbpassword,logging)
         for rw in datarows:
             try:
+                logging.info("-----------------------------------------------start---------------------------------------------------------------------")
                 logging.info("processing row")
                 row_exist=False
                 row_exist=bool(rw)
@@ -77,12 +79,16 @@ async def insertdata(payload: dict):
                         insertSttus=bi_db_obj.insertrow(schema,tablename,rw)
                 else:
                     logging.error('blank row found. Skipping row')
+                logging.info("completed row processing")
+                logging.info("-------------------------------------------------end-------------------------------------------------------------------")
             except Exception as e:                
                 logging.error(e)
                 errFlag=True
                 respstatus = {"status": "failure", "error": str(e)}
                 logging.debug(payloadinput)
                 logging.info("error processing row.moving to next row")
+                logging.info("completed row processing")
+                logging.info("-------------------------------------------------end-------------------------------------------------------------------")
         if not errFlag:
             status_code = 200
             respstatus = {"status": "success"}
@@ -101,6 +107,7 @@ async def upsertdata(payload: dict):
             status_code = 400
             raise Exception('Invalid payload')
         payloadinput=removenulls(payloadinput)
+        payloadinput = sanitizepayload(payloadinput)
     except Exception as e:
         # print(e)
         logging.error(e)
@@ -126,6 +133,7 @@ async def upsertdata(payload: dict):
         bi_db_obj=BiDBClass(dbname,dbserver,dbuser,dbpassword,logging)
         for rw in datarows:
             try:
+                logging.info("---------------------------------------------start-----------------------------------------------------------------------")
                 logging.info("processing row")
                 row_exist=False
                 row_exist=bool(rw)
@@ -146,12 +154,16 @@ async def upsertdata(payload: dict):
                         insertSttus=bi_db_obj.insertrow(schema,tablename,rw)
                 else:
                     logging.error('blank row found. Skipping row')
+                logging.info("completed row processing")
+                logging.info("--------------------------------------------------end------------------------------------------------------------------")
             except Exception as e:                
                 logging.error(e)
                 errFlag=True
                 respstatus = {"status": "failure", "error": str(e)}
                 logging.debug(payloadinput)
                 logging.info("error processing row.moving to next row")
+                logging.info("completed row processing")
+                logging.info("-----------------------------------------------------end---------------------------------------------------------------")
         if not errFlag:
             status_code = 200
             respstatus = {"status": "success"}
