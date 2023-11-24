@@ -72,10 +72,22 @@ def bi_prepquerystring(payload,primarykeys=None):
     return tmpstr[:-5]
 
 def bi_prepinsertstring(payload,tablename,schema):
-    columns = ', '.join(payload.keys())
-    values = ', '.join([f"'{value}'" for value in payload.values()])
+    tmp_payload=payload.copy()
+    if tablename=='geolocations':
+        tmp_payload['requested_address']='NA'
+        tmp_payload['submitted_address']='NA'
+        tmp_payload['full_address']='NA'
+        tmp_payload['databc_long']='NA'
+        tmp_payload['databc_lat']='NA'
+        tmp_payload['databc_score']='NA'
+    columns = ', '.join(tmp_payload.keys())
+    values = ', '.join([f"'{value}'" for value in tmp_payload.values()])
     sql_query = f"INSERT INTO {schema}.{tablename} ({columns}) VALUES ({values})"
     return sql_query
+    # columns = ', '.join(payload.keys())
+    # values = ', '.join([f"'{value}'" for value in payload.values()])
+    # sql_query = f"INSERT INTO {schema}.{tablename} ({columns}) VALUES ({values})"
+    # return sql_query
 
 def bi_prepupsertstring(payload,tablename,schema,primarykeys):
     set_clause = ', '.join([f"{key} = '{value}'" for key, value in payload.items()])
