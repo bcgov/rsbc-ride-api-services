@@ -74,12 +74,18 @@ def bi_prepquerystring(payload,primarykeys=None):
 def bi_prepinsertstring(payload,tablename,schema):
     tmp_payload=payload.copy()
     if tablename=='geolocations':
-        tmp_payload['requested_address']='NA'
-        tmp_payload['submitted_address']='NA'
-        tmp_payload['full_address']='NA'
-        tmp_payload['databc_long']='NA'
-        tmp_payload['databc_lat']='NA'
-        tmp_payload['databc_score']='NA'
+        if 'requested_address' not in tmp_payload:
+            tmp_payload['requested_address']='NA'
+        if 'submitted_address' not in tmp_payload:
+            tmp_payload['submitted_address']='NA'
+        if 'full_address' not in tmp_payload:
+            tmp_payload['full_address']='NA'
+        if 'databc_long' not in tmp_payload:
+            tmp_payload['databc_long']='NA'
+        if 'databc_lat' not in tmp_payload:
+            tmp_payload['databc_lat']='NA'
+        if 'databc_score' not in tmp_payload:
+            tmp_payload['databc_score']='NA'
     columns = ', '.join(tmp_payload.keys())
     values = ', '.join([f"'{value}'" for value in tmp_payload.values()])
     sql_query = f"INSERT INTO {schema}.{tablename} ({columns}) VALUES ({values})"
