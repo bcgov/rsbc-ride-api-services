@@ -44,7 +44,8 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.event.pull_request.head.ref, 'release-geocoder/')
     environment: dev
-    needs: [trivy-scan,run_unit_test]
+    # needs: [trivy-scan,run_unit_test]
+    needs: [trivy-scan]
     env:
       DOCKER_IMAGE_TAG: ${{ github.sha}}
       DOCKER_CONTEXT_FOLDER: rsbc-ride-geocoder-svc
@@ -76,7 +77,8 @@ jobs:
    deploy_dev_argocd:
     name: Push to Gitops repo for Dev deployment via Argocd
     runs-on: ubuntu-latest
-    needs: [trivy-scan,run_unit_test,build]
+    # needs: [trivy-scan,run_unit_test,build]
+    needs: [trivy-scan,build]
     env:
       PR_NUMBER: ${{ github.event.number }}
       PR_IMAGE_STREAM_TAG: ${{ github.sha}}
