@@ -21,7 +21,7 @@ application:
   googleApiKey: ${GOOGLE_API_KEY:not-implemented-at-this-time}
   googleFailOver: ${GOOGLE_FAIL_OVER_ENABLED:FALSE}
   webClientBaseUri:
-  webClientTimeOut: 5000
+  webClientTimeOut: ${WEB_CLIENT_TIMEOUT:80000}
   path:
     ping: /ping
     ready: /ready
