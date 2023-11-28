@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Collections;
 
 @Slf4j
@@ -32,14 +33,19 @@ public class BCDataService {
 
     @WithSpan
     public Mono<DataResponse> getBcDataApi(String addressString) {
+        // log the string
+        log.info("addressString: " + addressString);
+        log.info("url: " + properties.getDataBcUrl() + "/addresses.json?addressString=" +
+                URLEncoder.encode(addressString, StandardCharsets.UTF_8));
         return webClient
                 .method(HttpMethod.GET)
-                .uri(properties.getDataBcUrl() + "/addresses.json?addressString=" +
-                        URLEncoder.encode(addressString, StandardCharsets.UTF_8))
+                .uri(properties.getDataBcUrl() + "/addresses.json?addressString=" + addressString)
+//                        URLEncoder.encode(addressString, StandardCharsets.UTF_8))
                 .header("apikey", properties.getDataBcApiKey())
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(DataBcRaw.class)
+//                .timeout(Duration.ofSeconds(60))
                 .map(data -> DataResponse.builder()
                         .success(true)
                         .addressRaw(addressString)
@@ -51,6 +57,7 @@ public class BCDataService {
     }
 
     private DataBc extractDataBc(DataBcRaw data) {
+
         return DataBc.builder()
                 .fullAddress(data.features().get(0).properties().fullAddress())
                 .score(data.features().get(0).properties().score())
