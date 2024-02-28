@@ -1,0 +1,36 @@
+<configuration debug="true">
+    <springProperty scope="context" name="splunkUrl" source="logging.splunk.url"/>
+    <springProperty scope="context" name="splunkToken" source="logging.splunk.token"/>
+    <springProperty scope="context" name="splunkChannel" source="logging.splunk.channel"/>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{"yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Canada/Pacific} [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    <appender name="splunk" class="com.splunk.logging.HttpEventCollectorLogbackAppender">
+        <url>${splunkUrl}</url>
+        <token>${splunkToken}</token>
+        <channel>${splunkChannel}</channel>
+        <type>raw</type>
+        <source>jh-etk-paymentsvc</source>
+        <sourcetype>jh-etk-paymentsvc-log</sourcetype>
+        <batch_size_count>1</batch_size_count>
+        <disableCertificateValidation>true</disableCertificateValidation>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%msg</pattern>
+        </layout>
+    </appender>
+
+    <logger name="logger" additivity="false" level="debug">
+        <appender-ref ref="splunk"/>
+        <appender-ref ref="console"/>
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="splunk"/>
+        <appender-ref ref="console"/>
+    </root>
+
+</configuration>
