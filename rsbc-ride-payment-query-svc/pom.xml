@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.8</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<groupId>bcgov.jh.etk</groupId>
+	<artifactId>parent</artifactId>
+	<version>0.0.0</version>
+	<name>parent</name>
+	<packaging>pom</packaging>
+	<description>Parent pom</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<jh-etk-common.version>0.0.0</jh-etk-common.version>
+		<spring-security-oauth2.version>2.5.2.RELEASE</spring-security-oauth2.version>
+		<bootstrap.version>3.4.0</bootstrap.version>
+		<jquery.version>3.6.0</jquery.version>
+		<font-awesome.version>5.6.3</font-awesome.version>
+		<jquery-ui.version>1.12.1</jquery-ui.version>
+		<datetimepicker.version>2.4.2</datetimepicker.version>
+		<bootbox.version>4.4.0</bootbox.version>
+		<datatables.version>1.10.24</datatables.version>
+		<flexmark.version>0.40.16</flexmark.version>
+		<keycloak.version>20.0.3</keycloak.version>
+		<lesscss.version>1.7.0.1.1</lesscss.version>
+		<springfox-boot.version>3.0.0</springfox-boot.version>
+		<com.opencsv>5.0</com.opencsv>
+        <org.apache.poi>5.0.0</org.apache.poi>
+		<jacoco.version>0.8.4</jacoco.version>
+		<jcraft.version>0.1.55</jcraft.version>
+		<splunk-library-javalogging.version>1.7.3</splunk-library-javalogging.version>
+		<logback-classic.version>1.2.8</logback-classic.version>
+		<logback-core.version>1.2.8</logback-core.version>
+
+		<lombok.version>1.18.24</lombok.version>
+		<powermock-api-mockito2.version>2.0.0</powermock-api-mockito2.version>
+		<gson.version>2.8.6</gson.version>
+		<spring-cloud.version>2021.0.5</spring-cloud.version>
+	</properties>
+
+	<modules>
+		<module>jh-etk-common</module>
+		<module>jh-etk-paymentsvc</module>
+		
+	</modules>
+
+	<repositories>
+		<repository>
+			<id>splunk-artifactory</id>
+			<name>Splunk Releases</name>
+			<url>https://splunk.jfrog.io/artifactory/ext-releases-local</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>${springfox-boot.version}</version>
+        </dependency>
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+			  <groupId>io.fabric8</groupId>
+			  <artifactId>kubernetes-client</artifactId>
+			  <version>5.11.2</version>
+			</dependency>
+		    <dependency>
+			  	<groupId>bcgov.jh.etk</groupId>
+				<artifactId>jh-etk-common</artifactId>
+				<version>${jh-etk-common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			 
+			<dependency>
+	            <groupId>org.springframework.security.oauth</groupId>
+	            <artifactId>spring-security-oauth2</artifactId>
+	            <version>${spring-security-oauth2.version}</version>
+	        </dependency>
+	        
+			<!-- webjars related dependencies -->
+			<dependency>
+		        <groupId>org.webjars</groupId>
+		        <artifactId>bootstrap</artifactId>
+		        <version>${bootstrap.version}</version>
+		    </dependency>
+	
+			<dependency>
+			    <groupId>org.webjars</groupId>
+			    <artifactId>jquery</artifactId>
+			    <version>${jquery.version}</version>
+			</dependency>
+	
+			<dependency>
+			    <groupId>org.webjars</groupId>
+			    <artifactId>font-awesome</artifactId>
+			    <version>${font-awesome.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>org.webjars</groupId>
+			    <artifactId>jquery-ui</artifactId>
+			    <version>${jquery-ui.version}</version>
+			</dependency>
+	
+				
+			<dependency>
+			    <groupId>org.webjars</groupId>
+			    <artifactId>bootstrap-datetimepicker</artifactId>
+			    <version>${datetimepicker.version}</version>
+			</dependency>
+	
+			<dependency>
+			    <groupId>org.webjars</groupId>
+			    <artifactId>bootbox</artifactId>
+			    <version>${bootbox.version}</version>
+			</dependency>
+						
+			<dependency>
+			    <groupId>org.webjars</groupId>
+			    <artifactId>datatables</artifactId>
+			    <version>${datatables.version}</version>
+			</dependency>
+	
+			<!-- Markdown parser -->
+			<dependency>
+			    <groupId>com.vladsch.flexmark</groupId>
+			    <artifactId>flexmark-all</artifactId>
+			    <version>${flexmark.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.keycloak</groupId>
+			    <artifactId>keycloak-spring-boot-starter</artifactId>
+			    <version>${keycloak.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.jcraft</groupId>
+				<artifactId>jsch</artifactId>
+				<version>${jcraft.version}</version>
+			</dependency>
+			
+			<!-- Opencsv -->
+			<dependency>
+			  <groupId>com.opencsv</groupId>
+			  <artifactId>opencsv</artifactId>
+			  <version>${com.opencsv}</version>
+			</dependency>
+			
+			<!-- the Java API for Microsoft Documents -->
+			<dependency>
+			    <groupId>org.apache.poi</groupId>
+			    <artifactId>poi</artifactId>
+			    <version>${org.apache.poi}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.poi</groupId>
+			    <artifactId>poi-ooxml</artifactId>
+			    <version>${org.apache.poi}</version>
+			</dependency>
+
+			<!-- Splunk -->
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback-classic.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-core</artifactId>
+				<version>${logback-core.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.splunk.logging</groupId>
+				<artifactId>splunk-library-javalogging</artifactId>
+				<version>${splunk-library-javalogging.version}</version>	
+				<exclusions>
+				     <exclusion>
+				       <groupId>org.apache.logging.log4j</groupId>
+				       <artifactId>log4j-core</artifactId>
+				     </exclusion>
+				     <exclusion>
+				       <groupId>org.apache.logging.log4j</groupId>
+				       <artifactId>log4j-api</artifactId>
+				     </exclusion>
+				   </exclusions>			
+			</dependency>
+
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-api-mockito2</artifactId>
+				<version>${powermock-api-mockito2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>${gson.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>
