@@ -50,7 +50,7 @@ jobs:
       - name: Build
         uses: docker/build-push-action@v3
         with:
-          # context: ${{ env.DOCKER_CONTEXT }}
+          context: ${{ env.DOCKER_CONTEXT_FOLDER }}
           file: ${{ env.DOCKER_FILE }}
           push: true
           build-args: |
