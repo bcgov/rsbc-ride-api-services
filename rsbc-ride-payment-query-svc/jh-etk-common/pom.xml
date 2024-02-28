@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+        <groupId>bcgov.jh.etk</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.0.0</version>
+		
+    </parent>
+	
+	<artifactId>jh-etk-common</artifactId>
+	
+	<name>jh-etk-common</name>
+	<packaging>jar</packaging>
+	<description>Common library for the Hub</description>
+	
+	<dependencies>
+		<dependency>
+		  <groupId>io.fabric8</groupId>
+		  <artifactId>kubernetes-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+			<exclusions>
+		     <exclusion>
+		       <groupId>org.apache.logging.log4j</groupId>
+		       <artifactId>log4j-to-slf4j</artifactId>
+		     </exclusion>
+		     <exclusion>
+		       <groupId>org.apache.logging.log4j</groupId>
+		       <artifactId>log4j-api</artifactId>
+		     </exclusion>
+		   </exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+			
+		<!-- Opencsv -->
+		<dependency>
+		  <groupId>com.opencsv</groupId>
+		  <artifactId>opencsv</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
+		<!-- Splunk -->
+	    <dependency>
+	        <groupId>ch.qos.logback</groupId>
+	        <artifactId>logback-classic</artifactId>
+	    </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+        </dependency>
+		<dependency>
+            <groupId>com.splunk.logging</groupId>
+            <artifactId>splunk-library-javalogging</artifactId>
+    	</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+	            <groupId>org.springframework.boot</groupId>
+	            <artifactId>spring-boot-maven-plugin</artifactId>
+	            <!-- Need to skip repackage, so the the classes in the final jar can be found by referenced application -->
+	            <executions>
+	                <execution>
+	                    <id>repackage</id>
+	                    <configuration>
+	                        <skip>true</skip>
+	                  ***REMOVED***
+	                </execution>
+	            </executions>
+	        </plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>

@@ -1,0 +1,9 @@
+{
+  "ticket_no": "string",
+  "count_nbr": "string",
+  "transaction_id": "string",
+  "payment_card_type_txt": "string",
+  "payment_ticket_type_cd": "string",
+  "payment_amt": "string",
+  "receipt_nbr": "string"
+}
