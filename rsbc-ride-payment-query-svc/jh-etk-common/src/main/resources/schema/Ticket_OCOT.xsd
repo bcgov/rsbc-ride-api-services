@@ -1,0 +1,128 @@
+<?xml version="1.0" ?>
+
+<!-- Changes for Sprint 6.5 -->
+<!--   Modified occurrance for PARTNER_ID and PARTNER_ID_TRANS; minOccurs = 0 -->
+<!-- 2019-03-07 OCOT schema changes based on RSIFC-4609 / RSIFC-5551 -->
+
+<xs:schema id="Ticket" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" >
+  <xs:element name="XML_FILE">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="TRANSFER" type="xs:string" nillable="false" minOccurs="0"/>
+        <xs:element name="MRE_VERSION" type="xs:string" nillable="false" minOccurs="0"/>
+        <xs:element name="MINOR_VERSION" type="xs:string" nillable="false" minOccurs="0"/>
+        <xs:element name="TABLE_RELEASE_DATE" type="xs:string" nillable="false" minOccurs="0"/>
+        <xs:element name="PROFILE_NAME" type="xs:string" nillable="false" minOccurs="0"/>
+        <xs:element name="AGENCY_NAME" type="xs:string" nillable="false" minOccurs="0"/>
+        <xs:element name="FILE_NAME" type="xs:string" nillable="false" minOccurs="0"/>
+        <xs:element name="SUBMIT_BY" type="xs:string" nillable="false" minOccurs="0"/>
+        <xs:element name="SUBMIT_BY_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+        <xs:element name="ORG_UNIT" type="xs:string" nillable="false" minOccurs="0"/>
+        <xs:element name="ORG_UNIT_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+        <xs:element name="CASE_TYPE" type="xs:string" nillable="false" minOccurs="0"/>
+        <xs:element name="SUBMIT_DATE" type="xs:string" nillable="false" minOccurs="1"/>
+        <xs:element name="SENT_TIME" type="xs:string" nillable="false" minOccurs="1"/>
+
+        <xs:element name="REPORT" nillable="false" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="JURISDICTION" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="JURISDICTION_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="TICKET_TYPE" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="TICKET_TYPE_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="TICKET_NUM" type="xs:string" nillable="false" minOccurs="1"/>
+              <xs:element name="TICKET_CLASS" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="TICKET_CLASS_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="TICKET_STATUS" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="TICKET_STATUS_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="TICKET_ORIGIN" type="xs:string" nillable="false" minOccurs="1"/>
+              <xs:element name="TICKET_ORIGIN_TRANS" type="xs:string" nillable="false" minOccurs="1"/>
+              <xs:element name="TK_ROLE" type="xs:string" nillable="false" minOccurs="1"/>
+              <xs:element name="REPORT_DATE" type="xs:string"  nillable="false" minOccurs="0"/>
+              <xs:element name="REPORT_TIME" type="xs:string"  nillable="false" minOccurs="0"/>
+              <xs:element name="OFFENCE_DATE" type="xs:string" nillable="false" minOccurs="1"/>
+              <xs:element name="OFFENCE_TIME" type="xs:string" nillable="false" minOccurs="1"/>
+              <xs:element name="STREET_NAME" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="MUNICIPALITY" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="MUNICIPALITY_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="OFFICER_ID" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="OFFICER_ID_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="PARTNER_ID" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="PARTNER_ID_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="SET_FINE_AMOUNT" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="AMOUNT_OF_PENALTY" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="PAYMENT_METHOD" type="xs:string" nillable="false" minOccurs="1"/>
+              <xs:element name="PAYMENT_METHOD_TRANS" type="xs:string" nillable="false" minOccurs="1"/>
+              <xs:element name="PRINTED" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="CHARGE_TEXT" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="STATUTE_ACT" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="STATUTE_ACT_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="STATUTE_SECTION_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="LEGAL_STATUTE_SECTION" type="xs:string" nillable="false" minOccurs="0"/>
+              <xs:element name="PERSON" nillable="false" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="INDIVIDUAL_SURNAME" type="xs:string" nillable="false" minOccurs="0"/>
+                    <xs:element name="GIVEN_ONE" type="xs:string" nillable="false" minOccurs="0"/>
+                    <xs:element name="GIVEN_TWO" type="xs:string" nillable="false" minOccurs="0" />
+                    <xs:element name="GIVEN_THREE" type="xs:string" nillable="false" minOccurs="0" />
+                    <xs:element name="MUNICIPALITY_NAME" type="xs:string" nillable="false" minOccurs="0" />
+                    <xs:element name="PROV_STATE_CODE" type="xs:string" nillable="false" minOccurs="0" />
+                    <xs:element name="PROV_STATE_CODE_TRANS" type="xs:string" nillable="false" minOccurs="0" />
+                    <xs:element name="POSTAL_ZIPCODE" type="xs:string" nillable="false" minOccurs="0" />
+                    <xs:element name="GENDER_CODE" type="xs:string" nillable="false" minOccurs="0" />
+                    <xs:element name="STREET_NAME" type="xs:string" nillable="false" minOccurs="0" />
+                    <xs:element name="DATE_OF_BIRTH" type="xs:string" nillable="false" minOccurs="0" />
+                    <xs:element name="DRIVERS_LICENCE_NUMBER" type="xs:string" nillable="false" minOccurs="0" />
+                    <xs:element name="DRIVERS_LICENCE_PROV_STATE" type="xs:string" nillable="false" minOccurs="0" />
+                    <xs:element name="DRIVERS_LICENCE_PROV_STATE_TRANS" type="xs:string" nillable="false" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="VEHICLE" nillable="false" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="VEHICLE_LICENCE_NUMBER" type="xs:string" nillable="false" minOccurs="0"/>
+                    <xs:element name="LICENCE_PROVINCE" type="xs:string" nillable="false" minOccurs="0"/>
+                    <xs:element name="LICENCE_PROVINCE_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+                    <xs:element name="MODEL_YEAR" type="xs:string" nillable="false" minOccurs="0"/>
+                    <xs:element name="VEHICLE_MAKE" type="xs:string" nillable="false" minOccurs="0"/>
+                    <xs:element name="VEHICLE_MAKE_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+                    <xs:element name="STYLE" type="xs:string" nillable="false" minOccurs="0"/>
+                    <xs:element name="STYLE_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+                    <xs:element name="ORIGINAL_COLOUR" type="xs:string" nillable="false" minOccurs="0"/>
+                    <xs:element name="ORIGINAL_COLOUR_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="CUSTOMDATA" nillable="false" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                      <xs:element name="TK_YOUNG_PERSON" type="xs:string" nillable="false" minOccurs="0" />
+                      <xs:element name="TK_DL_PRODUCED" type="xs:string" nillable="false" minOccurs="0" />
+                      <xs:element name="TK_DL_EXPIRY" type="xs:string" nillable="false" minOccurs="0" />
+                      <xs:element name="TK_CHANGE_ADDRESS" type="xs:string" nillable="false" minOccurs="0" />
+                      <xs:element name="TK_NSC_PUJ" type="xs:string" nillable="false" minOccurs="0" />
+                      <xs:element name="TK_NSC_PUJ_TRANS" type="xs:string" nillable="false" minOccurs="0" />
+                      <xs:element name="TK_NSC_NBR" type="xs:string" nillable="false" minOccurs="0" />
+                      <xs:element name="TK_REG_OWNER_NAME" type="xs:string" nillable="false" minOccurs="0" />
+                      <xs:element name="TK_ACCIDENT" type="xs:string" nillable="false" minOccurs="0" />
+                      <xs:element name="TK_DISPUTE_LOCATION_ADDRESS_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+                      <xs:element name="TK_COURT_HEARING_LOCATION_TRANS" type="xs:string" nillable="false" minOccurs="0"/>
+                      <xs:element name="TK_WITNESSING_OFFICER" type="xs:string" nillable="false" minOccurs="0" />
+                      <xs:element name="TK_WITNESSING_OFFICER_TRANS" type="xs:string" nillable="false" minOccurs="0" />
+                      <xs:element name="TK_CERTIFICATE_ENTITY_PERSON" type="xs:string" nillable="false" minOccurs="1"/>
+                      <xs:element name="TK_CERTIFICATE" type="xs:string" nillable="false" minOccurs="1"/>
+                      <xs:element name="TK_CERTIFICATE_SERVED_TO" type="xs:string" nillable="false" minOccurs="1"/>
+                      <xs:element name="TK_CERTIFICATE_DATE_OF_SERVICE" type="xs:string" nillable="false" minOccurs="1"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="TYPE" type="xs:string" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
