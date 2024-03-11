@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="EVTCanonical" type="evtCanonical"/>
+
+  <xs:element name="EVTDetails" nillable="true" type="xs:anyType"/>
+
+  <xs:complexType name="evtCanonical">
+    <xs:sequence>
+      <xs:element ref="EVTDetails" minOccurs="0"/>
+      <xs:element name="primeFileXml" type="xs:string" minOccurs="0"/>
+      <xs:element name="filename" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+
+  <xs:complexType name="evtDetails">
+    <xs:sequence>
+      <xs:element name="amountOfPenalty" type="xs:string" minOccurs="0"/>
+      <xs:element name="changeOfAddressFlag" type="xs:string" minOccurs="0"/>
+      <xs:element name="carrierJurisdiction" type="xs:string" minOccurs="0"/>
+      <xs:element name="carrierRegNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="certificateOfServiceCompleted" type="xs:string" minOccurs="0"/>
+      <xs:element name="certificateOfServiceServedTo" type="xs:string" minOccurs="0"/>
+      <xs:element name="certificateOfServiceDateOfService" type="xs:string" minOccurs="0"/>
+      <xs:element name="certificateOfServiceEntityPerson" type="xs:string" minOccurs="0"/>
+      <xs:element name="courtLocationCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="dateOfBirth" type="xs:string" minOccurs="0"/>
+      <xs:element name="disputeAddress" type="xs:string" minOccurs="0"/>
+      <xs:element name="driversLicenseExpiryDate" type="xs:string" minOccurs="0"/>
+      <xs:element name="driversLicenseNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="driversLicenseProducedFlag" type="xs:string" minOccurs="0"/>
+      <xs:element name="driversLicenseProvinceCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="driversLicenseProvinceName" type="xs:string" minOccurs="0"/>
+      <xs:element name="enforcementOfficerName" type="xs:string" minOccurs="0"/>
+      <xs:element name="enforcementOfficerLastName" type="xs:string" minOccurs="0"/>
+      <xs:element name="enforcementOfficerNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="enforcementOfficerPartnerName" type="xs:string" minOccurs="0"/>
+      <xs:element name="enforcementOfficerPartnerLastName" type="xs:string" minOccurs="0"/>
+      <xs:element name="enforcementOfficerPartnerNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="enforcementOrganizationJurisdiction" type="xs:string" minOccurs="0"/>
+      <xs:element name="enforcementOrganizationJurisdictionCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="evtPrinted" type="xs:string" minOccurs="0"/>
+      <xs:element name="givenNameOne" type="xs:string" minOccurs="0"/>
+      <xs:element name="givenNameTwo" type="xs:string" minOccurs="0"/>
+      <xs:element name="givenNameThree" type="xs:string" minOccurs="0"/>
+      <xs:element name="MREMinorVersion" type="xs:string" minOccurs="0"/>
+      <xs:element name="offenceDescription" type="xs:string" minOccurs="0"/>
+      <xs:element name="offenderType" type="xs:string" minOccurs="0"/>
+      <xs:element name="organizationUnit" type="xs:string" minOccurs="0"/>
+      <xs:element name="personAddress" type="xs:string" minOccurs="0"/>
+      <xs:element name="personResidenceCity" type="xs:string" minOccurs="0"/>
+      <xs:element name="personResidenceProvinceCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="personResidenceProvinceName" type="xs:string" minOccurs="0"/>
+      <xs:element name="personResidencePostalCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="registeredUserName" type="xs:string" minOccurs="0"/>
+      <xs:element name="reportDate" type="xs:string" minOccurs="0"/>
+      <xs:element name="reportTime" type="xs:string" minOccurs="0"/>
+      <xs:element name="sex" type="xs:string" minOccurs="0"/>
+      <xs:element name="surname" type="xs:string" minOccurs="0"/>
+      <xs:element name="statuteAct" type="xs:string" minOccurs="0"/>
+      <xs:element name="statuteSection" type="xs:string" minOccurs="0"/>
+      <xs:element name="ticketClass" type="xs:string" minOccurs="0"/>
+      <xs:element name="ticketNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="ticketStatus" type="xs:string" minOccurs="0"/>
+      <xs:element name="ticketCOSFormNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="ticketEVTFormNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="violationDate" type="xs:string" minOccurs="0"/>
+      <xs:element name="violationTime" type="xs:string" minOccurs="0"/>
+      <xs:element name="violationLocation" type="xs:string" minOccurs="0"/>
+      <xs:element name="violationCityCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="violationCityName" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleAccidentFlag" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleColour" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleLicenseProvinceCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleLicenseProvinceName" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehiclePlateNo" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleMakeCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleMakeDescription" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleTypeCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleTypeDescription" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleYear" type="xs:string" minOccurs="0"/>
+      <xs:element name="youngPersonFlag" type="xs:string" minOccurs="0"/>
+      <xs:element name="counts" type="counts" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="driversLicense">
+    <xs:sequence>
+      <xs:element name="driversLicenseExpiryDate" type="xs:string" minOccurs="0"/>
+      <xs:element name="driversLicenseNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="driversLicenseProducedFlag" type="xs:string" minOccurs="0"/>
+      <xs:element name="driversLicenseProvinceCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="driversLicenseProvinceName" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ticket">
+    <xs:sequence>
+      <xs:element name="ticketCOSFormNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="ticketEVTFormNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="ticketNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="ticketStatus" type="xs:string" minOccurs="0"/>
+      <xs:element name="ticketClass" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="person">
+    <xs:sequence>
+      <xs:element name="personAddress" type="xs:string" minOccurs="0"/>
+      <xs:element name="personResidenceCity" type="xs:string" minOccurs="0"/>
+      <xs:element name="personResidencePostalCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="personResidenceProvinceCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="personResidenceProvinceName" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="certificateOfService">
+    <xs:sequence>
+      <xs:element name="certificateOfServiceCompleted" type="xs:string" minOccurs="0"/>
+      <xs:element name="certificateOfServiceDateOfService" type="xs:string" minOccurs="0"/>
+      <xs:element name="certificateOfServiceEntityPerson" type="xs:string" minOccurs="0"/>
+      <xs:element name="certificateOfServiceServedTo" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="violation">
+    <xs:sequence>
+      <xs:element name="violationCityCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="violationCityName" type="xs:string" minOccurs="0"/>
+      <xs:element name="violationDate" type="xs:string" minOccurs="0"/>
+      <xs:element name="violationLocation" type="xs:string" minOccurs="0"/>
+      <xs:element name="violationTime" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="enforcementOfficer">
+    <xs:sequence>
+      <xs:element name="enforcementOfficerName" type="xs:string" minOccurs="0"/>
+      <xs:element name="enforcementOfficerLastName" type="xs:string" minOccurs="0"/>
+      <xs:element name="enforcementOfficerNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="enforcementOfficerPartnerName" type="xs:string" minOccurs="0"/>
+      <xs:element name="enforcementOfficerPartnerLastName" type="xs:string" minOccurs="0"/>
+      <xs:element name="enforcementOfficerPartnerNumber" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vehicle">
+    <xs:sequence>
+      <xs:element name="vehicleAccidentFlag" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleColour" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleLicenseProvinceCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleLicenseProvinceName" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleMakeCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleMakeDescription" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehiclePlateNo" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleTypeCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleTypeDescription" type="xs:string" minOccurs="0"/>
+      <xs:element name="vehicleYear" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="counts">
+    <xs:sequence>
+      <xs:element name="countNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="act" type="xs:string" minOccurs="0"/>
+      <xs:element name="section" type="xs:string" minOccurs="0"/>
+      <xs:element name="offenseDescription" type="xs:string" minOccurs="0"/>
+      <xs:element name="amount" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+

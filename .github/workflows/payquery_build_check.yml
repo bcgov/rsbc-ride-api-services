@@ -1,0 +1,149 @@
+name: CI Checks for Pay Query Service build
+
+on:
+  push:
+    branches-ignore:   
+      - 'release**'
+      - 'main'
+      - 'master'
+    paths:
+      - rsbc-ride-payment-query-svc/**
+
+jobs:
+  test_build:
+    name: Test the Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: docker/setup-buildx-action@v2
+        with:
+          install: true
+
+      - name: Login
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build
+        uses: docker/build-push-action@v3
+        with:
+          context: rsbc-ride-payment-query-svc
+          file: rsbc-ride-payment-query-svc/Dockerfile
+          push: false
+#   build:
+#     runs-on: ubuntu-latest
+#     # if: ${{ !(
+#     #     github.event.pull_request.head.ref =~ '^hotfixrelease/' ||
+#     #     github.event.pull_request.head.ref =~ '^hotfix/' ||
+#     #     github.event.pull_request.head.ref =~ '^dependabot/'||
+#     #     github.event.pull_request.head.ref =~ '^feature/'
+#     #   )}}
+#     # if: ${{ github.event.pull_request.head.ref =~ '^release/' }}
+#     # if: startsWith(github.event.pull_request.head.ref, 'release/')
+#     env:
+#       DOCKER_IMAGE_TAG: ${{ github.sha}}
+#       DOCKER_IMAGE_NAME: ride-payquery-service
+#       # DOCKER_CONTEXT: ./
+#       DOCKER_CONTEXT_FOLDER: jh-etk-paymentsvc
+#       DOCKER_FILE: Dockerfile
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+
+#       - name: Setup
+#         uses: docker/setup-buildx-action@v2
+#         with:
+#           install: true
+
+#       - name: Login
+#         uses: docker/login-action@v2
+#         with:
+#           registry: ${{ secrets.DOCKER_REGISTRY }}
+#           username: ${{ secrets.DOCKER_USERNAME }}
+#           password: ${{ secrets.DOCKER_PASSWORD }}
+
+#       - name: Tag
+#         id: tag
+#         uses: mathieudutour/github-tag-action@v6.1
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           tag_prefix: ${{ env.DOCKER_IMAGE_NAME }}=v
+#           fetch_all_tags: true
+
+#       - name: Build
+#         uses: docker/build-push-action@v3
+#         with:
+#           # context: ${{ env.DOCKER_CONTEXT }}
+#           file: ${{ env.DOCKER_FILE }}
+#           push: true
+#           build-args: |
+#             VERSION=${{ steps.tag.outputs.new_version }}
+#           tags: ${{ secrets.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}
+
+# jobs:
+#   trivy-scan:
+#     uses: ./.github/workflows/trivy-scan-workflow.yml
+#     with:
+#       DOCKER_CONTEXT: rsbc-ride-geocoder-svc
+#       DOCKER_FILE: rsbc-ride-geocoder-svc/Dockerfile
+#       DOCKER_IMAGE_NAME: rsbc-ride-geocoder-svc
+#     secrets: inherit
+#   run_unit_test:
+#     name: Run Unit Tests
+#     runs-on: ubuntu-latest
+#     environment: pr
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3   
+#       - name: Set up JDK 17
+#         uses: actions/setup-java@v3
+#         with:
+#           java-version: '17'
+#           distribution: 'temurin'
+#       - name: Run unit tests
+#         run: |
+#           cd rsbc-ride-geocoder-svc
+#           mvn clean compile test
+#       - name: Publish Test Report
+#         uses: mikepenz/action-junit-report@v3
+#         if: success() || failure()
+#         with:
+#           report_paths: './rsbc-ride-geocoder-svc/target/surefire-reports/TEST-*.xml'
+
+          
+
+#   test_build:
+#     name: Test the Build
+#     runs-on: ubuntu-latest
+#     needs: run_unit_test
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+
+#       - name: Setup
+#         uses: docker/setup-buildx-action@v2
+#         with:
+#           install: true
+
+#       - name: Login
+#         uses: docker/login-action@v2
+#         with:
+#           registry: ${{ secrets.DOCKER_REGISTRY }}
+#           username: ${{ secrets.DOCKER_USERNAME }}
+#           password: ${{ secrets.DOCKER_PASSWORD }}
+
+#       - name: Build
+#         uses: docker/build-push-action@v3
+#         with:
+#           context: rsbc-ride-geocoder-svc
+#           file: rsbc-ride-geocoder-svc/Dockerfile
+#           push: false
+
+
+
+
