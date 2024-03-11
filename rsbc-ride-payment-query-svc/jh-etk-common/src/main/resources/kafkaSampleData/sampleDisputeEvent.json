@@ -1,0 +1,8 @@
+{
+  "contravention_no": "string",
+  "dispute_type": "string",
+  "ticketed_amt": "string",
+  "compressed_section": "string",
+  "count_act_regulation": "string",
+  "created_dtmz": "string"
+}
