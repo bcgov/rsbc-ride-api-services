@@ -1,4 +1,4 @@
-name: PayQueryService-Build & Deploy to Test
+name: PayQueryService-Build & Deploy to Prod
 on:
   pull_request:
     types: [opened, reopened,edited,synchronize]
