@@ -1,0 +1,46 @@
+{
+	"contravention": {
+		"number": "EA200008161",
+		"dispute_date": "2019-02-08",
+		"violation_date": "2018-12-25",
+		"date_of_service": "2019-02-03",
+		"violation_city": "SURREY",
+		"icbc_act_regulation": "MVA",
+		"icbc_compressed_section": "135.1",
+		"ticketed_amount": "253.00",
+		"dispute_type_code": ""
+	},
+	"court": {
+		"location_code": "20407"
+	},
+	"evt_data": {
+		"evt_xml": "PHJzaTpjcmVhdGVDb250cmF2ZW50aW9uUmVxdWVzdCB4bWxuczpyc2k9Imh0dHA6Ly9pY2JjLm5ldC9SU0lfSW5mb3JtYXRpb25NYW5hZ2VyIj48U3VibWlzc2lvbj48RGF0ZVN1Ym1pdHRlZD4yMDE3LTExLTI1PC9EYXRlU3VibWl0dGVkPjxUaW1lU2VudD4yMzE1PC9UaW1lU2VudD48L1N1Ym1pc3Npb24+PFBhcnR5PjxJbmRpdmlkdWFsUGFydHk+PFN1cm5hbWU+VEFJTE9SPC9TdXJuYW1lPjxHaXZlbk5hbWUxPkpFUkVNWTwvR2l2ZW5OYW1lMT48R2VuZGVyPk08L0dlbmRlcj48QmlydGhEYXRlPjE5OTAtMDYtMjk8L0JpcnRoRGF0ZT48WW91bmdQZXJzb24+TjwvWW91bmdQZXJzb24+PENoYW5nZU9mQWRkcmVzc0ZsYWc+TjwvQ2hhbmdlT2ZBZGRyZXNzRmxhZz48UmVzaWRlbmNlQWRkcmVzcz48U3RyZWV0QWRkcmVzcz4zNDExIEdSQVRUT04gUkQsIFZJQ1RPUklBIEJDICBWOUMgMVoxPC9TdHJlZXRBZGRyZXNzPjxDaXR5PlZJQ1RPUklBPC9DaXR5PjxQb3N0YWxDb2RlPlY5QzFaMTwvUG9zdGFsQ29kZT48SnVyaXNkaWN0aW9uPjxDb2RlPkJDPC9Db2RlPjwvSnVyaXNkaWN0aW9uPjwvUmVzaWRlbmNlQWRkcmVzcz48RHJpdmVyTGljZW5zZT48TGljZW5zZVByb2R1Y2VkPlk8L0xpY2Vuc2VQcm9kdWNlZD48TnVtYmVyPjE3MDAwMDE8L051bWJlcj48RXhwaXJ5WWVhcj4yMDIxPC9FeHBpcnlZZWFyPjxKdXJpc2RpY3Rpb24+PENvZGU+QkM8L0NvZGU+PC9KdXJpc2RpY3Rpb24+PC9Ecml2ZXJMaWNlbnNlPjwvSW5kaXZpZHVhbFBhcnR5PjwvUGFydHk+PFZpb2xhdGlvbj48VGlja2V0TnVtYmVyPkVBMjAwMDA4MTY8L1RpY2tldE51bWJlcj48T2ZmZW5kZXJEZXNjcmlwdGlvbj5EUklWRVI8L09mZmVuZGVyRGVzY3JpcHRpb24+PFZpb2xhdGlvbkRhdGU+MjAxNy0xMS0yNTwvVmlvbGF0aW9uRGF0ZT48VmlvbGF0aW9uVGltZT4yMzE1PC9WaW9sYXRpb25UaW1lPjxIaWdod2F5Pk1PVU5UQUlOPC9IaWdod2F5PjxDaXR5Q29kZT5TUlk8L0NpdHlDb2RlPjxDaXR5TmFtZT5TVVJSRVk8L0NpdHlOYW1lPjxEaXNwdXRlQWRkcmVzcz4xMTAzLTExNSBGdWxmb3JkLUdhbmdlcyBSZCwgR2FuZ2VzIChTYWx0c3ByaW5nIElzbGFuZCksIEIuQy48L0Rpc3B1dGVBZGRyZXNzPjxDb3VydExvY2F0aW9uPlZBTkNPVVZFUjwvQ291cnRMb2NhdGlvbj48Q291bnQ+PEFjdD5NVjwvQWN0PjxTZWN0aW9uPjEyOSgxKTwvU2VjdGlvbj48T2ZmZW5zZURlc2NyaXB0aW9uPkZBSUwgVE8gU1RPUCBGT1IgUkVEIExJR0hUIEFUIElOVEVSU0VDVElPTjwvT2ZmZW5zZURlc2NyaXB0aW9uPjxBbW91bnQ+MTY3LjAwPC9BbW91bnQ+PC9Db3VudD48L1Zpb2xhdGlvbj48VmVoaWNsZT48UmVnaXN0ZXJlZE93bmVyTmFtZT5KRVJFTVkgVEFJTE9SPC9SZWdpc3RlcmVkT3duZXJOYW1lPjxNYWtlRGVzY3JpcHRpb24+SE9OREE8L01ha2VEZXNjcmlwdGlvbj48VHlwZUNvZGU+U0Q8L1R5cGVDb2RlPjxDb2xvdXI+UFVSUExFPC9Db2xvdXI+PFllYXI+MjAxNTwvWWVhcj48QWNjaWRlbnQ+WTwvQWNjaWRlbnQ+PFZlaGljbGVMaWNlbnNlPjxOdW1iZXI+TUlMSU5EIFc8L051bWJlcj48SnVyaXNkaWN0aW9uPkJDPC9KdXJpc2RpY3Rpb24+PC9WZWhpY2xlTGljZW5zZT48TlNDPjxSZWdpc3RyYXRpb25Db2RlPjAxNzAwMDAxMDwvUmVnaXN0cmF0aW9uQ29kZT48SnVyaXNkaWN0aW9uPkJDPC9KdXJpc2RpY3Rpb24+PC9OU0M+PC9WZWhpY2xlPjxFbmZvcmNlbWVudD48T2ZmaWNlck51bWJlcjE+TVcxMjM0PC9PZmZpY2VyTnVtYmVyMT48RGV0YWNobWVudENvZGU+NDEwODwvRGV0YWNobWVudENvZGU+PERldGFjaG1lbnQ+U0FMVCBTUFJJTkcgSVNMQU5EIFJDTVA8L0RldGFjaG1lbnQ+PE9mZmljZXJOYW1lMT5BLiBKT0hOU09OIE1DTkFMTFk8L09mZmljZXJOYW1lMT48L0VuZm9yY2VtZW50PjxDZXJ0aWZpY2F0ZU9mU2VydmljZT48Q29tcGxldGVkPlk8L0NvbXBsZXRlZD48U2VydmVkVG8+SkVSRU1ZIFRBSUxPUjwvU2VydmVkVG8+PERhdGVPZlNlcnZpY2U+MjAxNy0xMS0yNTwvRGF0ZU9mU2VydmljZT48RW50aXR5VHlwZT5BIFBFUlNPTjwvRW50aXR5VHlwZT48L0NlcnRpZmljYXRlT2ZTZXJ2aWNlPjwvcnNpOmNyZWF0ZUNvbnRyYXZlbnRpb25SZXF1ZXN0Pg=="
+	},
+	"officers": {
+		"enforcement_officer1_number": ""
+	},
+	"disputant": {
+		"client_type_code": "",
+		"organization_name": "",
+		"surname": "TASTEST",
+		"given_name1": "THURSDAY",
+		"given_name2": "",
+		"given_name3": "",
+		"dl_number": "1300016",
+		"mvb_client_number": "013000161",
+		"driver_jurisdiction_code": "BC",
+		"gender_code": "M",
+		"date_of_birth": "1962-05-28",
+		"dispute_client_address1": "",
+		"dispute_client_address2": "",
+		"dispute_client_address3": "",
+		"dispute_client_city": "SOOKE",
+		"dispute_client_jurisdiction_code": "BC",
+		"dispute_client_postal_code": "V8V 8V8",
+		"dispute_client_country_code": ""
+	},
+	"vehicle": {
+		"plate_jurisdiction_code": "",
+		"plate_number": "YNOT"
+	}
+}
