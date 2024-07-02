@@ -19,7 +19,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<jh-etk-common.version>0.0.0</jh-etk-common.version>
+		<jh-etk-common.version>1.1.0-SNAPSHOT</jh-etk-common.version>
 		<spring-security-oauth2.version>2.5.2.RELEASE</spring-security-oauth2.version>
 		<bootstrap.version>3.4.0</bootstrap.version>
 		<jquery.version>3.6.0</jquery.version>
