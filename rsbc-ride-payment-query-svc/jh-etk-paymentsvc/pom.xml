@@ -5,7 +5,7 @@
 	<parent>
         <groupId>bcgov.jh.etk</groupId>
 		<artifactId>parent</artifactId>
-		<version>0.0.0</version>
+		<version>1.0.0</version>
     </parent>
     
 	<artifactId>jh-etk-paymentsvc</artifactId>
