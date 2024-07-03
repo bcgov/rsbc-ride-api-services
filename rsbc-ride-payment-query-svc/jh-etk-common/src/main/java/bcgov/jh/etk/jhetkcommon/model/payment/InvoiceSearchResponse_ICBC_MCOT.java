@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import bcgov.jh.etk.jhetkcommon.model.payment.ref.Contravention;
+import bcgov.jh.etk.jhetkcommon.model.payment.ref.Party;
 import bcgov.jh.etk.jhetkcommon.model.payment.ref.Vehicle;
 
 /**
@@ -23,6 +24,10 @@ public class InvoiceSearchResponse_ICBC_MCOT {
 	
 	/** The vehicle. */
 	private Vehicle vehicle;
+	
+	/** The party. */
+	private Party party;
+	
 	
 	/** The contraventions. */
 	private List<Contravention> contraventions;
@@ -119,6 +124,24 @@ public class InvoiceSearchResponse_ICBC_MCOT {
 	 */
 	public void setVehicle(Vehicle vehicle) {
 		this.vehicle = vehicle;
+	}
+	
+	/**
+	 * Gets the party.
+	 *
+	 * @return the party
+	 */
+	public Party getParty() {
+		return party;
+	}
+
+	/**
+	 * Sets the party.
+	 *
+	 * @param party the new party
+	 */
+	public void setParty(Party party) {
+		this.party = party;
 	}
 	
 	/**
