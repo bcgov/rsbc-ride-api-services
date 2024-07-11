@@ -23,6 +23,15 @@ public class IndividualInvoiceResponse_paybc {
 	/** The party name. */
 	private String party_name;
 	
+	/** The party surname. */
+	private String party_surname;
+	
+	/** The party given name 1. */
+	private String party_given_name1;
+	
+	/** The given name 2. */
+	private String party_given_name2;
+	
 	/** The account number. */
 	private String account_number;
 	
