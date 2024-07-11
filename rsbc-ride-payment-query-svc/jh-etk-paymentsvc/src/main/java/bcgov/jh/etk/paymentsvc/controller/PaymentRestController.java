@@ -601,6 +601,9 @@ public class PaymentRestController extends BaseController {
 		paybcResponse.setCust_trx_type(cust_trx_type);
 		paybcResponse.setInvoice_number(returnResponse.getTicketNumber());
 		paybcResponse.setParty_name(party_name);
+		paybcResponse.setParty_surname(icbcResponse.getParty() == null ? null:icbcResponse.getParty().getSurname());
+		paybcResponse.setParty_given_name1(icbcResponse.getParty() == null ? null:icbcResponse.getParty().getGivenName1());
+		paybcResponse.setParty_given_name2(icbcResponse.getParty() == null ? null:icbcResponse.getParty().getGivenName2());
 		paybcResponse.setParty_number(party_number);
 		paybcResponse.setPbc_ref_number(pbc_ref_number);
 		paybcResponse.setSite_number(site_number);
