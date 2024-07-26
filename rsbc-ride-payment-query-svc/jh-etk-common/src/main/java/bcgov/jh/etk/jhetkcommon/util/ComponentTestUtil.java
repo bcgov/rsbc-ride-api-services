@@ -3,10 +3,7 @@ package bcgov.jh.etk.jhetkcommon.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
 import bcgov.jh.etk.jhetkcommon.config.ApplicationProperties;
@@ -61,7 +58,7 @@ public class ComponentTestUtil {
 		// access ping service
 		ResponseEntity<String> response;
 		String serverUrl;
-		HttpStatus respCode;
+		HttpStatusCode respCode;
 		String resp;
 		
 		serverUrl = urlPrefix + PathConst.PATH_PING_REQUEST;
@@ -71,7 +68,7 @@ public class ComponentTestUtil {
 		respCode = response.getStatusCode();
 		resp = response.getBody();
 		
-		if (respCode != HttpStatus.OK) {
+		if (respCode.value() != HttpStatus.OK.value()) {
 			message.append("Failed accessing " + componentName + ". " + "Http status: " + respCode + "; body: " + resp + "\n");
 			isSuccess = false;
 		} 

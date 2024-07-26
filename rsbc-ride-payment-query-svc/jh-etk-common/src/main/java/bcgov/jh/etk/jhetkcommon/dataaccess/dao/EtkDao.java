@@ -400,7 +400,7 @@ public class EtkDao {
 		String errorStatusesStr = errorStatuses == null ? null : errorStatuses.stream().map(EnumErrorStatus::getCodeValue).collect(Collectors.joining(","));
 		
 		//Call stored procedure
-		Map<String, Object> result = sp.execute(errorID == null ? null : new Integer(errorID), startDateTime, endDateTime, errorStatusesStr);
+		Map<String, Object> result = sp.execute(errorID == null ? null : Integer.parseInt(errorID), startDateTime, endDateTime, errorStatusesStr);
 		if (result == null || result.get(RetrieveErrorStoredProc.PARAM_OUT_RECORDS) == null) {
 			return null;
 		}
