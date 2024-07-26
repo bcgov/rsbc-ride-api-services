@@ -8,8 +8,8 @@
 
 package bcgov.jh.etk.jhetkcommon.model.icbc.evt.mcot;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlEnum;
+import jakarta.xml.bind.annotation.XmlType;
 
 
 /**

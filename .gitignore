@@ -45,3 +45,4 @@ build/
 
 ## Metrics ##
 tempo-data/
+/rsbc-ride-payment-query-svc/.run
