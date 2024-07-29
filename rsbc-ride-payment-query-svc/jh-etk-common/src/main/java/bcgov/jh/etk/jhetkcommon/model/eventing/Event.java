@@ -35,7 +35,7 @@ import bcgov.jh.etk.jhetkcommon.annotation.serializer.OffsetDateTimeSerializer;
 /**
  * Event
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2021-07-02T15:57:15.869-07:00")
+@jakarta.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2021-07-02T15:57:15.869-07:00")
 public class Event implements Comparable<Event>{
   @JsonProperty("event_id")
   private Integer eventId = null;
