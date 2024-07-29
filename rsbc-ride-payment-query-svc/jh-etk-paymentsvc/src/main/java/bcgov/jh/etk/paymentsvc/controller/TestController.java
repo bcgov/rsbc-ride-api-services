@@ -49,15 +49,12 @@ public class TestController {
 		ComponentTestResult dbCheckResult = componentTestUtil.dbVersionCheck();
 		message.append(dbCheckResult.getMessage());
 
-		// check if the component itself is ready
-		Boolean isComponentReady = workingDataSerice.isReady();
-				
 		// access icbcadapter/ping service
 		ComponentTestResult pingCheckResult = componentTestUtil.pingCheck(urlPrefix, "icbcAdapter");
 		message.append(pingCheckResult.getMessage());
 		
 		// return the result
-		if (!(dbCheckResult.isSuccess() && isComponentReady && pingCheckResult.isSuccess())) {
+		if (!(dbCheckResult.isSuccess() && pingCheckResult.isSuccess())) {
 			return ResponseEntity
     				.status(HttpStatus.INTERNAL_SERVER_ERROR)
     				.body(message.toString());

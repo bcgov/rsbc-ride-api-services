@@ -9,7 +9,7 @@ RUN ls -a
 RUN mvn package
 
 # FROM openjdk:8-jre-alpine
-FROM artifacts.developer.gov.bc.ca/rbe5-images/openjdk-basseimage:17.0.2-jdk
+FROM artifacts.developer.gov.bc.ca/rbe5-images/ubi8-openjdk-17-runtime:1.20
 
 WORKDIR /app
 RUN pwd
