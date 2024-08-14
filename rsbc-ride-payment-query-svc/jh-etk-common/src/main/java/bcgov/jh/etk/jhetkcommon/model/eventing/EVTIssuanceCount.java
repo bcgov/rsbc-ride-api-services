@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Electronic violation ticket issuance count
  */
 @ApiModel(description = "Electronic violation ticket issuance count")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2021-07-02T15:57:15.869-07:00")
+@jakarta.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2021-07-02T15:57:15.869-07:00")
 public class EVTIssuanceCount {
   @JsonProperty("count_number")
   private Integer countNumber = null;

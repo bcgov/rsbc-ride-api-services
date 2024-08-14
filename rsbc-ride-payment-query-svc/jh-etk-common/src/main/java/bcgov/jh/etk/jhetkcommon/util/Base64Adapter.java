@@ -4,7 +4,7 @@ package bcgov.jh.etk.jhetkcommon.util;
 import java.nio.charset.Charset;
 import java.util.Base64;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 public class Base64Adapter extends XmlAdapter<String, String> {
 

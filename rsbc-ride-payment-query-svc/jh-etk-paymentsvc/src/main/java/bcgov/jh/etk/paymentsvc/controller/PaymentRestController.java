@@ -38,10 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -298,7 +295,7 @@ public class PaymentRestController extends BaseController {
 	 */
 	private ResponseEntity<String> icbcInvoiceSearchHelper(String ticketNumber, final String contraventionNumber, final String time, 
 			final boolean individualInvoiceSearch) {
-		HttpStatus responseCode = HttpStatus.OK;
+		HttpStatusCode responseCode = HttpStatus.OK;
 		String responseString = "";
 		try {
 			ticketNumber = URLEncoder.encode(ticketNumber, "UTF-8");
@@ -351,10 +348,11 @@ public class PaymentRestController extends BaseController {
 			}
 			return new ResponseEntity<> (getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR), HttpStatus.SERVICE_UNAVAILABLE); 
 		}
-		
-		responseCode = response.getStatusCode();
+
+        assert response != null;
+        responseCode = response.getStatusCode();
 		//success, process the response from ICBC
-		if (HttpStatus.OK.equals(responseCode) || HttpStatus.CREATED.equals(responseCode)) {
+		if (HttpStatus.OK.value() == responseCode.value() || HttpStatus.CREATED.value() == responseCode.value()) {
 			//update ICBC_QT interfaces to RUNNING
 			try {
 				etkService.UpdateInterface(ICBC_QT, EnumInterfaceState.RUNNING, Const.CONST_JH_ETK);
@@ -681,14 +679,14 @@ public class PaymentRestController extends BaseController {
 		//send paymentReceiptRequest to ICBC
 		ResponseEntity<String> response = restService.restfulSave(url, StringUtil.objectToJsonString(receiptICBC), HttpMethod.POST, MediaType.APPLICATION_JSON);
 		
-		HttpStatus responseCode = response.getStatusCode();
+		HttpStatusCode responseCode = response.getStatusCode();
 		//success, process the response from ICBC
 		PaymentReceiptResponse_paybc responsePaybc = new PaymentReceiptResponse_paybc();
 		responsePaybc.setReceipt_amount(paymentReceipt.getReceipt_amount());
 		responsePaybc.setReceipt_date(paymentReceipt.getReceipt_date());
 		responsePaybc.setReceipt_number(paymentReceipt.getReceipt_number());
 		
-		if (responseCode == HttpStatus.OK || responseCode == HttpStatus.CREATED) {
+		if (responseCode.value() == HttpStatus.OK.value() || responseCode.value() == HttpStatus.CREATED.value()) {
 			log.debug("Payment receipt sent to ICBC successfully.");
 			responsePaybc.setStatus("APP");
 			
