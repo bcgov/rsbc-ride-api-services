@@ -2,20 +2,21 @@ package bcgov.jh.etk.paymentsvc.config;
 
 import static bcgov.jh.etk.jhetkcommon.model.PathConst.PATH_PING_REQUEST;
 import static bcgov.jh.etk.jhetkcommon.model.PathConst.PATH_READY_REQUEST;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 	@Value("${svc.security.user.name}")
 	private String apiUserName;
 
@@ -25,34 +26,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Override
-	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.csrf().disable()
-				.authorizeRequests()
-				.anyRequest()
-				.authenticated()
-				.and().httpBasic();
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.authorizeHttpRequests((auth) -> {
+			auth.requestMatchers(PATH_PING_REQUEST, PATH_READY_REQUEST).permitAll();
+			auth.anyRequest().authenticated();
+		}).httpBasic(withDefaults());
+		return http.build();
 	}
 
-	/* 
-     * Unsecure /ping service
-     * (non-Javadoc)
-     * @see org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter#configure(org.springframework.security.config.annotation.web.builders.WebSecurity)
-     */
-    @Override
-    public void configure(final WebSecurity webSecurity) throws Exception {
-        webSecurity.ignoring()
-                // All of Spring Security will ignore the requests
-                .antMatchers(PATH_PING_REQUEST)
-                .antMatchers(PATH_READY_REQUEST);
-    }
-    
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder authentication)
-			throws Exception {
-		authentication.inMemoryAuthentication()
-				.withUser(apiUserName)
+	@Bean
+	public InMemoryUserDetailsManager userDetailsService() {
+		UserDetails user = User
+				.withUsername(apiUserName)
 				.password(passwordEncoder.encode(apiUserPassword))
-				.authorities("USER");
+				.authorities("USER")
+				.build();
+		return new InMemoryUserDetailsManager(user);
 	}
 }
