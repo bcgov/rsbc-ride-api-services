@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Electronic violation ticket purged
  */
 @ApiModel(description = "Electronic violation ticket purged")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2021-07-02T15:57:15.869-07:00")
+@jakarta.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2021-07-02T15:57:15.869-07:00")
 public class EVTPurged {
   @JsonProperty("ticket_number")
   private String ticketNumber = null;

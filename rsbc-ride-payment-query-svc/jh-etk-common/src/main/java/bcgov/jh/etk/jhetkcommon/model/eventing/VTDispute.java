@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Violation ticket dispute
  */
 @ApiModel(description = "Violation ticket dispute")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2021-07-02T15:57:15.869-07:00")
+@jakarta.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2021-07-02T15:57:15.869-07:00")
 public class VTDispute {
   @JsonProperty("ticket_number")
   private String ticketNumber = null;
