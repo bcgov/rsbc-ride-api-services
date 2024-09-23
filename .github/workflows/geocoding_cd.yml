@@ -1,0 +1,21 @@
+name: geocoding-svc-cd
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    branches:
+      - main
+      - devbranch
+      - testbranch
+    paths:
+      - rsbc-ride-geocoding-svc/**
+      - .github/workflows/geocoding-cd.yml
+
+jobs:
+  CD:
+    uses: ./.github/workflows/cd-workflow.yml
+    with:
+      DOCKER_CONTEXT: rsbc-ride-geocoding-svc
+      DOCKER_FILE: rsbc-ride-geocoding-svc/Dockerfile
+      DOCKER_IMAGE_NAME: rbe5-images/rsbc-ride-geocoding-svc
+    secrets: inherit
