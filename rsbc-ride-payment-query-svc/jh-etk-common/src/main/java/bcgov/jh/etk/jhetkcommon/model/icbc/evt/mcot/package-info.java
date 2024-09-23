@@ -5,5 +5,5 @@
 // Generated on: 2020.07.02 at 09:47:31 PM PDT 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://icbc.net/RSI_InformationManager")
+@jakarta.xml.bind.annotation.XmlSchema(namespace = "http://icbc.net/RSI_InformationManager")
 package bcgov.jh.etk.jhetkcommon.model.icbc.evt.mcot;
