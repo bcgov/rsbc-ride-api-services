@@ -13,7 +13,7 @@
 	<description>Justice Violation Processing Hub Payment service</description>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>17</java.version>
 	</properties>
 
 	<dependencies>
