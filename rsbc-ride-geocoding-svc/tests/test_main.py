@@ -6,7 +6,7 @@ client = TestClient(app)
 def test_read_root():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "Geocoding Service is up and running!"}
+    assert response.json() == {"message": "Geocoding Service V-1.0 is up and running!"}
 
 def test_ping():
     response = client.get("/ping")
