@@ -1,4 +1,4 @@
-name: promote build to environment
+name: Geocoding - promote build to environment
 on:
   workflow_dispatch:
     inputs:
@@ -6,6 +6,11 @@ on:
         type: environment
         description: 'Environment to promote to'
         required: true
+      release_name:
+        type: string
+        description: 'Release name'
+        required: true
+        default: '1.0.0'
 
 jobs:
   promote:
@@ -15,3 +20,4 @@ jobs:
       IMAGE_NAME: rbe5-images/rsbc-ride-geocoding-svc
       APP_FOLDER: geocoding-svc
       ENV_NAME: ${{ github.event.inputs.environment }}
+      RELEASE_NAME: ${{ github.event.inputs.release_name }}

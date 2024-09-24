@@ -1,4 +1,4 @@
-name: CI Checks for Geocoding Service build
+name: Geocoding - CI Check build
 
 on:
   push:

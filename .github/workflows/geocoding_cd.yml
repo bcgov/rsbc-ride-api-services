@@ -1,4 +1,4 @@
-name: geocoding-svc-cd
+name: Geocoding - Build and push image
 
 on:
   pull_request:
@@ -18,4 +18,5 @@ jobs:
       DOCKER_CONTEXT: rsbc-ride-geocoding-svc
       DOCKER_FILE: rsbc-ride-geocoding-svc/Dockerfile
       DOCKER_IMAGE_NAME: rbe5-images/rsbc-ride-geocoding-svc
+      DOCKER_IMAGE_TAG: ${{ github.sha }}
     secrets: inherit
