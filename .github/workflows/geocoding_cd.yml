@@ -18,5 +18,5 @@ jobs:
       DOCKER_CONTEXT: rsbc-ride-geocoding-svc
       DOCKER_FILE: rsbc-ride-geocoding-svc/Dockerfile
       DOCKER_IMAGE_NAME: rbe5-images/rsbc-ride-geocoding-svc
-      DOCKER_IMAGE_TAG: ${{ github.sha }}
+      DOCKER_IMAGE_TAG: ${{ github.event.pull_request.head.sha }}
     secrets: inherit
