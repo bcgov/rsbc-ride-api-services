@@ -1,0 +1,17 @@
+name: promote build to environment
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: 'Environment to promote to'
+        required: true
+
+jobs:
+  promote:
+    secrets: inherit
+    uses: ./.github/workflows/template-deployment-workflow.yml
+    with:
+      IMAGE_NAME: rbe5-images/rsbc-ride-geocoding-svc
+      APP_FOLDER: geocoding-svc
+      ENV_NAME: ${{ github.event.inputs.environment }}
