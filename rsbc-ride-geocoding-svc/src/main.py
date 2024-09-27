@@ -14,7 +14,7 @@ class Message(BaseModel):
 numeric_level = getattr(logging, os.getenv('LOG_LEVEL', default='INFO').upper(), 10)
 logging.basicConfig(
     level=numeric_level,
-    format='%(asctime)s %(levelname)s [RIDE_GEOCODING_SVC] %(module)s:%(lineno)d %(message)s'
+    format='%(levelname)s [RIDE_GEOCODING_SVC] %(module)s:%(lineno)d %(message)s'
 )
 
 if os.getenv('GOOGLE_MAPS_API_KEY') is None:
