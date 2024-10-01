@@ -1,4 +1,5 @@
-from fastapi import FastAPI, status
+from typing import Annotated, Union
+from fastapi import FastAPI, Header, status
 import logging
 import os
 
@@ -21,9 +22,14 @@ if os.getenv('GOOGLE_MAPS_API_KEY') is None:
     logging.error("GOOGLE_MAPS_API_KEY environment variable not set.")
     exit(1)
 
+if os.getenv('ALLOWED_API_KEYS') is None:
+    logging.error("ALLOWED_API_KEYS environment variable not set.")
+    exit(1)
+
 app = FastAPI()
 app.add_middleware(ErrorHandlerMiddleware)
 geocoding_adapter = GoogleMapsGeocodingAdapter(api_key=os.getenv('GOOGLE_MAPS_API_KEY'))
+allowed_api_keys = os.getenv('ALLOWED_API_KEYS', '').split(',')
 
 @app.get("/")
 def read_root():
@@ -35,9 +41,20 @@ def ping():
     logging.debug("/ping endpoint triggered")
     return {"status": "working"}
 
-@app.get("/coordinates", responses={404: {"model": Message}})
-def coordinates(address: str, city: str, province: str = 'BC', country: str = 'CA') -> Location:
+@app.get("/coordinates", responses={404: {"model": Message}, 401: {"model": Message}})
+def coordinates(
+    address: str,
+    city: str,
+    province: str = 'BC',
+    country: str = 'CA',
+    api_key: Annotated[Union[str, None], Header()] = None) -> Location:
     logging.debug(f"/coordinates endpoint triggered with address: {address}, city: {city}, province: {province}, country: {country}")
+
+    if api_key not in allowed_api_keys:
+        logging.warning(f"Unauthorized request with API key {api_key}")
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Unauthorized"})
+
+    logging.info(f"API key {api_key[0:5]}*** authorized")
     result = geocoding_adapter.get_location(address=address, city=city, province=province, country=country)
     if result.location is None:
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"message": result.error})
