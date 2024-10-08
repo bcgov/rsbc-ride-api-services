@@ -13,7 +13,7 @@ app = FastAPI()
 @app.get("/")
 def read_root():
     logging.debug("/ endpoint triggered")
-    return {"message": "Geocoding Service is up and running!"}
+    return {"message": "Geocoding Service V-1.0 is up and running!"}
 
 @app.get("/ping")
 def ping():
