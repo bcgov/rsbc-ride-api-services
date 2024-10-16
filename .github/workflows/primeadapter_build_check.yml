@@ -1,4 +1,4 @@
-name: CI Checks for Pay Query Service build
+name: CI Checks for Primeadapter build
 
 on:
   push:
