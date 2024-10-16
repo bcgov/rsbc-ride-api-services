@@ -26,22 +26,22 @@ async def pingmethod():
 async def readFtpFiles():
     logging.debug("inside read ftp")
     host=os.getenv('PRIME_SFTP_SERVER') 
-    port=22
+    port=os.getenv('PRIME_SFTP_SERVER_PORT', 22)
     user=os.getenv('PRIME_SFTP_USER') 
     user_password=os.getenv('PRIME_SFTP_PASS')    
-    priv_key_file = os.getenv('PRIME_SFTP_PRIV_KEY_FILE')
+    priv_key_str = os.getenv('PRIME_SFTP_PRIV_KEY_FILE')
     priv_key_file_passphrase = os.getenv('PRIME_SFTP_PRIV_KEY_FILE_PASSPHRASE')
-    pub_key_file = os.getenv('PRIME_SFTP_PUB_KEY_FILE')    
+    pub_key_str = os.getenv('PRIME_SFTP_PUB_KEY_FILE')    
        
     try:
         # Initialize the SFTP helper with necessary arguments
         ftputil = FTPUtil(
-            host,
-            port,
-            user,
-            user_password,
-            priv_key_file,
-            pub_key_file,
+            host=host,
+            port=port,
+            user=user,
+            user_password=user_password,
+            priv_key_str=priv_key_str,
+            pub_key_str=pub_key_str,
             passphrase=priv_key_file_passphrase,
             known_hosts=None
         )

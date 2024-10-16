@@ -1,4 +1,4 @@
-# RIDE DB Adapter  
+# RIDE PRIME Adapter  
 
 
 
@@ -6,7 +6,7 @@
 
 The API is deployed to Openshift and exposed with a ClusterIP endpoint.   
 
-ClusterIP Endpoint: ride-db-adapter-clusterip  
+ClusterIP Endpoint: ride-prime-adapter-clusterip  
 Port: 5000  
 
 To connect from local, first perform a port-forward to the service:  

@@ -1,16 +1,17 @@
+import io
 import paramiko
 import os
 import logging
 
 class FTPUtil:
 
-    def __init__(self, host, user, user_password, port, priv_key_file, pub_key_file, passphrase=None, known_hosts=None, base_path=None, clean_up='Y'):
+    def __init__(self, host, user, user_password, port, priv_key_str, pub_key_str, passphrase=None, known_hosts=None, base_path=None, clean_up='Y'):
         self.host = host
         self.user = user
         self.user_password = user_password
         self.port = port
-        self.priv_key_file = priv_key_file
-        self.pub_key_file = pub_key_file
+        self.priv_key_str = priv_key_str
+        self.pub_key_str = pub_key_str
         self.passphrase = passphrase
         self.known_hosts = known_hosts
         self.base_path = base_path or ""
@@ -35,11 +36,11 @@ class FTPUtil:
                 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
                 self.logger.debug("Auto-adding unknown hosts")
 
-            # Load private key if specified
+            # Load private key from string
             private_key = None
-            if self.priv_key_file:
-                private_key = paramiko.RSAKey.from_private_key_file(self.priv_key_file, password=self.passphrase)
-                self.logger.debug("Private key loaded")
+            if self.priv_key_str:
+                private_key = paramiko.RSAKey.from_private_key(io.StringIO(self.priv_key_str), password=self.passphrase)
+                self.logger.debug("Private key loaded from string")
 
             # Connect to the SFTP server
             ssh.connect(hostname=self.host, port=self.port, username=self.user, password=self.user_password, pkey=private_key)
