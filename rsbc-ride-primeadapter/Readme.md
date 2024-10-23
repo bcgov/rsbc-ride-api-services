@@ -2,21 +2,14 @@
 
 
 
-## Connect to API  
-
-The API is deployed to Openshift and exposed with a ClusterIP endpoint.   
-
-ClusterIP Endpoint: ride-prime-adapter-clusterip  
-Port: 5000  
-
-To connect from local, first perform a port-forward to the service:  
-
+## Executable Scipt
 ```
-oc port-forward service/ride-prime-adapter-clusterip 5000  
-```  
+process_ftp.py
+```
+This script will identify the Recon files in the provided SFTP directory and process them and send to the ETK prime adapter endpoints.
+```
+/primeadapter/v3/api/recon/incoming
+/primeadapter/v3/api/recon/outgoing
+```
 
-After this the API can be accessed at :
-
-http://localhost:5000  
-
-The Postman collection for the APi can be found in docs folder.  
+This script will run as an Openshift Cron Job.
