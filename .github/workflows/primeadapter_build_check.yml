@@ -1,0 +1,71 @@
+name: Primeadapter - CI Check build
+
+on:
+  push:
+    branches-ignore:   
+      - 'release**'
+      - 'main'
+      - 'master'
+    paths:
+      - rsbc-ride-primeadapter/**
+
+jobs:
+  test_build:
+    name: Test the Build
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4    
+      - name: Setup
+        uses: docker/setup-buildx-action@v3
+        with:
+          install: true  
+      - name: Login
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build
+        uses: docker/build-push-action@v6
+        with:
+          context: rsbc-ride-primeadapter
+          file: rsbc-ride-primeadapter/Dockerfile
+          push: false
+
+  trivy-scan:
+    uses: ./.github/workflows/trivy-scan-workflow.yml
+    with:
+      DOCKER_CONTEXT: rsbc-ride-primeadapter
+      DOCKER_FILE: rsbc-ride-primeadapter/Dockerfile
+      DOCKER_IMAGE_NAME: rsbc-ride-primeadapter
+    secrets: inherit
+
+  run_unit_test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4   
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+      - name: Run unit tests
+        run: |
+          cd rsbc-ride-primeadapter
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Test with pytest
+        run: |
+          cd rsbc-ride-primeadapter
+          pip install pytest pytest-cov
+          pytest tests/ --doctest-modules --junitxml=test-results/test-results.xml
+      - name: Upload pytest test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-results
+          path: rsbc-ride-primeadapter/test-results/test-results.xml
+        if: ${{ always() }}
