@@ -48,3 +48,4 @@ tempo-data/
 src/test/resources/local/tempo-data/
 opentelemetry-javaagent.jar
 
+/.apt_generated_tests/
