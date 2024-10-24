@@ -26,6 +26,11 @@ def main():
         for key, value in os.environ.items():
             if key.startswith('OPENSHIFT_') or key.startswith('KUBERNETES_'):
                 logger.info(f"{key}: {value}")
+
+        logger.info(f"PRIME_ADAPTER_RECON_INCOMING_ENDPOINT: {os.getenv('PRIME_ADAPTER_RECON_INCOMING_ENDPOINT')}")
+        logger.info(f"PRIME_ADAPTER_RECON_OUTGOING_ENDPOINT: {os.getenv('PRIME_ADAPTER_RECON_OUTGOING_ENDPOINT')}")
+        logger.info(f"PRIMERECON_FTP_FOLDER: {os.getenv('PRIMERECON_FTP_FOLDER')}")
+        logger.info(f"PRIMERECON_ARCHIVE_FOLDER: {os.getenv('PRIMERECON_ARCHIVE_FOLDER')}")
         
         # Simulate some work
         logger.info("Starting task processing...")
