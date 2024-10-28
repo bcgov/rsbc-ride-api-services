@@ -111,8 +111,8 @@ async def test_successful_processing(mock_env_vars, mock_ftp_util, mock_sftp):
         assert processor_instance.process_file.call_count == 2
         
         archived_files = [path[1] for path in mock_sftp.renamed_files]
-        assert '/primerecon_archive/test1_processed.txt' in archived_files
-        assert '/primerecon_archive/test2_processed.txt' in archived_files
+        assert 'dev/primerecon_archive/test1_processed.txt' in archived_files
+        assert 'dev/primerecon_archive/test2_processed.txt' in archived_files
 
 
 @pytest.mark.asyncio
