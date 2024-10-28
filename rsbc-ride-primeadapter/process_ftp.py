@@ -36,24 +36,43 @@ async def read_sftp_file(sftp, file_path: str) -> io.BytesIO:
     async with async_sftp_open(sftp, file_path) as f:
         content = f.read()
         return io.BytesIO(content)
+    
+    
+def get_full_path(*parts: str) -> str:
+    """
+    Construct a clean path from parts, removing duplicate slashes and leading/trailing slashes
+    """
+    # Join all parts with '/', remove duplicate slashes, and strip leading/trailing slashes
+    return '/'.join(p.strip('/') for p in parts if p).strip('/')
 
 def ensure_folder_exists(sftp, folder_path: str) -> None:
     """Ensure the specified folder exists in SFTP"""
     try:
+        logger.debug(f"Checking if folder exists: {folder_path}")
         sftp.stat(folder_path)
+        logger.info(f"Folder exists: {folder_path}")
     except IOError:
         logger.info(f"Creating folder: {folder_path}")
-        sftp.mkdir(folder_path)
+        try:
+            sftp.mkdir(folder_path)
+        except IOError as e:
+            # If parent directory doesn't exist, try to create it
+            parent_dir = os.path.dirname(folder_path)
+            if parent_dir:
+                logger.info(f"Parent folder doesn't exist, creating: {parent_dir}")
+                try:
+                    sftp.stat(parent_dir)
+                except IOError:
+                    sftp.mkdir(parent_dir)
+                # Try creating the original folder again
+                sftp.mkdir(folder_path)
 
 def handle_failed_file(sftp, source_folder: str, file_name: str) -> str:
-    """
-    Rename failed file by appending _error to its name
-    Returns the new filename
-    """
+    """Rename failed file by appending _error to its name"""
     file_name_without_ext, file_extension = os.path.splitext(file_name)
     new_file_name = f"{file_name_without_ext}_error{file_extension}"
-    old_path = f'/{source_folder}/{file_name}'
-    new_path = f'/{source_folder}/{new_file_name}'
+    old_path = get_full_path(source_folder, file_name)
+    new_path = get_full_path(source_folder, new_file_name)
     
     try:
         sftp.rename(old_path, new_path)
@@ -67,10 +86,10 @@ def archive_processed_files(sftp, source_folder: str, archive_folder: str, files
     """Archive successfully processed files"""
     archived_files = []
     for file in files:
-        source_path = f'/{source_folder}/{file}'
+        source_path = get_full_path(source_folder, file)
         file_name, file_extension = os.path.splitext(file)
         new_file_name = f"{file_name}_processed{file_extension}"
-        dest_path = f'/{archive_folder}/{new_file_name}'
+        dest_path = get_full_path(archive_folder, new_file_name)
         
         try:
             # Remove existing archived file if it exists
@@ -102,8 +121,15 @@ async def process_ftp_files() -> bool:
     priv_key_str = os.getenv('PRIME_SFTP_PRIV_KEY_FILE')
     priv_key_file_passphrase = os.getenv('PRIME_SFTP_PRIV_KEY_FILE_PASSPHRASE', None)
     pub_key_str = os.getenv('PRIME_SFTP_PUB_KEY_FILE')
-    primerecon_folder = os.getenv('PRIMERECON_FTP_FOLDER', 'primerecon')
-    primerecon_archive_folder = os.getenv('PRIMERECON_ARCHIVE_FOLDER', 'primerecon_archive')
+    # Base path and folder configuration
+    ftp_instance_folder = os.getenv('FTP_INSTANCE_FOLDER_NAME', 'dev').strip('/')
+    primerecon_folder = os.getenv('PRIMERECON_FTP_FOLDER', 'primerecon').strip('/')
+    primerecon_archive_folder = os.getenv('PRIMERECON_ARCHIVE_FOLDER', 'primerecon_archive').strip('/')
+    
+    # Construct full paths
+    full_primerecon_path = get_full_path(ftp_instance_folder, primerecon_folder)
+    full_archive_path = get_full_path(ftp_instance_folder, primerecon_archive_folder)
+    
     incoming_endpoint = os.getenv('PRIME_ADAPTER_RECON_INCOMING_ENDPOINT', 'http://localhost:8080/primeadapter/v3/api/recon/incoming')
     outgoing_endpoint = os.getenv('PRIME_ADAPTER_RECON_OUTGOING_ENDPOINT', 'http://localhost:8080/primeadapter/v3/api/recon/outgoing')
 
@@ -121,13 +147,13 @@ async def process_ftp_files() -> bool:
             known_hosts=None
         )
         sftp = ftputil.acquire_sftp_channel()
-
+        
         # Ensure folders exist
-        ensure_folder_exists(sftp, f'/{primerecon_folder}')
-        ensure_folder_exists(sftp, f'/{primerecon_archive_folder}')
+        ensure_folder_exists(sftp, full_primerecon_path)
+        ensure_folder_exists(sftp, full_archive_path)
 
         # Get list of txt files (excluding error files)
-        files = sftp.listdir(f'/{primerecon_folder}')
+        files = sftp.listdir(full_primerecon_path)
         txt_files = [f for f in files if f.endswith('.txt') and not f.endswith('_error.txt')]
         
         if not txt_files:
@@ -141,7 +167,7 @@ async def process_ftp_files() -> bool:
         # Process files concurrently
         async def process_single_file(file: str):
             try:
-                file_path = f'/{primerecon_folder}/{file}'
+                file_path = get_full_path(full_primerecon_path, file)
                 content = await read_sftp_file(sftp, file_path)
                 result = await recon_processor.process_file(file, content)
                 
@@ -152,20 +178,20 @@ async def process_ftp_files() -> bool:
                     failed_files.append(file)
                     logger.error(f"Failed to process {file}: {result.message}")
                     logger.error("Errors: " + "\n".join(result.errors))
-                    new_error_file = handle_failed_file(sftp, primerecon_folder, file)
+                    handle_failed_file(sftp, full_primerecon_path, file)
                     
             except Exception as e:
                 logger.error(f"Failed to process file {file}: {str(e)}")
                 failed_files.append(file)
-                new_error_file = handle_failed_file(sftp, primerecon_folder, file)
+                handle_failed_file(sftp, full_primerecon_path, file)
 
         # Process all files concurrently
         await asyncio.gather(*[process_single_file(file) for file in txt_files])
 
         # Archive successfully processed files
         if processed_files:
-            archived_files = archive_processed_files(sftp, primerecon_folder, primerecon_archive_folder, processed_files)
-            logger.info(f"Successfully processed and archived {len(archived_files)} files")
+            archive_processed_files(sftp, full_primerecon_path, full_archive_path, processed_files)
+            logger.info(f"Successfully processed and archived {len(processed_files)} files")
 
         if failed_files:
             logger.error(f"Failed to process {len(failed_files)} files: {', '.join(failed_files)}")
