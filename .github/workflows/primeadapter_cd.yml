@@ -1,0 +1,22 @@
+name: Primeadapter - Build and push image
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    branches:
+      - main
+      - devbranch
+      - testbranch
+    paths:
+      - rsbc-ride-primeadapter/**
+      - .github/workflows/primeadapter-cd.yml
+
+jobs:
+  CD:
+    uses: ./.github/workflows/cd-workflow.yml
+    with:
+      DOCKER_CONTEXT: rsbc-ride-primeadapter
+      DOCKER_FILE: rsbc-ride-primeadapter/Dockerfile
+      DOCKER_IMAGE_NAME: rbe5-images/rsbc-ride-primeadapter
+      DOCKER_IMAGE_TAG: ${{ github.event.pull_request.head.sha }}
+    secrets: inherit
