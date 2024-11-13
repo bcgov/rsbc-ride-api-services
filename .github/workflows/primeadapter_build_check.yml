@@ -1,4 +1,4 @@
-name: Geocoding - CI Check build
+name: Primeadapter - CI Check build
 
 on:
   push:
@@ -7,12 +7,13 @@ on:
       - 'main'
       - 'master'
     paths:
-      - rsbc-ride-geocoding-svc/**
+      - rsbc-ride-primeadapter/**
 
 jobs:
   test_build:
     name: Test the Build
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4    
@@ -29,21 +30,22 @@ jobs:
       - name: Build
         uses: docker/build-push-action@v6
         with:
-          context: rsbc-ride-geocoding-svc
-          file: rsbc-ride-geocoding-svc/Dockerfile
+          context: rsbc-ride-primeadapter
+          file: rsbc-ride-primeadapter/Dockerfile
           push: false
 
   trivy-scan:
     uses: ./.github/workflows/trivy-scan-workflow.yml
     with:
-      DOCKER_CONTEXT: rsbc-ride-geocoding-svc
-      DOCKER_FILE: rsbc-ride-geocoding-svc/Dockerfile
-      DOCKER_IMAGE_NAME: rsbc-ride-geocoding-svc
+      DOCKER_CONTEXT: rsbc-ride-primeadapter
+      DOCKER_FILE: rsbc-ride-primeadapter/Dockerfile
+      DOCKER_IMAGE_NAME: rsbc-ride-primeadapter
     secrets: inherit
 
   run_unit_test:
     name: Run Unit Tests
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4   
@@ -53,22 +55,17 @@ jobs:
           python-version: 3.9
       - name: Run unit tests
         run: |
-          cd rsbc-ride-geocoding-svc
+          cd rsbc-ride-primeadapter
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Test with pytest
         run: |
-          cd rsbc-ride-geocoding-svc
-          pip install pytest pytest-cov pytest-mock
-          pytest tests/ --doctest-modules --junitxml=test-results/test-results.xml --cov --cov-report=html:coverage_re
+          cd rsbc-ride-primeadapter
+          pip install pytest pytest-cov
+          pytest tests/ --doctest-modules --junitxml=test-results/test-results.xml
       - name: Upload pytest test results
         uses: actions/upload-artifact@v4
         with:
           name: pytest-results
-          path: rsbc-ride-geocoding-svc/test-results/test-results.xml
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: rsbc-ride-geocoding-svc/coverage_re/
+          path: rsbc-ride-primeadapter/test-results/test-results.xml
         if: ${{ always() }}
