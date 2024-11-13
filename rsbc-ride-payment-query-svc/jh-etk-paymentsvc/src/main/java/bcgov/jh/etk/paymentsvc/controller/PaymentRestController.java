@@ -64,13 +64,19 @@ public class PaymentRestController extends BaseController {
 	/** The log. */
 	private static Logger log = LoggerFactory.getLogger(PaymentRestController.class);
 	
-	/** The icbc payment service uri. */
-	@Value("${icbcadapter_paymentservice_endpoint_url}")
-    private String ICBC_PAYMENT_SERVICE_URI;
-	
 	/** The paybc individual invoice endpoint url prefix. */
 	@Value("${paybc_individual_invoice_endpoint_url_prefix}")
     private String PAYBC_INDIVIDUAL_INVOICE_ENDPOINT_URL_PREFIX;
+
+	/** The icbc payment service uri. */
+	@Value("${icbc.payment.service.uri}")
+	private String ICBC_PAYMENT_SERVICE_URI;
+
+	@Value("${icbc.payment.service.username}")
+	private String ICBC_PAYMENT_SERVICE_USERNAME;
+
+	@Value("${icbc.payment.service.password}")
+	private String ICBC_PAYMENT_SERVICE_PASSWORD;
 	
 	/** The etk service. */
 	@Autowired
@@ -305,13 +311,13 @@ public class PaymentRestController extends BaseController {
 			return new ResponseEntity<> (getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND), HttpStatus.BAD_REQUEST);
 		}
 		
-		String url = ICBC_PAYMENT_SERVICE_URI + PathConst.PATH_TICKET_QUERY + "/" + ticketNumber;
+		String url = ICBC_PAYMENT_SERVICE_URI + PathConst.PATH_TICKET_QUERY_ICBC + "/" + ticketNumber;
 		
 		EnumInterface ICBC_QT = EnumInterface.ICBC_QT;
 		
-		log.debug("Send ticket query [ticket number: {}, contraventionNumber: {}, time: {}] to ICBCAdapter: {}", ticketNumber, contraventionNumber, time, url);
+		log.debug("Send ticket query [ticket number: {}, contraventionNumber: {}, time: {}] to ICBC: {}", ticketNumber, contraventionNumber, time, url);
+		ResponseEntity<String> response = restService.secureRestfulExchange(url, null, HttpMethod.GET, ICBC_PAYMENT_SERVICE_USERNAME, ICBC_PAYMENT_SERVICE_PASSWORD, MediaType.APPLICATION_JSON);
 		
-		ResponseEntity<String> response = restService.restfulSave(url, null, HttpMethod.GET, MediaType.APPLICATION_JSON);
 
 		// Process the error returned from ICBCAdapter
 		if (response != null && response.getStatusCode() == CUSTOM_HTTP_STATUS_FROM_ICBCADAPTER ) {
@@ -487,7 +493,7 @@ public class PaymentRestController extends BaseController {
 			
 			//error handling
 			log.error("Error occurred while doing ticket query to ICBC");
-			String errorDetails = String.format("HTTP status: %s \r\n HTTP Body: %s", response.getStatusCodeValue(), response.getBody()); 
+			String errorDetails = String.format("HTTP status: %s \r\n HTTP Body: %s", response.getStatusCode().value(), response.getBody()); 
 			errorService.saveError(contraventionNumber, ticketNumber, EnumErrorCode.Q11, "PaymentController.icbcInvoiceSearchHelper", errorDetails, null, null, null, null, true);
 			
 		}
@@ -677,7 +683,7 @@ public class PaymentRestController extends BaseController {
 		log.debug("Payment receipt request payload to ICBC [{}]: {}", url, StringUtil.objectToJsonString(receiptICBC));
 		
 		//send paymentReceiptRequest to ICBC
-		ResponseEntity<String> response = restService.restfulSave(url, StringUtil.objectToJsonString(receiptICBC), HttpMethod.POST, MediaType.APPLICATION_JSON);
+		ResponseEntity<String> response = restService.secureRestfulExchange(url, StringUtil.objectToJsonString(receiptICBC), HttpMethod.POST, ICBC_PAYMENT_SERVICE_USERNAME, ICBC_PAYMENT_SERVICE_PASSWORD, MediaType.APPLICATION_JSON);
 		
 		HttpStatusCode responseCode = response.getStatusCode();
 		//success, process the response from ICBC
@@ -728,7 +734,7 @@ public class PaymentRestController extends BaseController {
 			}
     		
     		//error handling
-			String errorDetails = String.format("HTTP status: %s \r\n HTTP Body: %s", response.getStatusCodeValue(), response.getBody()); 
+			String errorDetails = String.format("HTTP status: %s \r\n HTTP Body: %s", response.getStatusCodeValue(), response.getBody());
 			log.debug("Save an error: {}", errorDetails);
 			errorService.saveError(contraventionNumber, EvtEnrichUtil.getTicketNumber(contraventionNumber), EnumErrorCode.R11, "PaymentController.receiptCreateToICBC", errorDetails, null, null, null, null, true);
 		}
