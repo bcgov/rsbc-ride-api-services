@@ -1,0 +1,23 @@
+name: Primeadapter - promote build to environment
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: 'Environment to promote to'
+        required: true
+      release_name:
+        type: string
+        description: 'Release name'
+        required: true
+        default: '1.0.0'
+
+jobs:
+  promote:
+    secrets: inherit
+    uses: ./.github/workflows/template-deployment-workflow.yml
+    with:
+      IMAGE_NAME: rbe5-images/rsbc-ride-primeadapter
+      APP_FOLDER: primeadapter
+      ENV_NAME: ${{ github.event.inputs.environment }}
+      RELEASE_NAME: ${{ github.event.inputs.release_name }}
