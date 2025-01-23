@@ -26,8 +26,8 @@ public class TestController {
 	@Autowired
 	ComponentTestUtil componentTestUtil;
 	
-	/** The icbc adatper service uri. */
-	@Value("${icbcadapter_paymentservice_endpoint_url}")
+	/** The icbc payment service uri. */
+	@Value("${icbc.payment.service.uri}")
     private String urlPrefix;
 
 	@Autowired
