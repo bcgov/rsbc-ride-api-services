@@ -39,7 +39,6 @@ import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Map;
 
 import static bcgov.jh.etk.jhetkcommon.model.PathConst.PATH_PING_REQUEST;
 
@@ -81,18 +80,6 @@ public class PaymentRestController extends BaseController {
 	@Autowired
 	WorkerService helperService;
 
-    /**  Ticket number provided is not found. */
-    private final static String ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND = "101";
-
-    /** The Constant ICBC_PAYMENT_MESSAGE_CODE_ZERO_OUTSTANDING. */
-    private final static String ICBC_PAYMENT_MESSAGE_CODE_ZERO_OUTSTANDING = "102";
-
-    /** The Constant ICBC_PAYMENT_MESSAGE_CODE_TICKET_NOT_PAYABLE. */
-    private final static String ICBC_PAYMENT_MESSAGE_CODE_TICKET_NOT_PAYABLE = "103";
-
-    /** ICBC Service is Not Available. */
-    private final static String ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR = "201";
-
 	private static final String PAYMENT_CONTROLLER_ICBC_INVOICE_SEARCH_HELPER = "PaymentController.icbcInvoiceSearchHelper";
 
     @Value("${spring.application.name}")
@@ -124,7 +111,7 @@ public class PaymentRestController extends BaseController {
 		if (helperService.isInterfaceStopped(EnumInterface.ICBC_QT)) {
 			log.debug("Ticket query interface is STOPPED, return 'Service not available'");
 			//prepare response
-			String responseString = getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR);
+			String responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR);
 			return new ResponseEntity<> (responseString, HttpStatus.SERVICE_UNAVAILABLE);
 		}
 
@@ -151,7 +138,7 @@ public class PaymentRestController extends BaseController {
 		if (helperService.isInterfaceStopped(EnumInterface.ICBC_QT)) {
 			log.debug("Ticket query interface is STOPPED, return 'Service not available'");
 			//prepare response
-			String responseString = getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR);
+			String responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR);
 			return new ResponseEntity<> (responseString, HttpStatus.SERVICE_UNAVAILABLE);
 		}
 
@@ -162,7 +149,7 @@ public class PaymentRestController extends BaseController {
 		String validatedTime = DateUtil.validateTime(time);
 		if (validatedTime == null) {
 			log.debug("Time [{}] is invalid", time);
-			responseString = getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND);
+			responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND);
 			return new ResponseEntity<> (responseString, HttpStatus.OK);
 		}
 
@@ -188,7 +175,7 @@ public class PaymentRestController extends BaseController {
 		} catch (UnsupportedEncodingException e) {
 			String errorDetails = "Exception occurred while doing URLEncode " + ticketNumber + "; error details: " + e.toString() + "; " + e.getMessage();
 			log.error(errorDetails);
-			return new ResponseEntity<> (getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<> (getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND), HttpStatus.BAD_REQUEST);
 		}
 
 		String url = ICBC_PAYMENT_SERVICE_URI + PathConst.PATH_TICKET_QUERY_ICBC + "/" + ticketNumber;
@@ -207,7 +194,7 @@ public class PaymentRestController extends BaseController {
 			// If the errorCode is 404, return 'ticket not found' response
 			if (responseCode == HttpStatus.NOT_FOUND) {
 				log.debug("Ticket not found");
-				return new ResponseEntity<> (getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND), HttpStatus.OK);
+				return new ResponseEntity<> (getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND), HttpStatus.OK);
 			}
 
 			// only raise an error if it's client exception (except 404 which is used by ICBC for ticket not found)
@@ -215,7 +202,7 @@ public class PaymentRestController extends BaseController {
 				errorDetails = "Exception occurred while sending ticket query to " + url + ", exception details: " + e.toString() + "; " + e.getMessage();
 				errorService.saveError(contraventionNumber, ticketNumber, EnumErrorCode.Q00, PAYMENT_CONTROLLER_ICBC_INVOICE_SEARCH_HELPER, errorDetails, null, null, null, null, true);
 			}
-			return new ResponseEntity<> (getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR), HttpStatus.SERVICE_UNAVAILABLE);
+			return new ResponseEntity<> (getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR), HttpStatus.SERVICE_UNAVAILABLE);
 		}
 
         assert response != null;
@@ -248,7 +235,7 @@ public class PaymentRestController extends BaseController {
 	        // ICBC returns 200 or 201 statusCode, but with empty body, do the following:
 	        // 1. Return 'Ticket not found' error
 	        if (icbcResponse == null) {
-	        	responseString = getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND);
+	        	responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND);
 	        	return new ResponseEntity<> (responseString, HttpStatus.OK);
 	        }
 
@@ -276,7 +263,7 @@ public class PaymentRestController extends BaseController {
 	        		}
 	        		// contravention not found, prepare ticket not found response
 	        		if (returnResponse == null) {
-	        			responseString = getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND);
+	        			responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND);
 	        		}
 	        	// invoice search
 	        	} else {
@@ -321,21 +308,21 @@ public class PaymentRestController extends BaseController {
 	        		// all the contraventions in the ticket are in the zero outstanding status (102),
 	        		// Hub returns "No payment required for this traffic violation ticket." to PayBC
 	        		} else if (!found100 && !found103 && found102) {
-	        			responseString = getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_ZERO_OUTSTANDING);
+	        			responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_ZERO_OUTSTANDING);
 	        		// all the contraventions in the ticket are either in 103 or 102.
 	        		// If at least one of the contraventions is 103, Hub returns "the ticket not payable message" to PayBC.
 	        		} else if (!found100 && found103) {
-	        			responseString = getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_TICKET_NOT_PAYABLE);
+	        			responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_TICKET_NOT_PAYABLE);
 	        		// unexpected statusCode combination, log it, and return service not available message back to paybc
 	        		} else {
 	        			log.error("Cannot derive message for paybc, unexpected statusCode combination: found 100: {}; found 102: {}; found 103: {}", found100, found102, found103);
-	        			responseString = getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR);
+	        			responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR);
 	        		}
 	        		log.debug("Found 100: {}; found 102: {}; found 103: {}. Ticket query returns: {}", found100, found102, found103, responseString);
 	        	}
 	        } else {
 	        	// time doesn't match, prepare ticket not found response
-				responseString = getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND);
+				responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND);
 	        }
 		} else {
 			// bad response...
@@ -343,7 +330,7 @@ public class PaymentRestController extends BaseController {
 			log.debug("Service not available error");
 
 			//prepare response
-			responseString = getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR);
+			responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR);
 
 			//update ICBC_QT interfaces to FAILED
 			try {
@@ -410,7 +397,7 @@ public class PaymentRestController extends BaseController {
 		    }
 		}
 
-		return new ResponseEntity<> (getPaybcPaymentMessage(ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR), HttpStatus.SERVICE_UNAVAILABLE);
+		return new ResponseEntity<> (getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR), HttpStatus.SERVICE_UNAVAILABLE);
 	}
 
 	/**
@@ -491,7 +478,7 @@ public class PaymentRestController extends BaseController {
 	 * @param icbcPaymentMessageCode the icbc payment message code
 	 * @return the paybc payment message
 	 */
-	private String getPaybcPaymentMessage (final String icbcPaymentMessageCode) {
+	private String getPaymentMessage(final String icbcPaymentMessageCode) {
 		return etkService.GetPaymentMessage(icbcPaymentMessageCode);
 	}
 
