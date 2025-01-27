@@ -4,16 +4,11 @@ import bcgov.jh.etk.jhetkcommon.controller.BaseController;
 import bcgov.jh.etk.jhetkcommon.exception.EtkDataAccessException;
 import bcgov.jh.etk.jhetkcommon.model.Const;
 import bcgov.jh.etk.jhetkcommon.model.PathConst;
-import bcgov.jh.etk.jhetkcommon.model.PaymentEventLog;
-import bcgov.jh.etk.jhetkcommon.model.BusinessEventLog;
 import bcgov.jh.etk.jhetkcommon.model.enums.EnumErrorCode;
 import bcgov.jh.etk.jhetkcommon.model.enums.EnumInterface;
 import bcgov.jh.etk.jhetkcommon.model.enums.EnumInterfaceState;
-import bcgov.jh.etk.jhetkcommon.model.enums.EnumBusinessEventLogEndpoints;
-import bcgov.jh.etk.jhetkcommon.model.enums.EnumTicketType;
-import bcgov.jh.etk.jhetkcommon.model.eventing.Event.EventTypeEnum;
+import bcgov.jh.etk.jhetkcommon.model.enums.EnumEventType;
 import bcgov.jh.etk.jhetkcommon.model.payment.InvoiceSearchResponse_ICBC_MCOT;
-import bcgov.jh.etk.jhetkcommon.model.payment.PaymentReceiptRequest_ICBC;
 import bcgov.jh.etk.jhetkcommon.model.payment.ref.Contravention;
 import bcgov.jh.etk.jhetkcommon.model.payment.ref.Vehicle;
 import bcgov.jh.etk.jhetkcommon.service.EtkRestService;
@@ -22,12 +17,9 @@ import bcgov.jh.etk.jhetkcommon.service.impl.EtkService;
 import bcgov.jh.etk.jhetkcommon.service.impl.WorkerService;
 import bcgov.jh.etk.jhetkcommon.util.DateUtil;
 import bcgov.jh.etk.jhetkcommon.util.EvtEnrichUtil;
-import bcgov.jh.etk.jhetkcommon.util.LogUtil;
 import bcgov.jh.etk.jhetkcommon.util.StringUtil;
 import bcgov.jh.etk.jhetkcommon.model.paymentsvc.IndividualInvoiceResponse_paybc;
 import bcgov.jh.etk.jhetkcommon.model.paymentsvc.InvoiceSearchResponse_ICBC;
-import bcgov.jh.etk.jhetkcommon.model.paymentsvc.PaymentReceiptRequest_paybc;
-import bcgov.jh.etk.jhetkcommon.model.paymentsvc.PaymentReceiptResponse_paybc;
 import bcgov.jh.etk.jhetkcommon.model.paymentsvc.ref.Item;
 import bcgov.jh.etk.jhetkcommon.model.paymentsvc.ref.Items;
 import bcgov.jh.etk.jhetkcommon.model.paymentsvc.ref.keyValue;
@@ -38,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.*;
@@ -48,7 +39,6 @@ import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import static bcgov.jh.etk.jhetkcommon.model.PathConst.PATH_PING_REQUEST;
@@ -165,12 +155,7 @@ public class PaymentRestController extends BaseController {
 			return new ResponseEntity<> (responseString, HttpStatus.SERVICE_UNAVAILABLE);
 		}
 
-		// Log sankey diagram friendly log
-		BusinessEventLog logDetail = new BusinessEventLog(EventTypeEnum.VT_QUERY, ticketNum,
-				componentName, EnumBusinessEventLogEndpoints.PAYBC.getCodeValue(), EnumBusinessEventLogEndpoints.ICBCADAPTER.getCodeValue(), podName);
-		LogUtil.info(log, logDetail);
-
-		log.debug("Ticket query from PayBC, ticketNum: {}, time: {}", ticketNum, time);
+		log.info("Ticket query payment svc: {}, ticketNum: {}, time: {}", EnumEventType.VT_QUERY, ticketNum, time);
 		String responseString = "";
 
 	    //validate the time, and convert it to hh:mm format

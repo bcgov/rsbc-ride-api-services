@@ -1,11 +1,6 @@
 package bcgov.jh.etk.paymentsvc.security;
 
 
-import bcgov.jh.etk.jhetkcommon.dataaccess.repository.AgencyCodeMapsRepository;
-import bcgov.jh.etk.jhetkcommon.dataaccess.repository.ChargeTypeMapsRepository;
-import bcgov.jh.etk.jhetkcommon.service.RestService;
-import bcgov.jh.etk.jhetkcommon.service.impl.AgencyCodeServiceImpl;
-import bcgov.jh.etk.jhetkcommon.service.impl.ChargeTypeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 //import org.springframework.boot.test.mock.mockito.MockBean;
@@ -32,21 +27,6 @@ public class InMemoryHttpBasicAuthTest {
 
 	@Value("${svc.security.user.password}")
 	private String apiUserPassword;
-
-	//@MockBean
-	private RestService restService;
-
-	//@MockBean
-	private AgencyCodeServiceImpl agencyCodeServiceImpl;
-
-	//@MockBean
-	private ChargeTypeServiceImpl chargeTypeServiceImpl;
-
-	//@MockBean
-	private AgencyCodeMapsRepository agencyCodeMapsRepository;
-
-	//@MockBean
-	private ChargeTypeMapsRepository chargeTypeMapsRepository;
 
 	//	@Test
 	public void accessProtected() throws Exception {
