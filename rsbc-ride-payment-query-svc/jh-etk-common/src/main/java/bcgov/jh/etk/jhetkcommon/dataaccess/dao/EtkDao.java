@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import bcgov.jh.etk.jhetkcommon.dataaccess.storedprocedure.ETKStoredProcedure;
 import bcgov.jh.etk.jhetkcommon.dataaccess.storedprocedure.impl.CreateErrorStoredProc;
 import bcgov.jh.etk.jhetkcommon.dataaccess.storedprocedure.impl.GetDBVersionStoredProc;
-import bcgov.jh.etk.jhetkcommon.dataaccess.storedprocedure.impl.GetIcbcPaymentCodeStoredProc;
 import bcgov.jh.etk.jhetkcommon.dataaccess.storedprocedure.impl.LogErrorCommentStoredProc;
 import bcgov.jh.etk.jhetkcommon.dataaccess.storedprocedure.impl.RecordQueryEventStoredProc;
 import bcgov.jh.etk.jhetkcommon.dataaccess.storedprocedure.impl.RetrieveInterfaceStoredProc;
@@ -42,10 +41,6 @@ public class EtkDao {
 	/** The create error stored proc. */
 	@Autowired
 	private CreateErrorStoredProc createErrorStoredProc;
-
-	/** The get icbc payment code stored proc. */
-	@Autowired
-	private GetIcbcPaymentCodeStoredProc getIcbcPaymentCodeStoredProc;
 
 	/** The record query event stored proc. */
 	@Autowired
@@ -112,28 +107,6 @@ public class EtkDao {
 		}
 		return (Integer) result.get(CreateErrorStoredProc.PARAM_OUT_P_ERROR_ID);
 
-	}
-
-	/**
-	 * Gets the icbc payment code.
-	 *
-	 * @param icbcPaymentMsgCode the icbc payment msg code
-	 * @return the map
-	 */
-	public Map<String, String> GetIcbcPaymentCode(final String icbcPaymentMsgCode) {
-		
-		ETKStoredProcedure sp = (ETKStoredProcedure)getIcbcPaymentCodeStoredProc.getStoredProc();
-		
-		Map<String, Object> result = sp.execute(new Integer(icbcPaymentMsgCode));
-		if (result == null) {
-			return null;
-		}
-		String icbcPaymentMessageDsc = (String) result.get(GetIcbcPaymentCodeStoredProc.PARAM_OUT_P_ICBC_PAYMENT_MESSAGE_DSC);
-		String paymentMessageDsc = (String) result.get(GetIcbcPaymentCodeStoredProc.PARAM_OUT_P_PAYMENT_MESSAGE_DSC);
-		Map<String, String> returnObj = new HashMap<>();
-		returnObj.put(Const.KEY_ICBC_PAYMENT_MESSAGE_DSC, icbcPaymentMessageDsc);
-		returnObj.put(Const.KEY_PAYMENT_MESSAGE_DSC, paymentMessageDsc);
-		return returnObj;
 	}
 
 	/**

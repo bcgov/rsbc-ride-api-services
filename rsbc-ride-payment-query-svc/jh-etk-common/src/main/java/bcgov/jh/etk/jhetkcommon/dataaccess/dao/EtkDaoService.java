@@ -86,23 +86,6 @@ public class EtkDaoService {
 	}
 
 	/**
-	 * Gets the icbc payment code.
-	 *
-	 * @param icbcPaymentMsgCode the icbc payment msg code
-	 * @return the map
-	 * @throws EtkDataAccessException the etk data access exception
-	 */
-	public Map<String, String> GetIcbcPaymentCode(final String icbcPaymentMsgCode) throws EtkDataAccessException {
-		try {
-			return etkDao.GetIcbcPaymentCode(icbcPaymentMsgCode);
-		} catch (Exception e) {
-			logger.error("Exception occurred while executing GetIcbcPaymentCode: {}", e.toString() + "; " + e.getMessage());
-			dbExceptionHandling(e);
-		}
-		return null;
-	}
-
-	/**
 	 * Record query event.
 	 *
 	 * @param ticketNO the ticket NO

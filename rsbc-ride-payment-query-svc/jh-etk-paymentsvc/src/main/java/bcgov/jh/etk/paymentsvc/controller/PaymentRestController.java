@@ -492,15 +492,7 @@ public class PaymentRestController extends BaseController {
 	 * @return the paybc payment message
 	 */
 	private String getPaybcPaymentMessage (final String icbcPaymentMessageCode) {
-		// time doesn't match, prepare ticket not found response
-		try {
-			Map<String, String> paymentCodeMap = etkService.GetIcbcPaymentCode(icbcPaymentMessageCode);
-			String message = paymentCodeMap.get(Const.KEY_PAYMENT_MESSAGE_DSC);
-			return String.format("{\"error\": \"%s\"}", message);
-		} catch (EtkDataAccessException e) {
-			log.error("Fail to get ICBC payment code[{}], error: {}", icbcPaymentMessageCode, e.getMessage());
-		}
-		return null;
+		return etkService.GetPaymentMessage(icbcPaymentMessageCode);
 	}
 
 	/**

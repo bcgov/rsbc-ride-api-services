@@ -122,4 +122,16 @@ public class Const {
 	
 	/** The Constant KEY_STUCK_DISPUTE_SU_RECORDS. */
 	public static final String KEY_STUCK_DISPUTE_SU_RECORDS = "stuckDisputeSURecords";
+
+	/**  Ticket number provided is not found. */
+	public final static String ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND = "101";
+
+	/** The Constant ICBC_PAYMENT_MESSAGE_CODE_ZERO_OUTSTANDING. */
+	public final static String ICBC_PAYMENT_MESSAGE_CODE_ZERO_OUTSTANDING = "102";
+
+	/** The Constant ICBC_PAYMENT_MESSAGE_CODE_TICKET_NOT_PAYABLE. */
+	public final static String ICBC_PAYMENT_MESSAGE_CODE_TICKET_NOT_PAYABLE = "103";
+
+	/** ICBC Service is Not Available. */
+	public final static String ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR = "201";
 }

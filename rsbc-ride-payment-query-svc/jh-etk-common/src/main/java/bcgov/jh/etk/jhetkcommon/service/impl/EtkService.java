@@ -2,6 +2,7 @@ package bcgov.jh.etk.jhetkcommon.service.impl;
 
 import java.util.Map;
 
+import bcgov.jh.etk.jhetkcommon.model.Const;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,11 @@ public class EtkService implements IEtkService {
 	
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(EtkService.class);
+	private static Map<String, String> PAYMENT_MSG_CODE_MAP = Map.of(
+			Const.ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND, "Electronic violation ticket not found. Electronic violation ticket numbers that begin with 'E' or 'S' are available to pay online. Please allow 48 hours for your ticket to appear. If you wish to pay now and your ticket is not available, please use one of the other methods of payments listed on the ticket.",
+			Const.ICBC_PAYMENT_MESSAGE_CODE_ZERO_OUTSTANDING, "No payment required for this electronic violation ticket.",
+			Const.ICBC_PAYMENT_MESSAGE_CODE_TICKET_NOT_PAYABLE, "This electronic violation ticket cannot be paid online. See ticket for other payment options.",
+			Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR, "Service is Not Available. Please try later.");
 	
 	/** The vph dao. */
 	@Autowired(required = false)
@@ -31,13 +37,12 @@ public class EtkService implements IEtkService {
 	 * Gets the icbc payment code.
 	 *
 	 * @param icbcPaymentMsgCode the icbc payment msg code
-	 * @return the map
-	 * @throws EtkDataAccessException the etk data access exception
+	 * @return the message
 	 */
 	@Override
-	public Map<String, String> GetIcbcPaymentCode(String icbcPaymentMsgCode) throws EtkDataAccessException {
+	public String GetPaymentMessage(String icbcPaymentMsgCode) {
 		logger.debug("Get ICBC payment code details: {}", icbcPaymentMsgCode);
-		return etkDao.GetIcbcPaymentCode(icbcPaymentMsgCode);
+		return PAYMENT_MSG_CODE_MAP.get(icbcPaymentMsgCode);
 	}
 
 	/**
