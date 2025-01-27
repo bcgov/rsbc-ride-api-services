@@ -2,7 +2,6 @@ package bcgov.jh.etk.paymentsvc.controller;
 
 import bcgov.jh.etk.jhetkcommon.model.ComponentTestResult;
 import bcgov.jh.etk.jhetkcommon.model.PathConst;
-import bcgov.jh.etk.jhetkcommon.service.impl.WorkingDataService;
 import bcgov.jh.etk.jhetkcommon.util.ComponentTestUtil;
 
 import org.slf4j.Logger;
@@ -30,9 +29,6 @@ public class TestController {
 	@Value("${icbc.payment.service.uri}")
     private String urlPrefix;
 
-	@Autowired
-	WorkingDataService workingDataSerice;
-	
 	/**
 	 * Start tests
 	 *
