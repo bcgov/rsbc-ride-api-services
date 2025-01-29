@@ -1,5 +1,6 @@
 package bcgov.jh.etk.jhetkcommon.service.impl;
 
+import bcgov.jh.etk.jhetkcommon.dataaccess.entity.ErrorComment;
 import bcgov.jh.etk.jhetkcommon.dataaccess.entity.ErrorEntity;
 import bcgov.jh.etk.jhetkcommon.dataaccess.repository.ErrorRepository;
 import org.slf4j.Logger;
@@ -8,52 +9,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import bcgov.jh.etk.jhetkcommon.config.ApplicationProperties;
-import bcgov.jh.etk.jhetkcommon.dataaccess.dao.EtkDaoService;
 import bcgov.jh.etk.jhetkcommon.model.Const;
 import bcgov.jh.etk.jhetkcommon.model.EtkError;
 import bcgov.jh.etk.jhetkcommon.model.enums.EnumErrorCategory;
 import bcgov.jh.etk.jhetkcommon.model.enums.EnumErrorCode;
 import bcgov.jh.etk.jhetkcommon.model.enums.EnumErrorSeverity;
-import bcgov.jh.etk.jhetkcommon.model.enums.EnumInterfaceState;
 import bcgov.jh.etk.jhetkcommon.service.EmailService;
 import bcgov.jh.etk.jhetkcommon.service.IErrorService;
 import bcgov.jh.etk.jhetkcommon.util.DateUtil;
-import bcgov.jh.etk.jhetkcommon.util.InterfaceStateUtil;
 
 @Service
 public class ErrorService implements IErrorService {
 
 	/** The logger. */
-	private static Logger logger = LoggerFactory.getLogger(ErrorService.class);
-	
-	/** The vph dao. */
-	@Autowired(required = false)
-	EtkDaoService etkDao;
-	
+	private static final Logger logger = LoggerFactory.getLogger(ErrorService.class);
+
 	/** The email service. 
 	 *  Set required=false, to make EmailService bean optional
 	 **/
 	@Autowired(required = false)
 	EmailService emailService;
-	
-	/** The interface state util. */
-	@Autowired
-	InterfaceStateUtil interfaceStateUtil;
 
 	@Autowired
 	ErrorRepository errorRepository;
 
 	@Override
-	public Integer saveError(final String contraventionNum, final String ticketNum, final EnumErrorCode errorCode, final String errorSource, final String errorDescription, 
-			final String updateUserID, final String icbcText, final String justinText, final String primeText, final Boolean sendEmail) {
-		// Don't raise an error if 
-		// 1. The interface is RESUMING and
-		// 2. The errorCode.silentErrorWhileInterfaceResuming is true
-		if (errorCode != null &&
-				errorCode.getSilentErrorWhileInterfaceResuming() && 
-				EnumInterfaceState.RESUMING.equals(interfaceStateUtil.getInterfaceState(errorCode.getInterface()).getInterfaceState())) {
-			return null;
-		}
+	public void saveError(final String contraventionNum, final String ticketNum, final EnumErrorCode errorCode, final String errorSource, final String errorDescription,
+						  final String updateUserID, final String icbcText, final String justinText, final String primeText, final Boolean sendEmail) {
 		logger.debug("Save error and/or email");
 		EtkError error = new EtkError();
 		error.setErrorCode(errorCode);
@@ -68,32 +50,22 @@ public class ErrorService implements IErrorService {
 		error.setJUSTINText(justinText);
 		error.setPRIMEText(primeText);
 		error.setUpdateUserID(updateUserID);
-		
-		return saveError(error, errorDescription, sendEmail);
+
+		saveError(error, errorDescription, sendEmail);
 	}
 
 	/**
 	 * Save error and/or send email.
 	 *
-	 * @param error the error
+	 * @param error        the error
 	 * @param errorDetails the error details
-	 * @param sendEmail the send email
-	 * @return the long
+	 * @param sendEmail    the send email
 	 */
-	private Integer saveError(EtkError error, String errorDetails, Boolean sendEmail) {
-		// Don't raise an error if 
-		// 1. The interface is RESUMING and
-		// 2. The errorCode.silentErrorWhileInterfaceResuming is true
-		if (error != null &&
-				error.getErrorCode() != null && 
-				error.getErrorCode().getSilentErrorWhileInterfaceResuming() && 
-				EnumInterfaceState.RESUMING.equals(interfaceStateUtil.getInterfaceState(error.getErrorCode().getInterface()).getInterfaceState())) {
-			return null;
-		}
+	private void saveError(EtkError error, String errorDetails, Boolean sendEmail) {
 		Integer errorID = null;
 		try {
             assert error != null;
-            errorRepository.save(new ErrorEntity(
+			ErrorEntity newError = new ErrorEntity(
 					error.getErrorCategory().getCodeValue(),
 					error.getErrorSeverity().getCodeValue(),
 					error.getCorrelationTicketNumber(),
@@ -101,16 +73,9 @@ public class ErrorService implements IErrorService {
 					error.getErrorDescription(),
 					error.getErrorSource(),
 					error.getICBCText()
-			));
-
-			//save error to db
-			errorID = etkDao.createErrorStoredProc(error.getCorrelationTicketID(), error.getErrorCategory() == null ? null : error.getErrorCategory().getCodeValue(), 
-					error.getErrorSeverity() == null ? null : error.getErrorSeverity().getCodeValue(), error.getCorrelationTicketNumber(), error.getCorrelationContraventionNumber(), 
-					error.getErrorDescription(), error.getErrorSource(), error.getPRIMEText(), error.getICBCText(), error.getJUSTINText(), 
-					error.getErrorCode().getErrorCode());
-			
-			// save error comments to db
-			etkDao.logUserComment(String.valueOf(errorID), Const.CONST_JH_ETK, errorDetails);
+			);
+			newError.getComments().add(new ErrorComment(Const.CONST_PAYMENT_SVC, errorDetails));
+            errorRepository.save(newError);
 			
 			//send email if sendEmail is true
 			if (sendEmail == null || Boolean.TRUE.equals(sendEmail)) {
@@ -121,7 +86,6 @@ public class ErrorService implements IErrorService {
 		} catch (Exception e) {
 			logger.error("Error occurred while calling saveError: {}", e.getMessage());
 		}
-		return errorID;
 	}
 
 	/**

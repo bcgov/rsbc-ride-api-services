@@ -13,7 +13,7 @@ public class Const {
 	public final static String HUB_EVENT_VERSION = "1.6";
 	
 	/** The Constant CONST_JH_ETK. */
-	public static final String CONST_JH_ETK = "JH-ETK";
+	public static final String CONST_PAYMENT_SVC = "PAYMENT_SVC";
 	
 	/** The Constant KEY_ICBC_PAYMENT_MESSAGE_DSC. */
 	public static final String KEY_ICBC_PAYMENT_MESSAGE_DSC = "ICBC_PAYMENT_MESSAGE_DSC";

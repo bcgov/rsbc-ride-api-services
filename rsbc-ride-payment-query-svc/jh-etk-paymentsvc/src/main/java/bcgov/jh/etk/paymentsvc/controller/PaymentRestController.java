@@ -6,7 +6,6 @@ import bcgov.jh.etk.jhetkcommon.model.Const;
 import bcgov.jh.etk.jhetkcommon.model.PathConst;
 import bcgov.jh.etk.jhetkcommon.model.enums.EnumErrorCode;
 import bcgov.jh.etk.jhetkcommon.model.enums.EnumInterface;
-import bcgov.jh.etk.jhetkcommon.model.enums.EnumInterfaceState;
 import bcgov.jh.etk.jhetkcommon.model.enums.EnumEventType;
 import bcgov.jh.etk.jhetkcommon.model.payment.InvoiceSearchResponse_ICBC_MCOT;
 import bcgov.jh.etk.jhetkcommon.model.payment.ref.Contravention;
@@ -14,7 +13,6 @@ import bcgov.jh.etk.jhetkcommon.model.payment.ref.Vehicle;
 import bcgov.jh.etk.jhetkcommon.service.EtkRestService;
 import bcgov.jh.etk.jhetkcommon.service.impl.ErrorService;
 import bcgov.jh.etk.jhetkcommon.service.impl.EtkService;
-import bcgov.jh.etk.jhetkcommon.service.impl.WorkerService;
 import bcgov.jh.etk.jhetkcommon.util.DateUtil;
 import bcgov.jh.etk.jhetkcommon.util.EvtEnrichUtil;
 import bcgov.jh.etk.jhetkcommon.util.StringUtil;
@@ -36,6 +34,7 @@ import org.springframework.web.client.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ import static bcgov.jh.etk.jhetkcommon.model.PathConst.PATH_PING_REQUEST;
 @RestController
 public class PaymentRestController extends BaseController {
 	/** The log. */
-	private static Logger log = LoggerFactory.getLogger(PaymentRestController.class);
+	private static final Logger log = LoggerFactory.getLogger(PaymentRestController.class);
 
 	/** The paybc individual invoice endpoint url prefix. */
 	@Value("${paybc_individual_invoice_endpoint_url_prefix}")
@@ -76,17 +75,7 @@ public class PaymentRestController extends BaseController {
 	@Autowired
 	ErrorService errorService;
 
-	/** The helper service. */
-	@Autowired
-	WorkerService helperService;
-
 	private static final String PAYMENT_CONTROLLER_ICBC_INVOICE_SEARCH_HELPER = "PaymentController.icbcInvoiceSearchHelper";
-
-    @Value("${spring.application.name}")
-	private String componentName;
-
-	@Value("${pod.name}")
-	private String podName;
 
     /**
      * Home.
@@ -107,14 +96,6 @@ public class PaymentRestController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET,value = PathConst.PATH_INDIVIDUAL_TICKET_QUERY_V2 + "/{id}", produces = "application/json")
 	@ResponseStatus(code = HttpStatus.OK)
 	public @ResponseBody ResponseEntity<String> individualTicketQueryToICBC(@PathVariable("id") String contraventionNum) {
-		//check the current ICBC_QT interface state, simply return 'Service not available' if it's STOPPED
-		if (helperService.isInterfaceStopped(EnumInterface.ICBC_QT)) {
-			log.debug("Ticket query interface is STOPPED, return 'Service not available'");
-			//prepare response
-			String responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR);
-			return new ResponseEntity<> (responseString, HttpStatus.SERVICE_UNAVAILABLE);
-		}
-
 		log.debug("Individual ticket query from ICBC, contraventionNum: {}", contraventionNum);
 		String ticketNum = "";
 		contraventionNum = contraventionNum.toUpperCase();
@@ -134,14 +115,6 @@ public class PaymentRestController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = PathConst.PATH_TICKET_QUERY_V2, produces = "application/json")
 	@ResponseStatus(code = HttpStatus.OK)
 	public @ResponseBody ResponseEntity<String> ticketQueryToICBC(@RequestParam("in") String ticketNum,@RequestParam("prn") String prn,@RequestParam("time") String time) {
-		//check the current ICBC_QT interface state, simply return 'Service not available' if it's STOPPED
-		if (helperService.isInterfaceStopped(EnumInterface.ICBC_QT)) {
-			log.debug("Ticket query interface is STOPPED, return 'Service not available'");
-			//prepare response
-			String responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR);
-			return new ResponseEntity<> (responseString, HttpStatus.SERVICE_UNAVAILABLE);
-		}
-
 		log.info("Ticket query payment svc: {}, ticketNum: {}, time: {}", EnumEventType.VT_QUERY, ticketNum, time);
 		String responseString = "";
 
@@ -164,24 +137,14 @@ public class PaymentRestController extends BaseController {
 	 * @param time the time
 	 * @param individualInvoiceSearch the individual invoice search
 	 * @return the response entity
-	 * @throws EtkDataAccessException the etk data access exception
-	 */
+     */
 	private ResponseEntity<String> icbcInvoiceSearchHelper(String ticketNumber, final String contraventionNumber, final String time,
 			final boolean individualInvoiceSearch) {
 		HttpStatusCode responseCode = HttpStatus.OK;
 		String responseString = "";
-		try {
-			ticketNumber = URLEncoder.encode(ticketNumber, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			String errorDetails = "Exception occurred while doing URLEncode " + ticketNumber + "; error details: " + e.toString() + "; " + e.getMessage();
-			log.error(errorDetails);
-			return new ResponseEntity<> (getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND), HttpStatus.BAD_REQUEST);
-		}
+        ticketNumber = URLEncoder.encode(ticketNumber, StandardCharsets.UTF_8);
 
-		String url = ICBC_PAYMENT_SERVICE_URI + PathConst.PATH_TICKET_QUERY_ICBC + "/" + ticketNumber;
-
-		EnumInterface ICBC_QT = EnumInterface.ICBC_QT;
-
+        String url = ICBC_PAYMENT_SERVICE_URI + PathConst.PATH_TICKET_QUERY_ICBC + "/" + ticketNumber;
 		log.debug("Send ticket query [ticket number: {}, contraventionNumber: {}, time: {}] to ICBC: {}", ticketNumber, contraventionNumber, time, url);
 
 		ResponseEntity<String> response;
@@ -209,15 +172,6 @@ public class PaymentRestController extends BaseController {
         responseCode = response.getStatusCode();
 		//success, process the response from ICBC
 		if (HttpStatus.OK == responseCode || HttpStatus.CREATED == responseCode) {
-			//update ICBC_QT interfaces to RUNNING
-			try {
-				etkService.UpdateInterface(ICBC_QT, EnumInterfaceState.RUNNING, Const.CONST_JH_ETK);
-			} catch (EtkDataAccessException e) {
-				errorDetails = "Failed to update ICBC_QT to RUNNING; error details: " + e.toString() + "; " + e.getMessage();
-    			log.error(errorDetails);
-    			errorService.saveError(contraventionNumber, ticketNumber, EnumErrorCode.Q00, PAYMENT_CONTROLLER_ICBC_INVOICE_SEARCH_HELPER, errorDetails, null, null, null, null, true);
-			}
-
 			InvoiceSearchResponse_ICBC_MCOT icbcResponse = null;
 	        if (StringUtils.isNotBlank(response.getBody())) {
             	log.debug("Ticket query to ICBC succeeded: {}", response.getBody());
@@ -239,19 +193,15 @@ public class PaymentRestController extends BaseController {
 	        	return new ResponseEntity<> (responseString, HttpStatus.OK);
 	        }
 
-	        boolean timeMatch = false;
-	        //if doing individual invoice search or ticket search and time provided match what ICBC returns, match true to timeMatch
-	        if (time == null || DateUtil.compareViolationTime(icbcResponse.getViolationDate(), time)) {
-	        	timeMatch = true;
-	        }
-
-			log.debug("ICBC response violation date: {}", icbcResponse.getViolationDate());
+			//if doing individual invoice search or ticket search and time provided match what ICBC returns, match true to timeMatch
+	        boolean timeMatch = time == null || DateUtil.compareViolationTime(icbcResponse.getViolationDate(), time);
+            log.debug("ICBC response violation date: {}", icbcResponse.getViolationDate());
 
 	        if (timeMatch) {
 	        	// individual invoice search
 	        	if (individualInvoiceSearch) {
 	        		//loop through the list of ICBC returned Contraventions,
-	        		//find the one where the contravention number matches the passed incontraventionNumber,
+	        		//find the one where the contravention number matches the passed in contraventionNumber,
 	        		//and map it to InvoiceSearchResponse_ICBC object
 	        		InvoiceSearchResponse_ICBC returnResponse = null;
 	        		for (Contravention contravention : icbcResponse.getContraventions()) {
@@ -270,7 +220,7 @@ public class PaymentRestController extends BaseController {
 	        		//save a query event to db
 	        		try {
 	        			etkService.RecordQueryEvent(ticketNumber);
-	        		} catch (EtkDataAccessException e) {
+	        		} catch (Exception e) {
 	        			errorDetails = "Exception occurred while record query event, details: " + e.toString() + "; " + e.getMessage();
 	        			log.error(errorDetails);
 	        			errorService.saveError(contraventionNumber, ticketNumber, EnumErrorCode.Q21, PAYMENT_CONTROLLER_ICBC_INVOICE_SEARCH_HELPER, errorDetails, null, null, null, null, true);
@@ -287,7 +237,6 @@ public class PaymentRestController extends BaseController {
 	        				found100 = true;
 	        				Item tmpItem = new Item();
 	        				keyValue kv = new keyValue();
-	        				// kv.set$ref(PAYBC_INDIVIDUAL_INVOICE_ENDPOINT_URL_PREFIX + PathConst.PATH_INDIVIDUAL_TICKET_QUERY + "/" + contravention.getContraventionNumber());
 							kv.set$ref(PAYBC_INDIVIDUAL_INVOICE_ENDPOINT_URL_PREFIX + PathConst.PATH_INDIVIDUAL_TICKET_QUERY_V2 + "/" + contravention.getContraventionNumber());
 	        				tmpItem.setSelected_invoice(kv);
 	        				tmpItems.add(tmpItem);
@@ -307,11 +256,11 @@ public class PaymentRestController extends BaseController {
 	        			responseString = StringUtil.objectToJsonString(items);
 	        		// all the contraventions in the ticket are in the zero outstanding status (102),
 	        		// Hub returns "No payment required for this traffic violation ticket." to PayBC
-	        		} else if (!found100 && !found103 && found102) {
+	        		} else if (!found103 && found102) {
 	        			responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_ZERO_OUTSTANDING);
 	        		// all the contraventions in the ticket are either in 103 or 102.
 	        		// If at least one of the contraventions is 103, Hub returns "the ticket not payable message" to PayBC.
-	        		} else if (!found100 && found103) {
+	        		} else if (found103) {
 	        			responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_TICKET_NOT_PAYABLE);
 	        		// unexpected statusCode combination, log it, and return service not available message back to paybc
 	        		} else {
@@ -332,20 +281,10 @@ public class PaymentRestController extends BaseController {
 			//prepare response
 			responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR);
 
-			//update ICBC_QT interfaces to FAILED
-			try {
-				etkService.UpdateInterface(ICBC_QT, EnumInterfaceState.FAILED, Const.CONST_JH_ETK);
-			} catch (EtkDataAccessException e) {
-				errorDetails = "Failed to update ICBC_QT to FAILED; error details: " + e.toString() + "; " + e.getMessage();
-    			log.error(errorDetails);
-    			errorService.saveError(contraventionNumber, ticketNumber, EnumErrorCode.Q00, PAYMENT_CONTROLLER_ICBC_INVOICE_SEARCH_HELPER, errorDetails, null, null, null, null, true);
-			}
-
 			//error handling
 			log.error("Error occurred while doing ticket query to ICBC");
 			errorDetails = String.format("HTTP status: %s \r\n HTTP Body: %s", response.getStatusCode().value(), response.getBody());
 			errorService.saveError(contraventionNumber, ticketNumber, EnumErrorCode.Q11, PAYMENT_CONTROLLER_ICBC_INVOICE_SEARCH_HELPER, errorDetails, null, null, null, null, true);
-
 		}
 		return new ResponseEntity<> (responseString, responseCode);
 	}
@@ -384,13 +323,6 @@ public class PaymentRestController extends BaseController {
 		} finally {
 			if (errorDetails != null) {
 		    	log.error(errorDetails);
-		    	try {
-					etkService.UpdateInterface(EnumInterface.ICBC_QT, EnumInterfaceState.FAILED, Const.CONST_JH_ETK);
-				} catch (Exception e) {
-					String error = "DB exception occurred while changing ICBC_QT to FAILED, details: " + e.toString() + "; " + e.getMessage();
-					log.error(error);
-					errorService.saveError(contraventionNum, ticketNum, EnumErrorCode.Q00, "PaymentController.ticketQueryWrapper", error, null, null, null, null, true);
-				}
 		    }
 		    if (errorCode != null) {
 		    	errorService.saveError(contraventionNum, ticketNum, errorCode, errorSource, errorDetails, null, null, null, null, true);

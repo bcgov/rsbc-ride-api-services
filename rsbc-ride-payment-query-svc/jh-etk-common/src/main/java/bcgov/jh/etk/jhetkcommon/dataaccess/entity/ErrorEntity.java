@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Setter
 @Getter
 @Document("errors")
@@ -15,6 +18,7 @@ public class ErrorEntity {
     private String detailsTxt;
     private String serviceNm;
     private String icbcTxt;
+    private List<ErrorComment> comments;
 
     public ErrorEntity(String errorCategoryCd, String errorSeverityLevelCd, String ticketNo, String contraventionNo, String detailsTxt, String serviceNm, String icbcTxt) {
         this.errorCategoryCd = errorCategoryCd;
@@ -24,5 +28,6 @@ public class ErrorEntity {
         this.detailsTxt = detailsTxt;
         this.serviceNm = serviceNm;
         this.icbcTxt = icbcTxt;
+        comments = new ArrayList<>();
     }
 }

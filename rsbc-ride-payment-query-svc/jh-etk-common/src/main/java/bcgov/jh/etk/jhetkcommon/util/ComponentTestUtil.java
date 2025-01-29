@@ -16,34 +16,10 @@ import bcgov.jh.etk.jhetkcommon.service.impl.EtkService;
 @Service
 public class ComponentTestUtil {
 	private static final Logger logger = LoggerFactory.getLogger(ComponentTestUtil.class);
-	
-	@Autowired
-	EtkService etkService;
-	
+
 	@Autowired
 	RestService restService;
-	
-	public ComponentTestResult dbVersionCheck() {
-		StringBuilder message = new StringBuilder();
-		boolean isSuccess = true;
-		
-		// check DBVersion
-		String curDBVersion = null;
-		try {
-			curDBVersion = etkService.getDBVersion();
-			if (!ApplicationProperties.dbVersion.equals(curDBVersion)) {
-				message.append("DB version check failed, expected: " + ApplicationProperties.dbVersion + "; current DB version: " + curDBVersion + "\n");
-				isSuccess = false;
-			}
-		} catch (EtkDataAccessException e) {
-			message.append("Failed execute getDBVersion, error details: " + e.toString() + "; " + e.getMessage() + "\n");
-			logger.error(message.toString());
-			isSuccess = false;
-		}
 
-		return new ComponentTestResult(isSuccess, message.toString());
-	}
-	
 	/**
 	 * Ping check.
 	 *

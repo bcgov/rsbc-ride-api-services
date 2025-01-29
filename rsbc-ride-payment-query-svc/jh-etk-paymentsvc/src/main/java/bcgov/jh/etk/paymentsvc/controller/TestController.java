@@ -40,17 +40,13 @@ public class TestController {
 		logger.trace("Received start tests request");
 
 		StringBuilder message = new StringBuilder();
-		
-		// check DBVersion
-		ComponentTestResult dbCheckResult = componentTestUtil.dbVersionCheck();
-		message.append(dbCheckResult.getMessage());
 
 		// access icbcadapter/ping service
 		ComponentTestResult pingCheckResult = componentTestUtil.pingCheck(urlPrefix, "icbcAdapter");
 		message.append(pingCheckResult.getMessage());
 		
 		// return the result
-		if (!(dbCheckResult.isSuccess() && pingCheckResult.isSuccess())) {
+		if (pingCheckResult.isSuccess()) {
 			return ResponseEntity
     				.status(HttpStatus.INTERNAL_SERVER_ERROR)
     				.body(message.toString());
