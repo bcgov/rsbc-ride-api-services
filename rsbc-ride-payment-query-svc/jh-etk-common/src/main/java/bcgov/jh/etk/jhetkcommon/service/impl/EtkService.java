@@ -1,8 +1,12 @@
 package bcgov.jh.etk.jhetkcommon.service.impl;
 
+import java.util.Date;
 import java.util.Map;
 
+import bcgov.jh.etk.jhetkcommon.dataaccess.entity.EventEntity;
+import bcgov.jh.etk.jhetkcommon.dataaccess.repository.EventRepository;
 import bcgov.jh.etk.jhetkcommon.model.Const;
+import bcgov.jh.etk.jhetkcommon.model.enums.EnumEventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +37,9 @@ public class EtkService implements IEtkService {
 	@Autowired(required = false)
 	EtkDaoService etkDao;
 
+	@Autowired
+	EventRepository eventRepository;
+
 	/**
 	 * Gets the icbc payment code.
 	 *
@@ -54,7 +61,7 @@ public class EtkService implements IEtkService {
 	@Override
 	public void RecordQueryEvent(final String ticketNO) throws EtkDataAccessException{
 		logger.debug("Record query event, {}", ticketNO);
-		etkDao.RecordQueryEvent(ticketNO);
+		eventRepository.save(new EventEntity(ticketNO, new Date(), EnumEventType.QUERY.getCodeValue()));
 	}
 
 	/**

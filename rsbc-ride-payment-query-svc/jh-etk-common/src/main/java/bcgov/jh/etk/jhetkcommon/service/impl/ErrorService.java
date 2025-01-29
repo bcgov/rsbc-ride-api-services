@@ -1,5 +1,7 @@
 package bcgov.jh.etk.jhetkcommon.service.impl;
 
+import bcgov.jh.etk.jhetkcommon.dataaccess.entity.ErrorEntity;
+import bcgov.jh.etk.jhetkcommon.dataaccess.repository.ErrorRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,9 @@ public class ErrorService implements IErrorService {
 	@Autowired
 	InterfaceStateUtil interfaceStateUtil;
 
+	@Autowired
+	ErrorRepository errorRepository;
+
 	@Override
 	public Integer saveError(final String contraventionNum, final String ticketNum, final EnumErrorCode errorCode, final String errorSource, final String errorDescription, 
 			final String updateUserID, final String icbcText, final String justinText, final String primeText, final Boolean sendEmail) {
@@ -55,34 +60,6 @@ public class ErrorService implements IErrorService {
 		error.setAssignedRole(null);
 		error.setCorrelationContraventionNumber(contraventionNum);
 		error.setCorrelationTicketNumber(ticketNum);
-		error.setErrorCategory(EnumErrorCategory.getEnumfromCodeValue(errorCode.getErrorCategory()));
-		error.setErrorDescription(errorCode.getErrorSummary());
-		error.setErrorSeverity(EnumErrorSeverity.getEnumfromCodeValue(errorCode.getErrorSeverity()));
-		error.setErrorSource(errorSource);
-		error.setICBCText(icbcText);
-		error.setJUSTINText(justinText);
-		error.setPRIMEText(primeText);
-		error.setUpdateUserID(updateUserID);
-		
-		return saveError(error, errorDescription, sendEmail);
-	}
-
-	@Override
-	public Integer saveError(final Integer ticketID, final EnumErrorCode errorCode, final String errorSource, final String errorDescription, 
-			final String updateUserID, final String icbcText, final String justinText, final String primeText, final Boolean sendEmail) {
-		// Don't raise an error if 
-		// 1. Issuance interface is RESUMING and
-		// 2. The errorCode.silentErrorWhileInterfaceResuming is true
-		if (errorCode != null &&
-				errorCode.getSilentErrorWhileInterfaceResuming() && 
-				EnumInterfaceState.RESUMING.equals(interfaceStateUtil.getInterfaceState(errorCode.getInterface()).getInterfaceState())) {
-			return null;
-		}
-		logger.debug("Save error and/or email");
-		EtkError error = new EtkError();
-		error.setErrorCode(errorCode);
-		error.setAssignedRole(null);
-		error.setCorrelationTicketID(ticketID);
 		error.setErrorCategory(EnumErrorCategory.getEnumfromCodeValue(errorCode.getErrorCategory()));
 		error.setErrorDescription(errorCode.getErrorSummary());
 		error.setErrorSeverity(EnumErrorSeverity.getEnumfromCodeValue(errorCode.getErrorSeverity()));
@@ -115,6 +92,17 @@ public class ErrorService implements IErrorService {
 		}
 		Integer errorID = null;
 		try {
+            assert error != null;
+            errorRepository.save(new ErrorEntity(
+					error.getErrorCategory().getCodeValue(),
+					error.getErrorSeverity().getCodeValue(),
+					error.getCorrelationTicketNumber(),
+					error.getCorrelationContraventionNumber(),
+					error.getErrorDescription(),
+					error.getErrorSource(),
+					error.getICBCText()
+			));
+
 			//save error to db
 			errorID = etkDao.createErrorStoredProc(error.getCorrelationTicketID(), error.getErrorCategory() == null ? null : error.getErrorCategory().getCodeValue(), 
 					error.getErrorSeverity() == null ? null : error.getErrorSeverity().getCodeValue(), error.getCorrelationTicketNumber(), error.getCorrelationContraventionNumber(), 
@@ -139,21 +127,15 @@ public class ErrorService implements IErrorService {
 	/**
 	 * Builds the email body.
 	 * 	Error summary: Failed to generate valid ICBC XML
-	 * 
 	 * 		Error code: I.4.3
-	 * 
 	 * 		Error occurred on:  2019-02-26T14:33:36
-	 * 
 	 * 		Error details link: https://test.jag.gov.bc.ca/vphsc/viewVPHErrorDetails/4809
-	 * 
 	 * 		Related ticket number: EZ03102285
-	 * 
 	 * 		Error technical details:
 	 * 		--
 	 * 		 HTTP Status Message: Internal Server Error HTTP Service Error: Error Path : /tns:createContraventionRequest/Violation/Count[0]/OffenseDescription
 	 * 		Error Code: VV-005
 	 * 		Error Message : [ISC.0082.9034] Field is absent, field must exist
-	 *
 	 * @param error the error
 	 * @param errorDetails the error details
 	 * @param errorID the error ID
@@ -164,12 +146,12 @@ public class ErrorService implements IErrorService {
 		
 		String ticketNumber = error.getCorrelationTicketNumber();
 
-		stringBuilder.append("Error summary: " + error.getErrorDescription() + "\n\n");
-		stringBuilder.append("Error code: " + error.getErrorCode().getErrorCode() + "\n\n");
-		stringBuilder.append("Error occurred on: " + DateUtil.getLocalCurrentDatetimeString() + "\n\n");
-		stringBuilder.append("Error details link: " + ApplicationProperties.emailURLPrefix + errorID +  "\n\n");
-		stringBuilder.append("Related ticket number: " + ticketNumber + "\n\n");
-		stringBuilder.append("Error technical details: " + "\n\n" + errorDetails);
+		stringBuilder.append("Error summary: ").append(error.getErrorDescription()).append("\n\n");
+		stringBuilder.append("Error code: ").append(error.getErrorCode().getErrorCode()).append("\n\n");
+		stringBuilder.append("Error occurred on: ").append(DateUtil.getLocalCurrentDatetimeString()).append("\n\n");
+		stringBuilder.append("Error details link: ").append(ApplicationProperties.emailURLPrefix).append(errorID).append("\n\n");
+		stringBuilder.append("Related ticket number: ").append(ticketNumber).append("\n\n");
+		stringBuilder.append("Error technical details: ").append("\n\n").append(errorDetails);
 		return stringBuilder.toString();
 	}
 	
