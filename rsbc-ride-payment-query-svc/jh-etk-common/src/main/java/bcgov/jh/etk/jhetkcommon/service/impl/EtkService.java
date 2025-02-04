@@ -6,14 +6,12 @@ import java.util.Map;
 import bcgov.jh.etk.jhetkcommon.dataaccess.entity.EventEntity;
 import bcgov.jh.etk.jhetkcommon.dataaccess.repository.EventRepository;
 import bcgov.jh.etk.jhetkcommon.model.Const;
-import bcgov.jh.etk.jhetkcommon.model.Event;
 import bcgov.jh.etk.jhetkcommon.model.TicketQueryEvent;
 import bcgov.jh.etk.jhetkcommon.model.enums.EnumErrorCode;
 import bcgov.jh.etk.jhetkcommon.model.enums.EnumEventType;
 import bcgov.jh.etk.jhetkcommon.service.RestService;
 import bcgov.jh.etk.jhetkcommon.util.StringUtil;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import bcgov.jh.etk.jhetkcommon.exception.EtkDataAccessException;
 import bcgov.jh.etk.jhetkcommon.service.IEtkService;
 
 /**
@@ -54,8 +51,8 @@ public class EtkService implements IEtkService {
 	@Value("${ride.producer.service.url}")
 	private String rideProducerServiceUrl;
 
-	@Value("${ride.producer.service.request.headers}")
-	private String rideProducerHeader;
+	@Value("${ride.producer.service.api.key}")
+	private String rideProducerServiceApiKey;
 
 
 	/**
@@ -87,7 +84,7 @@ public class EtkService implements IEtkService {
 
 	private void SendEventToProducerAPI(EventEntity newEvent) {
         try {
-            Map<String, String> requestHeaders = new Gson().fromJson(rideProducerHeader, new ParameterizedTypeReference<Map<String, String>>() {}.getType());
+            Map<String, String> requestHeaders = Map.of("ride-api-key", rideProducerServiceApiKey);
             TicketQueryEvent ticketQueryEvent = new TicketQueryEvent(newEvent);
             String payload = StringUtil.objectToJsonString(ticketQueryEvent);
             String url = rideProducerServiceUrl + "/etkevents/payquery";
