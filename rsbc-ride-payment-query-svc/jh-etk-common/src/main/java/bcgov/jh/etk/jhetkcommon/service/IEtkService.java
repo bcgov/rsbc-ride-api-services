@@ -22,7 +22,7 @@ public interface IEtkService {
 	 * @return the map
 	 * @throws EtkDataAccessException the etk data access exception
 	 */
-	public Map<String, String> GetIcbcPaymentCode(final String icbcPaymentMsgCode) throws EtkDataAccessException;
+	public String GetPaymentMessage(final String icbcPaymentMsgCode) throws EtkDataAccessException;
 
 	/**
 	 * Record query event.
@@ -31,24 +31,6 @@ public interface IEtkService {
 	 * @throws EtkDataAccessException the etk data access exception
 	 */
 	public void RecordQueryEvent(final String ticketNO) throws EtkDataAccessException;
-
-	/**
-	 * Update interface.
-	 *
-	 * @param interfaceNM the interface NM
-	 * @param interfaceStateCD the interface state CD
-	 * @param updUserID the upd user ID
-	 * @throws EtkDataAccessException the etk data access exception
-	 */
-	public void UpdateInterface(final EnumInterface interfaceNM, final EnumInterfaceState interfaceStateCD, final String updUserID) throws EtkDataAccessException;
-
-	/**
-	 * Gets the DB version.
-	 *
-	 * @return the DB version
-	 * @throws EtkDataAccessException the etk data access exception
-	 */
-	public String getDBVersion() throws EtkDataAccessException;
 }
 
 

@@ -13,7 +13,7 @@ public class Const {
 	public final static String HUB_EVENT_VERSION = "1.6";
 	
 	/** The Constant CONST_JH_ETK. */
-	public static final String CONST_JH_ETK = "JH-ETK";
+	public static final String CONST_PAYMENT_SVC = "PAYMENT_SVC";
 	
 	/** The Constant KEY_ICBC_PAYMENT_MESSAGE_DSC. */
 	public static final String KEY_ICBC_PAYMENT_MESSAGE_DSC = "ICBC_PAYMENT_MESSAGE_DSC";
@@ -122,4 +122,16 @@ public class Const {
 	
 	/** The Constant KEY_STUCK_DISPUTE_SU_RECORDS. */
 	public static final String KEY_STUCK_DISPUTE_SU_RECORDS = "stuckDisputeSURecords";
+
+	/**  Ticket number provided is not found. */
+	public final static String ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND = "101";
+
+	/** The Constant ICBC_PAYMENT_MESSAGE_CODE_ZERO_OUTSTANDING. */
+	public final static String ICBC_PAYMENT_MESSAGE_CODE_ZERO_OUTSTANDING = "102";
+
+	/** The Constant ICBC_PAYMENT_MESSAGE_CODE_TICKET_NOT_PAYABLE. */
+	public final static String ICBC_PAYMENT_MESSAGE_CODE_TICKET_NOT_PAYABLE = "103";
+
+	/** ICBC Service is Not Available. */
+	public final static String ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR = "201";
 }
