@@ -84,7 +84,7 @@ public class PaymentRestController extends BaseController {
      */
     @GetMapping(PATH_PING_REQUEST)
     public String home(){
-        return "{\"message\" : \"Welcome to Paymentsvc!\"}";
+        return "{\"message\" : \"Welcome to RIDE Payment SVC!\"}";
     }
 
 	/**
@@ -221,7 +221,7 @@ public class PaymentRestController extends BaseController {
 	        		try {
 	        			etkService.RecordQueryEvent(ticketNumber);
 	        		} catch (Exception e) {
-	        			errorDetails = "Exception occurred while record query event, details: " + e.toString() + "; " + e.getMessage();
+	        			errorDetails = "Exception occurred while record query event, details: " + e.getMessage() + "; " + e.toString();
 	        			log.error(errorDetails);
 	        			errorService.saveError(contraventionNumber, ticketNumber, EnumErrorCode.Q21, PAYMENT_CONTROLLER_ICBC_INVOICE_SEARCH_HELPER, errorDetails, null, null, null, null, true);
 	        		}
@@ -275,8 +275,7 @@ public class PaymentRestController extends BaseController {
 	        }
 		} else {
 			// bad response...
-            log.error("Ticket query to ICBC failed, status: {}, response: {}", response.getStatusCode(), response.getBody());
-			log.debug("Service not available error");
+            log.error("Ticket query to ICBC failed, ticket: {}, status: {}, response: {}", ticketNumber, response.getStatusCode(), response.getBody());
 
 			//prepare response
 			responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR);
@@ -307,9 +306,9 @@ public class PaymentRestController extends BaseController {
 			return icbcInvoiceSearchHelper(ticketNum, contraventionNum, time, individualInvoiceSearch);
 		} catch (ResourceAccessException e) {
 			//ICBC is not available, don't raise a Hub error; let PayBC automatically retry.
-			errorDetails = "Cannot reach " + ICBC_PAYMENT_SERVICE_URI + PathConst.PATH_TICKET_QUERY_ICBC + "/" + ticketNum + ". Exception details: " + e.toString() + "; " + e.getMessage();;
+			errorDetails = "Cannot reach " + ICBC_PAYMENT_SERVICE_URI + PathConst.PATH_TICKET_QUERY_ICBC + "/" + ticketNum + ". Exception details: " + e.getMessage() + "; " + e.toString();
 		} catch (HttpStatusCodeException e) {
-			errorDetails = "Exception occurred while querying ticket to icbcadapter, httpStatusCode: " + e.getStatusCode().value() + "; details: " + e.toString() + "; " + e.getMessage();
+			errorDetails = "Exception occurred while querying ticket in ICBC svc, httpStatusCode: " + e.getStatusCode().value() + "; details: " + e.getMessage() + "; " + e.toString();
 			// proper http status code returned
 			// if the exception is an instance of HttpClientErrorException, raise an error;
 			// otherwise, don't raise any error
@@ -318,11 +317,11 @@ public class PaymentRestController extends BaseController {
 			}
 		} catch (UnknownHttpStatusCodeException e) {
 			// unknown http status code returned; raise a general error
-			errorDetails = "UnknownHttpStatusCodeException occurred while querying ticket to icbcadapter: " +  e.toString() + "; " + e.getMessage();
+			errorDetails = "UnknownHttpStatusCodeException occurred while querying ticket using ICBC svc: " +  e.getMessage() + "; " + e.toString();
 			errorCode = EnumErrorCode.Q00;
 		} finally {
 			if (errorDetails != null) {
-		    	log.error(errorDetails);
+                log.error("Ticket number: {} error: {}", ticketNum, errorDetails);
 		    }
 		    if (errorCode != null) {
 		    	errorService.saveError(contraventionNum, ticketNum, errorCode, errorSource, errorDetails, null, null, null, null, true);

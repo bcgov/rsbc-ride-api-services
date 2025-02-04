@@ -40,7 +40,7 @@ public class ComponentTestUtil {
 		serverUrl = urlPrefix + PathConst.PATH_PING_REQUEST;
 		logger.trace("Access {} ping service: {}", componentName, serverUrl);
 		
-		response = restService.restfulSave(serverUrl, null, HttpMethod.GET, MediaType.APPLICATION_JSON);
+		response = restService.restfulSave(serverUrl, null, HttpMethod.GET, MediaType.APPLICATION_JSON, null);
 		respCode = response.getStatusCode();
 		resp = response.getBody();
 		
