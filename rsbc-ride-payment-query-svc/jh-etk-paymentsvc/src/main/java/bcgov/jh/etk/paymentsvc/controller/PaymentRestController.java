@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.circuitbreaker.NoFallbackAvailableException;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.*;
@@ -38,6 +39,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
 
 import static bcgov.jh.etk.jhetkcommon.model.PathConst.PATH_PING_REQUEST;
 
@@ -163,8 +165,11 @@ public class PaymentRestController extends BaseController {
 			// only raise an error if it's client exception (except 404 which is used by ICBC for ticket not found)
 			if (!(e instanceof HttpServerErrorException)) {
 				errorDetails = "Exception occurred while sending ticket query to " + url + ", exception details: " + e.toString() + "; " + e.getMessage();
-				errorService.saveError(contraventionNumber, ticketNumber, EnumErrorCode.Q00, PAYMENT_CONTROLLER_ICBC_INVOICE_SEARCH_HELPER, errorDetails, null, null, null, null, true);
+				errorService.saveError(contraventionNumber, ticketNumber, EnumErrorCode.Q11, PAYMENT_CONTROLLER_ICBC_INVOICE_SEARCH_HELPER, errorDetails, null, null, null, null, true);
 			}
+			return new ResponseEntity<> (getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR), HttpStatus.SERVICE_UNAVAILABLE);
+		} catch (NoFallbackAvailableException e) {
+			log.warn("ICBC service is not available, exception details: {}", e.getCause().getMessage());
 			return new ResponseEntity<> (getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR), HttpStatus.SERVICE_UNAVAILABLE);
 		}
 
