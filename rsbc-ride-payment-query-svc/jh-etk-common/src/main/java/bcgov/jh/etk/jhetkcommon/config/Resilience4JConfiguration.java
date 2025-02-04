@@ -10,6 +10,7 @@ import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.cloud.client.circuitbreaker.Customizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.Duration;
 
@@ -22,6 +23,7 @@ public class Resilience4JConfiguration {
                 .waitDurationInOpenState(Duration.ofMillis(ApplicationProperties.circuitBreakerWaitDurationInOpenStateInMS))
                 .permittedNumberOfCallsInHalfOpenState(ApplicationProperties.circuitBreakerPermittedNumberOfCallsInHalfOpenState)
                 .slidingWindowSize(ApplicationProperties.circuitBreakerSlidingWindowSize)
+                .ignoreExceptions(HttpClientErrorException.class)
                 .build();
         TimeLimiterConfig timeLimiterConfig = TimeLimiterConfig.custom()
                 .timeoutDuration(Duration.ofMillis(ApplicationProperties.serviceConnectionTimeoutInMS))

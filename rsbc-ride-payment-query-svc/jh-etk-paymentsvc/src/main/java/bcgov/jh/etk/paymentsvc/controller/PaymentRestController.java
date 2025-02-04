@@ -170,6 +170,20 @@ public class PaymentRestController extends BaseController {
 			return new ResponseEntity<> (getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR), HttpStatus.SERVICE_UNAVAILABLE);
 		} catch (NoFallbackAvailableException e) {
 			log.warn("ICBC service is not available, exception details: {}", e.getCause().getMessage());
+
+			if (e.getCause() instanceof HttpClientErrorException) {
+				responseCode = ((HttpClientErrorException) e.getCause()).getStatusCode();
+
+				// If the errorCode is 404, return 'ticket not found' response
+				if (responseCode == HttpStatus.NOT_FOUND) {
+					log.debug("Ticket not found");
+					return new ResponseEntity<> (getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND), HttpStatus.OK);
+				}
+
+				errorDetails = "Exception occurred while sending ticket query to " + url + ", exception details: " + e.toString() + "; " + e.getMessage();
+				errorService.saveError(contraventionNumber, ticketNumber, EnumErrorCode.Q11, PAYMENT_CONTROLLER_ICBC_INVOICE_SEARCH_HELPER, errorDetails, null, null, null, null, true);
+			}
+
 			return new ResponseEntity<> (getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR), HttpStatus.SERVICE_UNAVAILABLE);
 		}
 
