@@ -26,7 +26,7 @@ import bcgov.jh.etk.jhetkcommon.service.RestService;
  */
 public class PauseResumeUtil {
 	/** The logger. */
-	private static Logger logger = LoggerFactory.getLogger(PauseResumeUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(PauseResumeUtil.class);
 
 	/**
 	 * Send simple message.
@@ -49,29 +49,5 @@ public class PauseResumeUtil {
         } catch (MailException exception) {
         	logger.error("Send a simple email message failed: {}", exception.getMessage());
         }
-	}
-	
-	/**
-	 * Write pause file.
-	 *
-	 * @param restService the rest service
-	 */
-	public static void WritePauseFile(final RestService restService) {
-		if (!StringUtil.isPropertyValueConfigured(ApplicationProperties.FTP_FILE_MANAGEMENT_URI)) {
-			return;
-		}
-		
-		String url = ApplicationProperties.FTP_FILE_MANAGEMENT_URI + PathConst.PATH_PAUSE_FILE_WRITE;
-		logger.info("Write pause file, send the request to this URL: {}", url);
-		try {
-	    	ResponseEntity<String> response = restService.restfulSave(url, null, HttpMethod.POST, MediaType.APPLICATION_JSON);
-
-			//success, process the response from ICBC
-			if (HttpStatus.OK.equals(response.getStatusCode()) || HttpStatus.CREATED.equals(response.getStatusCode())) {
-				logger.debug("Pause file successfully written");
-			}
-		} catch (Exception e) {
-			logger.error("Fail writing pause file, error message: {}", e.toString() + "; " + e.getMessage());
-    	}
 	}
 }
