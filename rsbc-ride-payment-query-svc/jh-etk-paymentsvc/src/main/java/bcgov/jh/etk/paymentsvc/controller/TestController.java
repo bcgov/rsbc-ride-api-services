@@ -1,7 +1,7 @@
 package bcgov.jh.etk.paymentsvc.controller;
 
 import bcgov.jh.etk.jhetkcommon.model.PathConst;
-import bcgov.jh.etk.jhetkcommon.service.EtkRestService;
+import bcgov.jh.etk.jhetkcommon.service.RestService;
 import bcgov.jh.etk.jhetkcommon.util.ComponentTestUtil;
 
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ public class TestController {
 	ComponentTestUtil componentTestUtil;
 
 	@Autowired
-	EtkRestService restService;
+	RestService restService;
 	
 	/** The icbc ping service uri. */
 	@Value("${icbc.ping.service.uri}")
