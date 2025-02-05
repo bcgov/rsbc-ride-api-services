@@ -14,6 +14,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationProperties {
 
+	public static int circuitBreakerSlidingWindowSize;
+	public static int circuitBreakerPermittedNumberOfCallsInHalfOpenState;
+	public static int circuitBreakerWaitDurationInOpenStateInMS;
+	public static int circuitBreakerFailureRateThreshold;
+
 	/** The service connection timeout in MS. */
 	public static int serviceConnectionTimeoutInMS;
     
@@ -233,5 +238,25 @@ public class ApplicationProperties {
     @Value("${mre.versions.to.include:}")
     private void setMRE_VERSIONS_TO_INCLUDE(String MRE_VERSIONS_TO_INCLUDE) {
 		ApplicationProperties.MRE_VERSIONS_TO_INCLUDE = MRE_VERSIONS_TO_INCLUDE;
+	}
+
+	@Value("${circuit.breaker.sliding.window.size:10}")
+	private void setCircuitBreakerSlidingWindowSize(int circuitBreakerSlidingWindowSize) {
+		ApplicationProperties.circuitBreakerSlidingWindowSize = circuitBreakerSlidingWindowSize;
+	}
+
+	@Value("${circuit.breaker.calls.in.half.open.state:5}")
+	private void setCircuitBreakerPermittedNumberOfCallsInHalfOpenState(int circuitBreakerPermittedNumberOfCallsInHalfOpenState) {
+		ApplicationProperties.circuitBreakerPermittedNumberOfCallsInHalfOpenState = circuitBreakerPermittedNumberOfCallsInHalfOpenState;
+	}
+
+	@Value("${circuit.breaker.wait.duration.in.open.state:60000}")
+	private void setCircuitBreakerWaitDurationInOpenStateInMS(int circuitBreakerWaitDurationInOpenStateInMS) {
+		ApplicationProperties.circuitBreakerWaitDurationInOpenStateInMS = circuitBreakerWaitDurationInOpenStateInMS;
+	}
+
+	@Value("${circuit.breaker.failure.rate.threshold:50}")
+	private void setCircuitBreakerFailureRateThreshold(int circuitBreakerFailureRateThreshold) {
+		ApplicationProperties.circuitBreakerFailureRateThreshold = circuitBreakerFailureRateThreshold;
 	}
 }

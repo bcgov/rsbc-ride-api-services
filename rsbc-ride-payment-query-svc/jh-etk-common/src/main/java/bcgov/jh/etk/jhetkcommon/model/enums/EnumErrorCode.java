@@ -58,14 +58,13 @@ public enum EnumErrorCode {
 	I70("I.7.0", "General issuance reconciliation processing error", "OTHER", "WARNING", "Contact eTK application support for further investigation", false),
 	I71("I.7.1", "Issuance reconciliation mismatch error", "DATA", "INFO", "Contact ICBC for further investigation", false),
 	
-	Q00("Q.0.0", "General payment query error", "OTHER", "INFO", "Contact eTK application support for further investigation", false),
-	Q11("Q.1.1", "Failed to get invoice query response from ICBC", "CONN", "INFO", "Perform the each of the following steps until issue is resolved:\n" +
-			"- Check eTK's paymentsvc and icbcadapter server logs for connectivity details\n" +
-			"- Contact ISB to acquire SSG server log for additional connectivity errors from SSG to ICBC; e.g., password error or SSG downtime", false),
-	Q21("Q.2.1", "Failed to insert query event into DB", "OTHER", "INFO", "Perform the each of the following steps until issue is resolved:\n" +
-			"- Check the eTK query interface general status\n" +
-			"- Check for general database connectivity error\n" +
-			"- Contact eTK application support for further investigation", false),
+	Q00("Q.0.0", "General payment query error", "OTHER", "WARNING", "Contact RIDE application support for further investigation", false),
+	Q11("Q.1.1", "Failed to get payment query response from ICBC", "CONN", "WARNING", "Perform the each of the following steps until issue is resolved:\n" +
+			"- Contact ISB to acquire SSG server log for additional connectivity errors from SSG to ICBC; e.g., password error or SSG downtime,\n" +
+			"- Contact RIDE application support for further investigation", false),
+	Q21("Q.2.1", "Failed to insert query event into DB", "DATA", "WARNING", "Contact RIDE application support for further investigation", false),
+	Q31("Q.3.1", "Failed to send event to producer API", "CONN", "WARNING", "", false),
+
 	
 	R00("R.0.0", "General payment receipt processing error", "OTHER", "INFO", "Contact eTK application support for further investigation", false),
 	R11("R.1.1", "Failed to get confirmation from ICBC for payment receipt creation", "CONN", "INFO", "Perform the each of the following steps until issue is resolved:\n" +
