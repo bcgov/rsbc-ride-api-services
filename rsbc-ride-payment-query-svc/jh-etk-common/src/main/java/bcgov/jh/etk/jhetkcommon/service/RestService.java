@@ -1,6 +1,7 @@
 package bcgov.jh.etk.jhetkcommon.service;
 
 import java.util.Base64;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -47,8 +48,8 @@ public class RestService {
 	 * @param httpMethod the http method
 	 * @return the response entity
 	 */
-	public ResponseEntity<String> restfulSave(final String endpointURL, final Object payload, final HttpMethod httpMethod, final MediaType contentType) {
-		return restExchangeHelper(endpointURL, payload, httpMethod, null, null, contentType);
+	public ResponseEntity<String> restfulSave(final String endpointURL, final Object payload, final HttpMethod httpMethod, final MediaType contentType, final Map<String, String> requestHeaders) {
+		return restExchangeHelper(endpointURL, payload, httpMethod, null, null, contentType, requestHeaders);
 	}
 	
 	/**
@@ -58,11 +59,10 @@ public class RestService {
 	 * @param payload the payload
 	 * @param httpMethod the http method
 	 * @return the response entity
-	 * @throws InterruptedException 
 	 * @throws RestClientException the rest client exception
 	 */
-	public ResponseEntity<String> restfulSave(final String endpointURL, final String payload, final HttpMethod httpMethod, final MediaType contentType) {
-		return restExchangeHelper(endpointURL, payload, httpMethod, null, null, contentType);
+	public ResponseEntity<String> restfulSave(final String endpointURL, final String payload, final HttpMethod httpMethod, final MediaType contentType, final Map<String, String> requestHeaders) {
+		return restExchangeHelper(endpointURL, payload, httpMethod, null, null, contentType, requestHeaders);
 	}
 	
 	/**
@@ -76,7 +76,7 @@ public class RestService {
 	 * @return the response entity
 	 */
 	public ResponseEntity<String> secureRestfulExchange(final String endpointURL, final Object payload, final HttpMethod httpMethod, final String username, final String password, final MediaType contentType) {
-		return restExchangeHelper(endpointURL, payload, httpMethod, username, password, contentType);
+		return restExchangeHelper(endpointURL, payload, httpMethod, username, password, contentType, null);
 	}
 	
 	/**
@@ -89,12 +89,12 @@ public class RestService {
 	 * @param password the password
 	 * @return the response entity
 	 */
-	private ResponseEntity<String> restExchangeHelper(final String endpointURL, final Object payload, final HttpMethod httpMethod, final String username, final String password, final MediaType contentType) {
+	private ResponseEntity<String> restExchangeHelper(final String endpointURL, final Object payload, final HttpMethod httpMethod, final String username, final String password, final MediaType contentType, final Map<String, String> requestHeaders) {
 		HttpEntity<Object> request = null;
 		if (StringUtils.isNoneBlank(username) && StringUtils.isNotBlank(password)) {
 			request = getRequestWithCredential(payload, username, password, contentType);
 		} else {
-			request = getRequest(payload, contentType);
+			request = getRequest(payload, contentType, requestHeaders);
 		}
 		
     	ResponseEntity<String> response = null;
@@ -123,14 +123,22 @@ public class RestService {
 	}
 
 	/**
-     * Gets the request.
-     *
-     * @param payload the payload
-     * @return the request
-     */
-    protected HttpEntity<Object> getRequest(final Object payload, final MediaType contentType) {
+	 * Gets the request.
+	 *
+	 * @param payload        the payload
+	 * @param contentType    the content type
+	 * @param requestHeaders the request headers
+	 * @return the request
+	 */
+    protected HttpEntity<Object> getRequest(final Object payload, final MediaType contentType, Map<String, String> requestHeaders) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(contentType);
+
+		if(requestHeaders != null) {
+			for (Map.Entry<String, String> entry : requestHeaders.entrySet()) {
+				headers.add(entry.getKey(), entry.getValue());
+			}
+		}
 
         if (payload != null) {
             return new HttpEntity<>(payload, headers);
