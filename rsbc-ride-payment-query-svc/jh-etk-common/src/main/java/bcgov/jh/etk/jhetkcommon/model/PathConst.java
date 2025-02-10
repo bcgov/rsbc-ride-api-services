@@ -12,6 +12,12 @@ public class PathConst {
 	/** The Constant PATH for ready service */
 	public final static String PATH_READY_REQUEST = "/ready";
 
+	/** The Constant PATH for actuator endpoints */
+    public final static String PATH_ACTUATOR = "/actuator/**";
+	
+	/** The Constant PATH for test service. */
+	public final static String PATH_TEST_REQUEST = "/test";
+
 	/** The Constant PATH_TICKET_QUERY. */
 	public final static String PATH_TICKET_QUERY_ICBC = "/invoices/evt"; 
 	
