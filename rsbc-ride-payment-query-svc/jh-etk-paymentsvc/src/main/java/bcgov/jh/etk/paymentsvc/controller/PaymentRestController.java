@@ -429,7 +429,13 @@ public class PaymentRestController extends BaseController {
 	 * @return the paybc payment message
 	 */
 	private String getPaymentMessage(final String icbcPaymentMessageCode) {
-		return etkService.GetPaymentMessage(icbcPaymentMessageCode);
+		try {
+			String message = etkService.GetPaymentMessage(icbcPaymentMessageCode);
+			return String.format("{\"error\": \"%s\"}", message);
+		} catch (Exception e) {
+			log.error("Fail to get ICBC payment code[{}], error: {}", icbcPaymentMessageCode, e.getMessage());
+		}
+		return null;
 	}
 
 	/**
