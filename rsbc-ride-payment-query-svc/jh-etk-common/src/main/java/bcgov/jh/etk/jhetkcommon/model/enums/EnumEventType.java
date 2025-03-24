@@ -7,6 +7,8 @@ import java.util.Map;
  * The Enum EnumEventType.
  */
 public enum EnumEventType {
+
+	VT_QUERY ("VT_QUERY", "VT Query"),
 	
 	/** The query. */
 	QUERY ("QUERY", "Ticket Query"),
