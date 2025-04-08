@@ -4,6 +4,8 @@ import java.util.Base64;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -25,7 +27,10 @@ public class EtkRestService {
 	 * */
 	@Autowired(required = false)
     RestTemplate restTemplate;
-	
+
+	@Autowired
+	private CircuitBreakerFactory circuitBreakerFactory;
+
 	/**
 	 * Restful save.
 	 *
@@ -65,16 +70,22 @@ public class EtkRestService {
 	 * @return the response entity
 	 */
 	private ResponseEntity<String> restExchangeHelper(final String endpointURL, final Object payload, final HttpMethod httpMethod, final String username, final String password, final MediaType contentType) {
-		HttpEntity<Object> request = null;
+		final HttpEntity<Object> request = getRequest(payload, username, password, contentType);
+
+		CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitbreaker");
+		return circuitBreaker.run(() -> restTemplate.exchange(endpointURL, httpMethod, request, String.class));
+	}
+
+	private HttpEntity<Object> getRequest(Object payload, String username, String password, MediaType contentType) {
+		HttpEntity<Object> request;
 		if (StringUtils.isNoneBlank(username) && StringUtils.isNotBlank(password)) {
 			request = getRequestWithCredential(payload, username, password, contentType);
 		} else {
 			request = getRequest(payload, contentType);
 		}
-		
-		return restTemplate.exchange(endpointURL, httpMethod, request, String.class);
+		return request;
 	}
-	
+
 	/**
      * Gets the request.
      *
