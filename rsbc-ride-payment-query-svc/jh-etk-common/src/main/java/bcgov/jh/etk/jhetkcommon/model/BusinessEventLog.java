@@ -2,7 +2,7 @@ package bcgov.jh.etk.jhetkcommon.model;
 
 import java.time.LocalDateTime;
 
-import bcgov.jh.etk.jhetkcommon.model.eventing.Event.EventTypeEnum;
+import bcgov.jh.etk.jhetkcommon.model.enums.EnumEventType;
 import bcgov.jh.etk.jhetkcommon.util.DateUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +18,7 @@ public class BusinessEventLog {
 	String logType = "business_event";
 	
 	/** The business event type. */
-	EventTypeEnum businessEventType;
+	EnumEventType businessEventType;
 	
 	/** The business event datetime. */
 	String businessEventDatetime;
@@ -48,7 +48,7 @@ public class BusinessEventLog {
 	 * @param targetName the target name
 	 * @param componentPodName the component pod name
 	 */
-	public BusinessEventLog(EventTypeEnum businessEventType, String businessEventKey, 
+	public BusinessEventLog(EnumEventType businessEventType, String businessEventKey,
 			String componentName, String sourceName, String targetName, String componentPodName) {
 		this.businessEventType = businessEventType;
 		this.businessEventDatetime = DateUtil.localDateTimeToString(LocalDateTime.now(), DateUtil.YYYY_MM_DD_HH_MM_SS);
@@ -67,7 +67,7 @@ public class BusinessEventLog {
 	public String toJSONString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("logType: " +  logType + ", ");
-		sb.append("businessEventType: " +  businessEventType.getValue() + ", ");
+		sb.append("businessEventType: " +  businessEventType.getCodeValue() + ", ");
 		sb.append("businessEventDatetime: " +  businessEventDatetime + ", ");
 		sb.append("businessEventKey: " +  businessEventKey + ", ");
 		sb.append("componentName: " +  componentName + ", ");
