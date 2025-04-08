@@ -1,8 +1,7 @@
 package bcgov.jh.etk.paymentsvc.controller;
 
-import bcgov.jh.etk.jhetkcommon.model.ComponentTestResult;
 import bcgov.jh.etk.jhetkcommon.model.PathConst;
-import bcgov.jh.etk.jhetkcommon.service.impl.WorkingDataService;
+import bcgov.jh.etk.jhetkcommon.service.RestService;
 import bcgov.jh.etk.jhetkcommon.util.ComponentTestUtil;
 
 import org.slf4j.Logger;
@@ -10,8 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,14 +23,20 @@ public class TestController {
 
 	@Autowired
 	ComponentTestUtil componentTestUtil;
-	
-	/** The icbc adatper service uri. */
-	@Value("${icbcadapter_paymentservice_endpoint_url}")
-    private String urlPrefix;
 
 	@Autowired
-	WorkingDataService workingDataSerice;
+	RestService restService;
 	
+	/** The icbc ping service uri. */
+	@Value("${icbc.ping.service.uri}")
+    private String urlPrefix;
+
+	@Value("${icbc.payment.service.username}")
+	private String icbcPaymentServiceUsername;
+
+	@Value("${icbc.payment.service.password}")
+	private String icbcPaymentServicePassword;
+
 	/**
 	 * Start tests
 	 *
@@ -44,22 +48,33 @@ public class TestController {
 		logger.trace("Received start tests request");
 
 		StringBuilder message = new StringBuilder();
-		
-		// check DBVersion
-		ComponentTestResult dbCheckResult = componentTestUtil.dbVersionCheck();
-		message.append(dbCheckResult.getMessage());
+		boolean isSuccess = true;
 
-		// access icbcadapter/ping service
-		ComponentTestResult pingCheckResult = componentTestUtil.pingCheck(urlPrefix, "icbcAdapter");
-		message.append(pingCheckResult.getMessage());
-		
+		String serverUrl = urlPrefix + "?request=ping";
+		logger.trace("ICBC Ping to this url: {}", serverUrl);
+
+		try {
+			ResponseEntity<String> response = restService.secureRestfulExchange(serverUrl, null, HttpMethod.GET, icbcPaymentServiceUsername, icbcPaymentServicePassword, MediaType.APPLICATION_JSON);
+			HttpStatusCode respCode = response.getStatusCode();
+			String responseBody = response.getBody();
+
+			// HttpStatus.OK is expected return from MockSvc
+			if (respCode != HttpStatus.OK) {
+				message.append("Failed doing ping request to ICBC. Http status: ").append(respCode).append("; body: ").append(responseBody).append("\n");
+				isSuccess = false;
+			}
+		} catch (Exception e) {
+			message.append("Failed doing ping request to ICBC. Exception details: ").append(e.toString()).append("; ").append(e.getMessage()).append("\n");
+			isSuccess = false;
+		}
+
 		// return the result
-		if (!(dbCheckResult.isSuccess() && pingCheckResult.isSuccess())) {
-			return ResponseEntity
-    				.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    				.body(message.toString());
-		} else {
+		if (isSuccess) {
 			return ResponseEntity.status(HttpStatus.OK).body("");
+		} else {
+			return ResponseEntity
+					.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(message.toString());
 		}
 	}
 
