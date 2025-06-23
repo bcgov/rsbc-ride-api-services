@@ -20,9 +20,9 @@ class Database:
         try:
             username = os.getenv('RSBCODW_DB_USERNAME')
             password = os.getenv('RSBCODW_DB_PASSWORD')
-            host = os.getenv('TAS_DB_HOST')
-            port = int(os.getenv('TAS_DB_PORT', '1433'))
-            database = os.getenv('TAS_DB_NAME')
+            host = os.getenv('RSBCODW_DB_HOST')
+            port = int(os.getenv('RSBCODW_DB_PORT', '1433'))
+            database = ''
 
             connection = pymssql.connect(
                 server=host,
