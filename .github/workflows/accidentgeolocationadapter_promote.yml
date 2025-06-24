@@ -18,6 +18,6 @@ jobs:
     uses: ./.github/workflows/template-deployment-workflow.yml
     with:
       IMAGE_NAME: rbe5-images/rsbc-ride-accidentgeolocationadapter
-      APP_FOLDER:  accidentgeolocationadapter
+      APP_FOLDER: accident-geolocation-adapter
       ENV_NAME: ${{ github.event.inputs.environment }}
       RELEASE_NAME: ${{ github.event.inputs.release_name }}
