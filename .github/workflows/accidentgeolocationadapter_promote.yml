@@ -11,6 +11,7 @@ on:
         description: 'Release name'
         required: true
         default: '1.0.0'
+        
 
 jobs:
   promote:
