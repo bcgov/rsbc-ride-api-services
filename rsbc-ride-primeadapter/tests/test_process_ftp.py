@@ -65,10 +65,10 @@ class MockSFTP:
 @pytest.fixture
 def mock_sftp():
     return MockSFTP(
-        file_list=['test1.txt', 'test2.txt'],  # Removed error.txt from list
+        file_list=['test-incoming-1.txt', 'test-incoming-2.txt', 'test-outgoing.txt'],  # Removed error.txt from list
         file_contents={
-            'test1.txt': b'Mar 15 10:30, ticket1.txt, S, SERVER1',
-            'test2.txt': b'Mar 15 11:30, ticket2.txt, F, SERVER2'
+            'test-incoming-1.txt': b'Mar 15 10:30, ticket1.txt, S, SERVER1',
+            'test-incoming-2.txt': b'Mar 15 11:30, ticket2.txt, F, SERVER2'
         }
     )
 
@@ -104,15 +104,15 @@ async def test_successful_processing(mock_env_vars, mock_ftp_util, mock_sftp):
         processor_instance.process_file = AsyncMock(return_value=success_result)
         
         from process_ftp import process_ftp_files
-        result = await process_ftp_files()
+        result = await process_ftp_files('incoming')
         
         assert result is True
         assert len(mock_sftp.renamed_files) == 2
         assert processor_instance.process_file.call_count == 2
         
         archived_files = [path[1] for path in mock_sftp.renamed_files]
-        assert 'dev/primerecon_archive/test1_processed.txt' in archived_files
-        assert 'dev/primerecon_archive/test2_processed.txt' in archived_files
+        assert 'dev/primerecon_archive/test-incoming-1_processed.txt' in archived_files
+        assert 'dev/primerecon_archive/test-incoming-2_processed.txt' in archived_files
 
 
 @pytest.mark.asyncio
@@ -122,7 +122,7 @@ async def test_no_files_to_process(mock_env_vars, mock_ftp_util):
     mock_ftp_util.acquire_sftp_channel.return_value = empty_sftp
     
     from process_ftp import process_ftp_files
-    result = await process_ftp_files()
+    result = await process_ftp_files('incoming')
     
     assert result is True
     assert len(empty_sftp.renamed_files) == 0
