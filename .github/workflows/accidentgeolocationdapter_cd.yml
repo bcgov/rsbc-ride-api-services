@@ -1,0 +1,22 @@
+name: Accident Geolocation - Build and push image
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    branches:
+      - main
+      - devbranch
+      - testbranch
+    paths:
+      - rsbc-ride-accident-adapter/**
+      - .github/workflows/accidentgeolocationdapter_cd.yml
+
+jobs:
+  CD:
+    uses: ./.github/workflows/cd-workflow.yml
+    with:
+      DOCKER_CONTEXT: rsbc-ride-accident-adapter
+      DOCKER_FILE: rsbc-ride-accident-adapter/Dockerfile
+      DOCKER_IMAGE_NAME: rbe5-images/rsbc-ride-accidentgeolocationadapter
+      DOCKER_IMAGE_TAG: ${{ github.event.pull_request.head.sha }}
+    secrets: inherit

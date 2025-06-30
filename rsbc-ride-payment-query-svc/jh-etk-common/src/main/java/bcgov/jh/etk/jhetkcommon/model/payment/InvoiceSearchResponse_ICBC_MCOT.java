@@ -21,6 +21,10 @@ public class InvoiceSearchResponse_ICBC_MCOT {
 	
 	/** The violation date. */
 	private String violationDate;
+
+	/** The court location. */
+
+	private String courtLocation;
 	
 	/** The vehicle. */
 	private Vehicle vehicle;
@@ -106,6 +110,24 @@ public class InvoiceSearchResponse_ICBC_MCOT {
 	 */
 	public void setViolationDate(String violationDate) {
 		this.violationDate = violationDate;
+	}
+	
+	/**
+	 * Gets the court location.
+	 *
+	 * @return the court location
+	 */
+	public String getCourtLocation() {
+		return courtLocation;
+	}
+	
+	/**
+	 * Sets the court location.
+	 *
+	 * @param violationDate the new court location
+	 */
+	public void setCourtLocation(String courtLocation) {
+		this.courtLocation = courtLocation;
 	}
 	
 	/**
