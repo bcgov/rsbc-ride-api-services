@@ -108,7 +108,7 @@ def archive_processed_files(sftp, source_folder: str, archive_folder: str, files
             raise ProcessingError(f"Failed to archive {file}: {str(e)}")
     return archived_files
 
-async def process_ftp_files() -> bool:
+async def process_ftp_files(recon_type: str) -> bool:
     """
     Main function to process FTP files
     Returns True if successful, False if failed
@@ -133,6 +133,15 @@ async def process_ftp_files() -> bool:
     incoming_endpoint = os.getenv('PRIME_ADAPTER_RECON_INCOMING_ENDPOINT', 'http://localhost:8080/primeadapter/v3/api/recon/incoming')
     outgoing_endpoint = os.getenv('PRIME_ADAPTER_RECON_OUTGOING_ENDPOINT', 'http://localhost:8080/primeadapter/v3/api/recon/outgoing')
 
+    # Log environment variables
+    logger.info(f"Recon type: {recon_type.upper()}")
+    logger.info(f"FTP server: {host}:{port}")
+    logger.info(f"FTP user: {user}")
+    logger.info(f"Full primerecon path: {full_primerecon_path}")
+    logger.info(f"Full archive path: {full_archive_path}")
+    logger.info(f"Incoming endpoint: {incoming_endpoint}")
+    logger.info(f"Outgoing endpoint: {outgoing_endpoint}")
+
     ftputil = None
     try:
         # Initialize FTP connection
@@ -147,6 +156,7 @@ async def process_ftp_files() -> bool:
             known_hosts=None
         )
         sftp = ftputil.acquire_sftp_channel()
+        logger.info(f"Connected to SFTP server: {host}:{port} as {user}")
         
         # Ensure folders exist
         ensure_folder_exists(sftp, full_primerecon_path)
@@ -154,7 +164,7 @@ async def process_ftp_files() -> bool:
 
         # Get list of txt files (excluding error files)
         files = sftp.listdir(full_primerecon_path)
-        txt_files = [f for f in files if f.endswith('.txt') and not f.endswith('_error.txt')]
+        txt_files = [f for f in files if f.endswith('.txt') and f.lower().find(recon_type.lower()) >= 0 and not f.endswith('_error.txt')]
         
         if not txt_files:
             logger.info("No files to process")
@@ -208,7 +218,17 @@ async def process_ftp_files() -> bool:
 
 async def main():
     """Main entry point for the script"""
-    success = await process_ftp_files()
+    logger.info("Starting FTP file processing") 
+    recon_type = os.getenv('RECON_TYPE')
+
+    if not recon_type:
+        logger.error("RECON_TYPE environment variable is not set.")
+        sys.exit(1)
+    elif recon_type.upper() not in ['INCOMING', 'OUTGOING']:
+        logger.error(f"Invalid recon type: {recon_type}. Must be either INCOMING or OUTGOING.")
+        sys.exit(1)
+        
+    success =  await process_ftp_files(recon_type)
     sys.exit(0 if success else 1)
 
 if __name__ == "__main__":
