@@ -1,0 +1,71 @@
+name: Primeadapter - CI Check build
+
+on:
+  push:
+    branches-ignore:   
+      - 'release**'
+      - 'main'
+      - 'master'
+    paths:
+      - rsbc-ride-accident-adapter/**
+
+jobs:
+  test_build:
+    name: Test the Build
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4    
+      - name: Setup
+        uses: docker/setup-buildx-action@v3
+        with:
+          install: true  
+      - name: Login
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build
+        uses: docker/build-push-action@v6
+        with:
+          context: rsbc-ride-accident-adapter
+          file: rsbc-ride-accident-adapter/Dockerfile
+          push: false
+
+  trivy-scan:
+    uses: ./.github/workflows/trivy-scan-workflow.yml
+    with:
+      DOCKER_CONTEXT: rsbc-ride-accident-adapter
+      DOCKER_FILE: rsbc-ride-accident-adapter/Dockerfile
+      DOCKER_IMAGE_NAME: rsbc-ride-accidentgeolocationadapter
+    secrets: inherit
+
+  run_unit_test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4   
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+      - name: Run unit tests
+        run: |
+          cd rsbc-ride-accident-adapter
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Test with pytest
+        run: |
+          cd rsbc-ride-accident-adapter
+          pip install pytest pytest-cov
+          pytest tests/ --doctest-modules --junitxml=test-results/test-results.xml
+      - name: Upload pytest test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-results
+          path: rsbc-ride-accident-adapter/test-results/test-results.xml
+        if: ${{ always() }}
