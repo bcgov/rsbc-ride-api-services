@@ -1,4 +1,3 @@
-# FROM registry.access.redhat.com/ubi8/python-39
 FROM artifacts.developer.gov.bc.ca/rbe5-images/python:3.9-slim-buster
 
 # RUN addgroup --system app && adduser --system --group app
