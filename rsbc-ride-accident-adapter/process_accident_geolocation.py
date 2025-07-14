@@ -111,10 +111,18 @@ async def main():
     
 
     for accident in accidents:
+<<<<<<< Updated upstream
         accident_processed =await process_accident(accident, geo_key, producer_key, address_cache)
         if accident_processed and not success:
             sucess = True
     
+=======
+        if accident.STANDARD_CITY_NAME and not get_accidents_from_geolocation_db(db, accident.ACC_NO):
+            await process_accident(accident, geo_key, producer_key, address_cache)
+    
+    db.close()
+    success = True
+>>>>>>> Stashed changes
     sys.exit(0 if success else 1)
 
 
