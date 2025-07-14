@@ -10,6 +10,7 @@ on:
     paths:
       - rsbc-ride-accident-adapter/**
       - .github/workflows/accidentgeolocationdapter_cd.yml
+      
 
 jobs:
   CD:
