@@ -49,6 +49,9 @@ public class IndividualInvoiceResponse_paybc {
 	
 	/** The amount due. */
 	private double amount_due;
+
+	/** The court location. */
+	private String courtLocation;
 	
 	/** The attribute 1. */
 	private String attribute1;
