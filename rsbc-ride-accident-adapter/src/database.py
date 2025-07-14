@@ -2,7 +2,7 @@ import os
 import logging
 import pymssql
 
-from typing import List, Optional
+from typing import List, Optional,Tuple
 from dotenv import load_dotenv
 from src.models import Accident
 
@@ -55,6 +55,22 @@ class Database:
                 cursor.execute (sql, ())
                 accidents =[ Accident(*row )for row in cursor.fetchall()]
                 return accidents
+            
+        except Exception as e:
+                logger.error(f"Failed query: {str(e)}")
+                return None
+
+
+    def query_accident_from_geolocation(self, query :str,condition: str = "", params: Tuple = () )-> List [Accident]:
+        """run query """
+        sql = query+ " FROM GIS.GEOLOCATIONS "
+        if condition:
+            sql += f" WHERE {condition}"
+        try:
+                cursor = self.connection.cursor() 
+                cursor.execute (sql, params)
+                rows = cursor.fetchall()
+                return rows
             
         except Exception as e:
                 logger.error(f"Failed query: {str(e)}")

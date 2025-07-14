@@ -23,12 +23,12 @@ class GoogleGeoLocationRequest:
 
 @dataclass
 class GoogleGeoLocationResponse:
-     latitude: float
-     longitude: float
-     address : str
-     city: str
-     province: str
-     country: str
+     latitude: float=0.0
+     longitude: float=0.0
+     address : str=''
+     city: str=''
+     province: str=''
+     country: str=''
 
 
 @dataclass
@@ -38,8 +38,8 @@ class ProducerAPIGeolocationSubmittedResponse:
    
 @dataclass
 class LocationRequestPayload:
-    latitude : float
-    longitude: float
+    latitude : str
+    longitude: str
     requestedAddress: str
     fullAddress: str
   
