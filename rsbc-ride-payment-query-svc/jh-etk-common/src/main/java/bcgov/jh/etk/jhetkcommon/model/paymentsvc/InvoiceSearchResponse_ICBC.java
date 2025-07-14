@@ -25,6 +25,9 @@ public class InvoiceSearchResponse_ICBC {
 	
 	/** The fine amount. */
 	private double fineAmount;
+
+	/** The court location. */
+	private String courtLocation;
 	
 	/** The discounted amount. */
 	private double discountedAmount;
@@ -100,6 +103,26 @@ public class InvoiceSearchResponse_ICBC {
 	public void setTicketNumber(String ticketNumber) {
 		this.ticketNumber = ticketNumber;
 	}
+
+
+	/**
+	 * Gets the court location.
+	 *
+	 * @return the court location
+	 */
+	public String getCourtLocation() {
+		return courtLocation;
+	}
+	
+	/**
+	 * Sets the court location.
+	 *
+	 * @param courtLocation court location
+	 */
+	public void setCourtLocation(String courtLocation) {
+		this.courtLocation = courtLocation;
+	}
+
 	
 	/**
 	 * Gets the offense description.

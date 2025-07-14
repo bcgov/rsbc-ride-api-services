@@ -372,6 +372,7 @@ public class PaymentRestController extends BaseController {
 	private InvoiceSearchResponse_ICBC buildICBCResponse(Contravention contravention, InvoiceSearchResponse_ICBC_MCOT icbcResponse) {
 		InvoiceSearchResponse_ICBC returnResponse = new InvoiceSearchResponse_ICBC();
 		returnResponse.setAmountDue(contravention.getAmountDue());
+		returnResponse.setCourtLocation(icbcResponse.getCourtLocation());
 		returnResponse.setDiscountedAmount(contravention.getDiscountedAmount());
 		returnResponse.setFineAmount(contravention.getFineAmount());
 		returnResponse.setOffenseDescription(contravention.getOffenseDescription());
@@ -409,6 +410,7 @@ public class PaymentRestController extends BaseController {
 		IndividualInvoiceResponse_paybc paybcResponse = new IndividualInvoiceResponse_paybc();
 		paybcResponse.setAccount_number(account_number);
 		paybcResponse.setAmount_due(returnResponse.getAmountDue());
+		paybcResponse.setCourtLocation(returnResponse.getCourtLocation());
 		paybcResponse.setAttribute1(returnResponse.getOffenseDescription());
 		paybcResponse.setAttribute2(returnResponse.getVehicle().getMake() + returnResponse.getVehicle().getModel());
 		//remove the time portion
