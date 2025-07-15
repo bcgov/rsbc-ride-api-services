@@ -125,6 +125,7 @@ async def main():
     
 
     for accident in accidents:
+
         accident_processed = False
         if accident.STANDARD_CITY_NAME and not get_accidents_from_geolocation_db(db, accident.ACC_NO):
             accident_processed =await process_accident(accident, geo_key, producer_key, address_cache)
@@ -132,6 +133,7 @@ async def main():
     db.close()
     success = True
     sys.exit(0 if success else 1)
+
 
 
 if __name__ == "__main__":
