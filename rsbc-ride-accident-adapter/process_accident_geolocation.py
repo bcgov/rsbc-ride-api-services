@@ -36,7 +36,9 @@ def get_accidents_from_db(db: Database) -> list:
         "SELECT ACC_NO, STANDARD_CITY_NAME, BLOCK_NUMBER, STREET_TRAVELLED_ON, "
         "ST_TRAVELLED_ON_TYPE, ST_TRAVELLED_ON_DIRECTION, CROSS_STREET, CROSS_STREET_TYPE "
     )
-    accidents = db.query_accidents(query)
+    #accidents = db.query_accidents(query)
+    params = ("TAS")
+    accidents = db.query_accidents_excluding_existing_geolocations(query, params)
     return accidents
 
 def get_accidents_from_geolocation_db(db,accident_number: str) -> list:
@@ -125,9 +127,8 @@ async def main():
     
 
     for accident in accidents:
-        accident_processed = False
-        if accident.STANDARD_CITY_NAME and not get_accidents_from_geolocation_db(db, accident.ACC_NO):
-            accident_processed =await process_accident(accident, geo_key, producer_key, address_cache)
+        accident_processed = False        
+        accident_processed =await process_accident(accident, geo_key, producer_key, address_cache)
            
     db.close()
     success = True
