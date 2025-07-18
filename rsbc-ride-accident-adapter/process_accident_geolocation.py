@@ -6,6 +6,7 @@ import asyncio
 import logging
 import sys
 from dotenv import load_dotenv
+from typing import Optional
 
 from src.models import (
     Accident,
@@ -29,15 +30,27 @@ def get_api_keys():
     return os.getenv('API_RIDE_KEY_GEOCODING'), os.getenv('API_RIDE_KEY_PRODUCER')
 
 
-def get_accidents_from_db() -> list:
-    db = Database()
+def get_accidents_from_db(db: Database) -> list:
+  
     query = (
         "SELECT ACC_NO, STANDARD_CITY_NAME, BLOCK_NUMBER, STREET_TRAVELLED_ON, "
         "ST_TRAVELLED_ON_TYPE, ST_TRAVELLED_ON_DIRECTION, CROSS_STREET, CROSS_STREET_TYPE "
     )
-    accidents = db.query_accidents(query)
-    db.close()
+    #accidents = db.query_accidents(query)
+    params = ("TAS")
+    accidents = db.query_accidents_excluding_existing_geolocations(query, params)
     return accidents
+
+def get_accidents_from_geolocation_db(db,accident_number: str) -> list:
+    
+    query = (
+        "SELECT * "
+    )
+    condition = "business_program = %s AND business_id = %s"
+    params = ("TAS", accident_number)
+    accidents = db.query_accident_from_geolocation(query, condition, params)
+    return accidents
+
 
 
 def build_address(accident: Accident) -> str:
@@ -57,11 +70,12 @@ async def send_geolocation_request(controller, address, city, headers):
 async def send_producer_api_request(controller, acc_no, address, geolocation_response, headers):
     endpoint = os.getenv("PRODUCER_API_URL")
     payload = LocationRequestPayload(
-        str(geolocation_response.latitude),
-        str(geolocation_response.longitude),
+        geolocation_response.latitude,
+        geolocation_response.longitude,
         address,
         geolocation_response.address
     )
+   
     request = ProducerAPIGeolocationSubmittedRequest(acc_no, payload)
     result = await controller.send_to_endpoint(endpoint, request, True, headers)
     log_send_result(endpoint, result)
@@ -91,8 +105,9 @@ async def process_accident(accident: Accident, geo_key: str, producer_key: str, 
         # Not in cache — call API
         geo_result = await send_geolocation_request(controller, address, accident.STANDARD_CITY_NAME, headers_geo)
         if geo_result.status != ProcessingStatus.SUCCESS or not geo_result.data:
-            return False  # Skip this accident if geolocation failed
-        geo_data = GoogleGeoLocationResponse(**geo_result.data)
+            geo_data =  GoogleGeoLocationResponse()
+        else:
+            geo_data = GoogleGeoLocationResponse(**geo_result.data)
         address_cache[address] = geo_data  # Store in cache
 
     await send_producer_api_request(controller, accident.ACC_NO, address, geo_data, headers_producer)
@@ -101,7 +116,8 @@ async def process_accident(accident: Accident, geo_key: str, producer_key: str, 
 
 async def main():
     geo_key, producer_key = get_api_keys()
-    accidents = get_accidents_from_db()
+    db = Database()
+    accidents = get_accidents_from_db(db)
     success = False
 
     if not accidents:
@@ -111,10 +127,11 @@ async def main():
     
 
     for accident in accidents:
+        accident_processed = False        
         accident_processed =await process_accident(accident, geo_key, producer_key, address_cache)
-        if accident_processed and not success:
-            sucess = True
-    
+           
+    db.close()
+    success = True
     sys.exit(0 if success else 1)
 
 

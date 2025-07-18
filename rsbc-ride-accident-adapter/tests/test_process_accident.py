@@ -25,8 +25,8 @@ def test_accident():
 @pytest.fixture
 def test_geolocation_response():
     return GoogleGeoLocationResponse(
-        latitude=49.2827,
-        longitude=-123.1207,
+        latitude="49.2827",
+        longitude="-123.1207",
         address="123 Main St",
         city="Vancouver",
         province="BC",
@@ -74,7 +74,7 @@ async def test_process_accident_uses_cache(test_accident, test_geolocation_respo
 
 
 @pytest.mark.asyncio
-async def test_process_accident_skips_on_failed_geolocation(test_accident):
+async def test_process_accident_on_failed_geolocation(test_accident):
     address_cache = {}
 
     controller_mock = AsyncMock()
@@ -86,6 +86,7 @@ async def test_process_accident_skips_on_failed_geolocation(test_accident):
          patch("process_accident_geolocation.HTTPHeaders"):
         await process_accident(test_accident, "test-geo-key", "test-producer-key", address_cache)
 
-        # Should only try geolocation and not call producer API
-        assert controller_mock.send_to_endpoint.call_count == 1
-        assert address_cache == {}
+        
+        assert controller_mock.send_to_endpoint.call_count == 2
+        assert len(address_cache) == 1
+        assert "123 Main St Ave" in address_cache

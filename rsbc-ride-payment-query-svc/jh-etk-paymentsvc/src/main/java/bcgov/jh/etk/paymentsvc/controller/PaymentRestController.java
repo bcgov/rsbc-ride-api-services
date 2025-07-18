@@ -189,6 +189,7 @@ public class PaymentRestController extends BaseController {
 
         assert response != null;
         responseCode = response.getStatusCode();
+		boolean systemError = false;
 		//success, process the response from ICBC
 		if (HttpStatus.OK == responseCode || HttpStatus.CREATED == responseCode) {
 			InvoiceSearchResponse_ICBC_MCOT icbcResponse = null;
@@ -199,6 +200,7 @@ public class PaymentRestController extends BaseController {
             	try {
         			icbcResponse = objectMapper.readValue(response.getBody(), InvoiceSearchResponse_ICBC_MCOT.class);
         		} catch (Exception e) {
+					systemError = true;
         			log.error("Failed to convert ticket query result to object, error: {}", e.toString() + "; " + e.getMessage());
         		}
             } else {
@@ -208,7 +210,16 @@ public class PaymentRestController extends BaseController {
 	        // ICBC returns 200 or 201 statusCode, but with empty body, do the following:
 	        // 1. Return 'Ticket not found' error
 	        if (icbcResponse == null) {
-	        	responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND);
+				 if (systemError) {
+					responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_SYSTEM_ERROR );
+					systemError = false;
+
+				 }
+				 else {
+					responseString = getPaymentMessage(Const.ICBC_PAYMENT_MESSAGE_CODE_TICKET_NO_FOUND);
+
+				 }
+	        	 
 	        	return new ResponseEntity<> (responseString, HttpStatus.OK);
 	        }
 
@@ -361,6 +372,7 @@ public class PaymentRestController extends BaseController {
 	private InvoiceSearchResponse_ICBC buildICBCResponse(Contravention contravention, InvoiceSearchResponse_ICBC_MCOT icbcResponse) {
 		InvoiceSearchResponse_ICBC returnResponse = new InvoiceSearchResponse_ICBC();
 		returnResponse.setAmountDue(contravention.getAmountDue());
+		returnResponse.setCourtLocation(icbcResponse.getCourtLocation());
 		returnResponse.setDiscountedAmount(contravention.getDiscountedAmount());
 		returnResponse.setFineAmount(contravention.getFineAmount());
 		returnResponse.setOffenseDescription(contravention.getOffenseDescription());
@@ -398,6 +410,7 @@ public class PaymentRestController extends BaseController {
 		IndividualInvoiceResponse_paybc paybcResponse = new IndividualInvoiceResponse_paybc();
 		paybcResponse.setAccount_number(account_number);
 		paybcResponse.setAmount_due(returnResponse.getAmountDue());
+		paybcResponse.setCourtLocation(returnResponse.getCourtLocation());
 		paybcResponse.setAttribute1(returnResponse.getOffenseDescription());
 		paybcResponse.setAttribute2(returnResponse.getVehicle().getMake() + returnResponse.getVehicle().getModel());
 		//remove the time portion
