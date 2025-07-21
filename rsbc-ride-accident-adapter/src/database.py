@@ -75,3 +75,26 @@ class Database:
         except Exception as e:
                 logger.error(f"Failed query: {str(e)}")
                 return None
+
+    
+
+    def query_accidents_excluding_existing_geolocations(
+        self,
+        query :str,
+        params: Tuple = ()
+    ) -> List[Accident]:
+        
+    
+        sql = query+ " FROM TAS.ACCIDENT a WHERE STANDARD_CITY_NAME IS NOT NULL AND  ACC_DATE  >=  DATEADD(YEAR, -5, GETDATE()) AND  NOT EXISTS ( SELECT 1 FROM GIS.GEOLOCATIONS g WHERE g.business_program = %s AND g.business_id = ACC_NO )"
+    
+
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(sql, params)
+            accidents = [Accident(*row) for row in cursor.fetchall()]
+            return accidents
+
+        except Exception as e:
+            logger.error(f"Failed query: {str(e)}")
+            return None
+
