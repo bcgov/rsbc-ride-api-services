@@ -11,6 +11,7 @@ import bcgov.jh.etk.jhetkcommon.model.payment.InvoiceSearchResponse_ICBC_MCOT;
 import bcgov.jh.etk.jhetkcommon.model.payment.ref.Contravention;
 import bcgov.jh.etk.jhetkcommon.model.payment.ref.Vehicle;
 import bcgov.jh.etk.jhetkcommon.service.EtkRestService;
+import bcgov.jh.etk.jhetkcommon.service.IEtkService;
 import bcgov.jh.etk.jhetkcommon.service.impl.ErrorService;
 import bcgov.jh.etk.jhetkcommon.service.impl.EtkService;
 import bcgov.jh.etk.jhetkcommon.util.DateUtil;
@@ -67,7 +68,7 @@ public class PaymentRestController extends BaseController {
 
 	/** The etk service. */
 	@Autowired
-	EtkService etkService;
+	private IEtkService etkService;
 
 	/** The rest service. */
     @Autowired
