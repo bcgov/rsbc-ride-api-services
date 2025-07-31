@@ -104,7 +104,7 @@
 	                    <id>repackage</id>
 	                    <configuration>
 	                        <skip>true</skip>
-	                  ***REMOVED***
+	                  </configuration>
 	                </execution>
 	            </executions>
 	        </plugin>
