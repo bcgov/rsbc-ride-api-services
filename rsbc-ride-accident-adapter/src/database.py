@@ -86,10 +86,11 @@ class Database:
         
     
 
+        sql = query+ " FROM TAS.ACCIDENT a WHERE STANDARD_CITY_NAME IS NOT NULL AND  ACC_DATE  >=  DATEADD(YEAR, -13, GETDATE()) AND  NOT EXISTS ( SELECT 1 FROM GIS.GEOLOCATIONS g WHERE g.business_program = %s AND g.business_id = ACC_NO )"
 
-        sql = query+ " FROM TAS.ACCIDENT a WHERE STANDARD_CITY_NAME IS NOT NULL AND  ACC_DATE  >=  DATEADD(YEAR, -10, GETDATE()) AND  NOT EXISTS ( SELECT 1 FROM GIS.GEOLOCATIONS g WHERE g.business_program = %s AND g.business_id = ACC_NO )"
 
 
+       
     
 
         try:
