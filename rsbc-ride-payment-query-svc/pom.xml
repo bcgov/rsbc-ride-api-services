@@ -91,7 +91,22 @@
 	
 	<dependencyManagement>
 		<dependencies>
+           <dependency>
+				<groupId>org.apache.tomcat.embed</groupId>
+				<artifactId>tomcat-embed-core</artifactId>
+				<version>10.1.35</version>
+			</dependency>
 			<dependency>
+				<groupId>org.apache.tomcat.embed</groupId>
+				<artifactId>tomcat-embed-websocket</artifactId>
+				<version>10.1.35</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tomcat.embed</groupId>
+				<artifactId>tomcat-embed-el</artifactId>
+				<version>10.1.35</version>
+			</dependency>
+				<dependency>
 			  <groupId>io.fabric8</groupId>
 			  <artifactId>kubernetes-client</artifactId>
 			  <version>5.11.2</version>
