@@ -9,6 +9,7 @@ ENV ENVIRONMENT prod
 ENV TESTING 0
 
 
+
 WORKDIR /app
 COPY . .
 # COPY requirements.txt .
