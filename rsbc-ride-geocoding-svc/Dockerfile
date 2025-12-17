@@ -7,5 +7,6 @@ WORKDIR /app
 COPY requirements.txt .
 COPY /src/. .
 
+
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 CMD ["fastapi", "run", "main.py", "--port", "5000", "--workers", "1"]
