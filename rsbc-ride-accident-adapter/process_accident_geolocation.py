@@ -67,11 +67,22 @@ async def send_geolocation_request(controller, address, city, headers):
     return result
 
 
-async def send_producer_api_request(controller, acc_no, address, geolocation_response, headers):
+
+
+async def send_producer_api_request(controller, acc_no, address, geolocation_response, headers, city):
     endpoint = os.getenv("PRODUCER_API_URL")
+    
+    # Check if the city matches the address city
+    if city.strip().lower() != geolocation_response.city.strip().lower():
+        latitude = '0.0'
+        longitude = '0.0'
+    else:
+        latitude = geolocation_response.latitude
+        longitude = geolocation_response.longitude
+
     payload = LocationRequestPayload(
-        geolocation_response.latitude,
-        geolocation_response.longitude,
+        latitude,
+        longitude,
         address,
         geolocation_response.address
     )
@@ -110,7 +121,7 @@ async def process_accident(accident: Accident, geo_key: str, producer_key: str, 
             geo_data = GoogleGeoLocationResponse(**geo_result.data)
         address_cache[address] = geo_data  # Store in cache
 
-    await send_producer_api_request(controller, accident.ACC_NO, address, geo_data, headers_producer)
+    await send_producer_api_request(controller, accident.ACC_NO, address, geo_data, headers_producer, accident.STANDARD_CITY_NAME)
     return True
 
 
