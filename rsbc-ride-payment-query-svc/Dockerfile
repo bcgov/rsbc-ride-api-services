@@ -20,3 +20,4 @@ COPY --from=MAVEN_BUILD /build/jh-etk-paymentsvc/target/jh-etk-paymentsvc.jar /a
 # COPY --from=MAVEN_BUILD /build/target/paymentsvc-0.0.1-SNAPSHOT.jar /app/
 
 ENTRYPOINT ["java", "--add-opens", "java.base/java.io=ALL-UNNAMED", "-jar", "jh-etk-paymentsvc.jar"]
+
