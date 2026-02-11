@@ -9,5 +9,6 @@ WORKDIR /app
 COPY . .
 RUN /usr/local/bin/python -m pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
+
 # Command to run the script
 CMD ["python", "process_ftp.py"]
