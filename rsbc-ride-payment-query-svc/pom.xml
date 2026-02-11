@@ -20,7 +20,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>
 		<jh-etk-common.version>1.1.0</jh-etk-common.version>
-		<spring-security-oauth2.version>2.5.2.RELEASE</spring-security-oauth2.version>
 		<bootstrap.version>3.4.0</bootstrap.version>
 		<jquery.version>3.6.0</jquery.version>
 		<font-awesome.version>5.6.3</font-awesome.version>
@@ -124,11 +123,7 @@
 				<scope>import</scope>
 			</dependency>
 			 
-			<dependency>
-	            <groupId>org.springframework.security.oauth</groupId>
-	            <artifactId>spring-security-oauth2</artifactId>
-	            <version>${spring-security-oauth2.version}</version>
-	        </dependency>
+			
 	        
 			<!-- webjars related dependencies -->
 			<dependency>
