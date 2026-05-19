@@ -29,10 +29,13 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		 http.anonymous().disable();
 		http.authorizeHttpRequests((auth) -> {
-			auth.requestMatchers(PATH_PING_REQUEST, PATH_READY_REQUEST, PATH_ACTUATOR).permitAll();
+			//auth.requestMatchers(PATH_PING_REQUEST, PATH_READY_REQUEST, PATH_ACTUATOR).permitAll();
+			auth.requestMatchers("/", PATH_PING_REQUEST, PATH_READY_REQUEST, PATH_ACTUATOR).permitAll();
 			auth.anyRequest().authenticated();
 		}).httpBasic(withDefaults());
+		 http.csrf().disable();  
 		return http.build();
 	}
 
