@@ -6,8 +6,29 @@ on:
       - 'main'
     paths:
       - rsbc-ride-payment-query-svc/**
-
+      
 jobs:
+  run_unit_test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    environment: prod
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Run Unit Tests
+        run: |
+          cd rsbc-ride-payment-query-svc
+          mvn test 
   build:
     runs-on: ubuntu-latest
     if: startsWith(github.event.pull_request.head.ref, 'release-payquery/')

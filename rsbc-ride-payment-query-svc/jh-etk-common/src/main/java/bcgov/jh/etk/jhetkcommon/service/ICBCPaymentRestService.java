@@ -18,7 +18,7 @@ public class ICBCPaymentRestService {
      */
     public ResponseEntity<String> secureRestfulExchange(
             final String endpointURL,
-            final Object payload,          // <-- add this
+            final Object payload,          
             final HttpMethod httpMethod,
             final MediaType contentType) {
 
