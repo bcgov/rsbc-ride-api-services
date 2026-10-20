@@ -7,6 +7,8 @@ on:
     paths:
       - rsbc-ride-payment-query-svc/**
 
+permissions: write-all
+
 jobs:
   build:
     runs-on: ubuntu-latest
