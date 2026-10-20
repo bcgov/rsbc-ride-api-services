@@ -6,6 +6,8 @@ on:
       - 'devbranch'
     paths:
       - rsbc-ride-dbadapter/**
+      
+permissions: write-all
 
 
 jobs:
