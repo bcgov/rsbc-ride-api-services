@@ -19,6 +19,8 @@ on:
       GITOPS_GITHUB_TOKEN:
         required: true
 
+permissions: write-all
+
 jobs:
   pull:
     uses: ./.github/workflows/pull-image.yml
