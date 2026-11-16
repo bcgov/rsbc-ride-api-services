@@ -1,5 +1,5 @@
 # FROM registry.access.redhat.com/ubi8/python-39
-FROM artifacts.developer.gov.bc.ca/rbe5-images/python:3.9-slim-buster
+FROM artifacts.developer.gov.bc.ca/rbe5-images/python:3.11-slim-bookworm
 
 # RUN addgroup --system app && adduser --system --group app
 
@@ -7,7 +7,6 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV ENVIRONMENT prod
 ENV TESTING 0
-
 
 WORKDIR /app
 COPY . .
