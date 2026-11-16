@@ -19,4 +19,6 @@ COPY . .
 # USER 1001
 RUN /usr/local/bin/python -m pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
+# Force upgrade AnyIO to the security-fixed version
+RUN python -m pip install --no-cache-dir --upgrade --force-reinstall "anyio==4.14.2"
 CMD ["gunicorn", "main:api", "-w", "2", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:5000","--timeout","2000","--error-logfile", "-"]
